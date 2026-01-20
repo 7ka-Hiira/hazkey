@@ -164,8 +164,16 @@ install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/hazkey_24x24.png
 
 # install dictionary
 if(HAZKEY_SERVER_INSTALL_DICTIONARY)
+
+    set(_OLD_INSTALL_MESSAGE ${CMAKE_INSTALL_MESSAGE})
+    if(NOT CMAKE_INSTALL_MESSAGE)
+        set(CMAKE_INSTALL_MESSAGE "LAZY")
+    endif()
+
     install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/azooKey_dictionary_storage/Dictionary
         DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/hazkey)
+
+    set(CMAKE_INSTALL_MESSAGE ${_OLD_INSTALL_MESSAGE})
 endif()
 
 #install emoji dictionary
