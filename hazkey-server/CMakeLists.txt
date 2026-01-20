@@ -28,7 +28,7 @@ set(HAZKEY_SERVER_SYSTEM_RESOURCE_PATH "${CMAKE_INSTALL_FULL_DATADIR}" CACHE PAT
 option(HAZKEY_SERVER_INSTALL_DICTIONARY "Install dictionary" ON)
 
 # TODO: check path reliability
-set(HAZKEY_SERVER_LIBLLAMA_BINDIR "${CMAKE_CURRENT_BINARY_DIR}/bin" CACHE PATH "Llama.cpp library directory" )
+set(HAZKEY_SERVER_LIBLLAMA_BINDIR "${CMAKE_BINARY_DIR}/bin" CACHE PATH "Llama.cpp library directory" )
 
 # --- hazkey-server --- #
 
