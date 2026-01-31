@@ -53,7 +53,7 @@ class MainWindow : public QWidget {
 
    private:
     void connectSignals();
-    bool loadCurrentConfig();
+    bool loadCurrentConfig(bool fetchConfig = true);
     bool saveCurrentConfig();
     void setupInputTableLists();
     void loadInputTables();

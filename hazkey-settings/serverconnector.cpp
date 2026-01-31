@@ -22,7 +22,9 @@
 
 static std::mutex transact_mutex;
 
-ServerConnector::ServerConnector() {}
+ServerConnector::ServerConnector() : session_socket_(-1) {}
+
+ServerConnector::~ServerConnector() { endSession(); }
 
 std::string ServerConnector::get_socket_path() {
     const char* xdg_runtime_dir = std::getenv("XDG_RUNTIME_DIR");
@@ -189,6 +191,50 @@ int ServerConnector::create_connection() {
     return -1;
 }
 
+std::optional<hazkey::ResponseEnvelope> ServerConnector::transact_on_socket(
+    int sock, const hazkey::RequestEnvelope& send_data) {
+    std::string msg;
+    if (!send_data.SerializeToString(&msg)) {
+        return std::nullopt;
+    }
+
+    // write length
+    uint32_t writeLen = htonl(msg.size());
+    if (!writeAll(sock, &writeLen, 4)) {
+        return std::nullopt;
+    }
+
+    // write data
+    if (!writeAll(sock, msg.c_str(), msg.size())) {
+        return std::nullopt;
+    }
+
+    // read response length
+    uint32_t readLenBuf;
+    if (!readAll(sock, &readLenBuf, 4)) {
+        return std::nullopt;
+    }
+
+    uint32_t readLen = ntohl(readLenBuf);
+
+    if (readLen > 2 * 1024 * 1024) {  // 2MB limit
+        return std::nullopt;
+    }
+
+    // read response
+    std::vector<char> buf(readLen);
+    if (!readAll(sock, buf.data(), readLen)) {
+        return std::nullopt;
+    }
+
+    hazkey::ResponseEnvelope resp;
+    if (!resp.ParseFromArray(buf.data(), readLen)) {
+        return std::nullopt;
+    }
+
+    return resp;
+}
+
 std::optional<hazkey::ResponseEnvelope> ServerConnector::transact(
     const hazkey::RequestEnvelope& send_data) {
     std::lock_guard<std::mutex> lock(transact_mutex);
@@ -199,55 +245,74 @@ std::optional<hazkey::ResponseEnvelope> ServerConnector::transact(
         return std::nullopt;
     }
 
-    std::string msg;
-    if (!send_data.SerializeToString(&msg)) {
-        close(sock);
-        return std::nullopt;
-    }
-
-    // write length
-    uint32_t writeLen = htonl(msg.size());
-    if (!writeAll(sock, &writeLen, 4)) {
-        close(sock);
-        return std::nullopt;
-    }
-
-    // write data
-    if (!writeAll(sock, msg.c_str(), msg.size())) {
-        close(sock);
-        return std::nullopt;
-    }
-
-    // read response length
-    uint32_t readLenBuf;
-    if (!readAll(sock, &readLenBuf, 4)) {
-        close(sock);
-        return std::nullopt;
-    }
-
-    uint32_t readLen = ntohl(readLenBuf);
-
-    if (readLen > 2 * 1024 * 1024) {  // 2MB limit
-        close(sock);
-        return std::nullopt;
-    }
-
-    // read response
-    std::vector<char> buf(readLen);
-    if (!readAll(sock, buf.data(), readLen)) {
-        close(sock);
-        return std::nullopt;
-    }
-
-    hazkey::ResponseEnvelope resp;
-    if (!resp.ParseFromArray(buf.data(), readLen)) {
-        close(sock);
-        return std::nullopt;
-    }
+    auto resp = transact_on_socket(sock, send_data);
 
     // Close connection after transaction
     close(sock);
     return resp;
+}
+
+bool ServerConnector::beginSession() {
+    std::lock_guard<std::mutex> lock(transact_mutex);
+
+    // Close existing session if any
+    if (session_socket_ != -1) {
+        close(session_socket_);
+        session_socket_ = -1;
+    }
+
+    session_socket_ = create_connection();
+    return session_socket_ != -1;
+}
+
+void ServerConnector::endSession() {
+    std::lock_guard<std::mutex> lock(transact_mutex);
+
+    if (session_socket_ != -1) {
+        close(session_socket_);
+        session_socket_ = -1;
+    }
+}
+
+std::optional<hazkey::config::CurrentConfig>
+ServerConnector::getConfigInSession() {
+    std::lock_guard<std::mutex> lock(transact_mutex);
+
+    if (session_socket_ == -1) {
+        return std::nullopt;
+    }
+
+    hazkey::RequestEnvelope request;
+    auto _ = request.mutable_get_config();
+    auto response = transact_on_socket(session_socket_, request);
+    if (response == std::nullopt) {
+        return std::nullopt;
+    }
+    auto responseVal = response.value();
+    if (responseVal.status() != hazkey::SUCCESS) {
+        return std::nullopt;
+    }
+    if (!responseVal.has_current_config()) {
+        return std::nullopt;
+    }
+    return responseVal.current_config();
+}
+
+bool ServerConnector::reloadZenzaiModelInSession() {
+    std::lock_guard<std::mutex> lock(transact_mutex);
+
+    if (session_socket_ == -1) {
+        return false;
+    }
+
+    hazkey::RequestEnvelope request;
+    auto _ = request.mutable_reload_zenzai_model();
+    auto response = transact_on_socket(session_socket_, request);
+    if (response == std::nullopt) {
+        return false;
+    }
+    auto responseVal = response.value();
+    return responseVal.status() == hazkey::SUCCESS;
 }
 
 std::optional<hazkey::config::CurrentConfig> ServerConnector::getConfig() {

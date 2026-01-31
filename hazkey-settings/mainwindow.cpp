@@ -19,6 +19,7 @@
 #include <QNetworkRequest>
 #include <QPushButton>
 #include <QStandardPaths>
+#include <QThread>
 #include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
@@ -171,21 +172,23 @@ void MainWindow::onUseHistoryToggled(bool enabled) {
     ui_->stopStoreNewHistory->setEnabled(enabled);
 }
 
-bool MainWindow::loadCurrentConfig() {
-    auto configOpt = server_.getConfig();
+bool MainWindow::loadCurrentConfig(bool fetchConfig) {
+    if (fetchConfig) {
+        auto configOpt = server_.getConfig();
 
-    if (!configOpt.has_value()) {
-        return false;
-    }
+        if (!configOpt.has_value()) {
+            return false;
+        }
 
-    currentConfig_ = configOpt.value();
-    if (currentConfig_.profiles_size() == 0) {
-        return false;
-    }
+        currentConfig_ = configOpt.value();
+        if (currentConfig_.profiles_size() == 0) {
+            return false;
+        }
 
-    currentProfile_ = currentConfig_.mutable_profiles(0);
-    if (!currentProfile_) {
-        return false;
+        currentProfile_ = currentConfig_.mutable_profiles(0);
+        if (!currentProfile_) {
+            return false;
+        }
     }
 
     // Remove any existing warning widgets on AI tab
@@ -1699,11 +1702,48 @@ void MainWindow::onResetConfiguration() {
         return;
     }
 
-    server_.reloadZenzaiModel();
+    // Use a persistent session to avoid connection conflicts
+    if (!server_.beginSession()) {
+        QMessageBox::critical(this, tr("Connection Error"),
+                              tr("Failed to connect to server."));
+        return;
+    }
 
-    if (!loadCurrentConfig()) {
+    // Reload Zenzai model using the session
+    bool reloadSuccess = server_.reloadZenzaiModelInSession();
+    if (!reloadSuccess) {
+        qWarning() << "Failed to reload Zenzai model";
+    }
+
+    // Get config using the same session
+    auto configOpt = server_.getConfigInSession();
+    server_.endSession();
+
+    if (!configOpt.has_value()) {
         QMessageBox::critical(this, tr("Configuration Error"),
                               tr("Failed to load configuration from server."));
+        return;
+    }
+
+    // Update UI with the loaded config
+    currentConfig_ = configOpt.value();
+    if (currentConfig_.profiles_size() == 0) {
+        QMessageBox::critical(this, tr("Configuration Error"),
+                              tr("No profile found in configuration."));
+        return;
+    }
+
+    currentProfile_ = currentConfig_.mutable_profiles(0);
+    if (!currentProfile_) {
+        QMessageBox::critical(this, tr("Configuration Error"),
+                              tr("Failed to access profile."));
+        return;
+    }
+
+    // Reload all UI components (skip fetching config since we already have it)
+    if (!loadCurrentConfig(false)) {
+        QMessageBox::critical(this, tr("Configuration Error"),
+                              tr("Failed to update UI."));
         return;
     }
 
