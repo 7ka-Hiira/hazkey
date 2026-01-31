@@ -36,8 +36,8 @@ class HazkeyServerConfig {
     var profiles: [Hazkey_Config_Profile]
     var currentProfile: Hazkey_Config_Profile
     let dictionaryPath: URL
-    let zenzaiAvailable: Bool
-    let zenzaiModelPath: URL?
+    var zenzaiAvailable: Bool
+    var zenzaiModelPath: URL?
     let ggmlBackendDevices: [GGMLBackendDevice]
 
     init(ggmlBackendDevices: [GGMLBackendDevice]) {
@@ -196,7 +196,7 @@ class HazkeyServerConfig {
         let currentConfig = Hazkey_Config_CurrentConfig.with {
             $0.fileHashes = []
             $0.zenzaiModelAvailable = zenzaiModelPath != nil
-            $0.zenzaiModelUpdated = true
+            $0.zenzaiModelPath = zenzaiModelPath?.path ?? ""
             $0.xdgConfigHomePath = Self.getConfigDirectory().absoluteString
             $0.availableKeymaps = keymaps
             $0.availableTables = inputTables
@@ -559,4 +559,36 @@ class HazkeyServerConfig {
         return Array(currentProfile.submodeEntryPointChars)
     }
 
+    func reloadZenzaiModel() {
+        let fileManager = FileManager()
+
+        let systemZenzaiModelPath = URL(fileURLWithPath: systemResourcePath)
+            .appendingPathComponent("zenzai.gguf", isDirectory: false)
+        let userZenzaiModelPath = FileManager.default.urls(
+            for: .applicationSupportDirectory, in: .userDomainMask
+        ).first!
+        .appendingPathComponent("hazkey", isDirectory: true)
+        .appendingPathComponent("zenzai", isDirectory: true)
+        .appendingPathComponent("zenzai.gguf", isDirectory: false)
+
+        zenzaiModelPath = {
+            if ggmlBackendDevices.count == 0 {
+                return nil
+            }
+
+            if let envPath = ProcessInfo.processInfo.environment["HAZKEY_ZENZAI_MODEL"],
+                fileManager.fileExists(atPath: envPath)
+            {
+                return URL(filePath: envPath)
+            } else if fileManager.fileExists(atPath: userZenzaiModelPath.path) {
+                return userZenzaiModelPath
+            } else if fileManager.fileExists(atPath: systemZenzaiModelPath.path) {
+                return systemZenzaiModelPath
+            } else {
+                return nil
+            }
+        }()
+
+        zenzaiAvailable = (ggmlBackendDevices.count > 0) && (zenzaiModelPath != nil)
+    }
 }

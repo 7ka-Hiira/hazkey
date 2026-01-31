@@ -259,13 +259,13 @@
     </message>
     <message>
         <location filename="mainwindow.ui" line="861"/>
-        <location filename="mainwindow.cpp" line="1438"/>
+        <location filename="mainwindow.cpp" line="1486"/>
         <source>Romaji</source>
         <translation>ローマ字</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="866"/>
-        <location filename="mainwindow.cpp" line="1415"/>
+        <location filename="mainwindow.cpp" line="1463"/>
         <source>JIS Kana</source>
         <translation>JISかな</translation>
     </message>
@@ -321,7 +321,7 @@
     <message>
         <location filename="mainwindow.ui" line="1101"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;Note:&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt; You can use custom Keymaps in TSV format, located in &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;$XDG_CONFIG_HOME/hazkey/keymap&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt;. &lt;/span&gt;&lt;a href=&quot;https://hazkey.hiira.dev/docs/settings/input-style-keymap&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#2980b9;&quot;&gt;More info...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;メモ:&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;$XDG_CONFIG_HOME/hazkey/keymap&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt; に配置されたTSV形式のキーマップを利用することができます。&lt;/span&gt;&lt;a href=&quot;https://hazkey.hiira.dev/docs/settings/input-style-keymap&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#2980b9;&quot;&gt;詳細...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;メモ:&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt; &lt;/span&gt;&lt;span style=&quot; font-weight:700; font-style:italic;&quot;&gt;$XDG_CONFIG_HOME/hazkey/keymap&lt;/span&gt;&lt;span style=&quot; font-style:italic;&quot;&gt; に配置されたTSV形式のキーマップを利用することができます。&lt;/span&gt;&lt;a href=&quot;https://hazkey.hiira.dev/docs/settings/input-style-keymap&quot;&gt;&lt;span style=&quot; font-style:italic; text-decoration: underline; color:#2980b9;&quot;&gt;詳細...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1118"/>
@@ -341,7 +341,7 @@
     <message>
         <location filename="mainwindow.ui" line="1301"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Note:&lt;/span&gt; You can use custom input tables in TSV format, located in &lt;span style=&quot; font-weight:700;&quot;&gt;$XDG_CONFIG_HOME/hazkey/table&lt;/span&gt;. &lt;a href=&quot;https://hazkey.hiira.dev/docs/settings/input-style-input-table&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;More info...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;メモ:&lt;/span&gt; &lt;span style=&quot; font-weight:700;&quot;&gt;$XDG_CONFIG_HOME/hazkey/table&lt;/span&gt; に配置されたTSV形式の入力テーブルを利用することができます。&lt;a href=&quot;https://hazkey.hiira.dev/docs/settings/input-style-input-table&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;詳細...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;メモ:&lt;/span&gt; &lt;span style=&quot; font-weight:700;&quot;&gt;$XDG_CONFIG_HOME/hazkey/table&lt;/span&gt; に配置されたTSV形式の入力テーブルを利用することができます。&lt;a href=&quot;https://hazkey.hiira.dev/docs/settings/input-style-input-table&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;詳細...&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1318"/>
@@ -409,6 +409,11 @@
         <translation>推論制限</translation>
     </message>
     <message>
+        <location filename="mainwindow.ui" line="1693"/>
+        <source>Backend</source>
+        <translation>バックエンド</translation>
+    </message>
+    <message>
         <location filename="mainwindow.ui" line="1646"/>
         <source>Use contextual conversion</source>
         <translation>文脈変換を使用</translation>
@@ -422,11 +427,6 @@
         <location filename="mainwindow.ui" line="1639"/>
         <source>Enable Zenzai</source>
         <translation>Zenzaiを有効化</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.ui" line="1693"/>
-        <source>Zenzai Device</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1720"/>
@@ -469,150 +469,277 @@
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;https://github.com/7ka-Hiira/fcitx5-hazkey/issues&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#2980b9;&quot;&gt;不具合報告&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="47"/>
+        <location filename="mainwindow.cpp" line="58"/>
+        <location filename="mainwindow.cpp" line="1705"/>
         <source>Configuration Error</source>
         <translation>設定エラー</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="48"/>
+        <location filename="mainwindow.cpp" line="59"/>
         <source>Failed to load configuration. Please check your connection to the hazkey server.</source>
         <translation>設定の読み込みに失敗しました。hazkeyサーバーへの接続を確認してください。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="179"/>
+        <location filename="mainwindow.cpp" line="212"/>
         <source>&lt;b&gt;Warning:&lt;/b&gt; Zenzai support not installed.</source>
         <translation>&lt;b&gt;警告:&lt;/b&gt; Zenzaiサポートがインストールされていません。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="302"/>
-        <location filename="mainwindow.cpp" line="1380"/>
-        <location filename="mainwindow.cpp" line="1402"/>
+        <location filename="mainwindow.cpp" line="350"/>
+        <location filename="mainwindow.cpp" line="1428"/>
+        <location filename="mainwindow.cpp" line="1450"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="303"/>
-        <location filename="mainwindow.cpp" line="1381"/>
+        <location filename="mainwindow.cpp" line="351"/>
+        <location filename="mainwindow.cpp" line="1429"/>
         <source>No configuration profile loaded.</source>
         <translation>設定プロファイルが読み込まれていません。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="369"/>
-        <location filename="mainwindow.cpp" line="374"/>
+        <location filename="mainwindow.cpp" line="417"/>
+        <location filename="mainwindow.cpp" line="422"/>
         <source>Save Error</source>
         <translation>保存エラー</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="370"/>
+        <location filename="mainwindow.cpp" line="418"/>
         <source>Failed to save configuration: %1</source>
         <translation>設定の保存に失敗しました: %1</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="375"/>
+        <location filename="mainwindow.cpp" line="423"/>
         <source>An unknown error occurred while saving configuration.</source>
         <translation>設定の保存中に不明なエラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1440"/>
+        <location filename="mainwindow.cpp" line="1488"/>
         <source>Kana</source>
         <translation>かな</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="431"/>
-        <location filename="mainwindow.cpp" line="670"/>
+        <location filename="mainwindow.cpp" line="479"/>
+        <location filename="mainwindow.cpp" line="718"/>
         <source>[not found]</source>
         <translation>[見つかりません]</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="189"/>
-        <location filename="mainwindow.cpp" line="199"/>
+        <location filename="mainwindow.cpp" line="222"/>
         <source>&lt;b&gt;Warning:&lt;/b&gt; Zenzai model not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;b&gt;警告:&lt;/b&gt; Zenzaiモデルが見つかりません。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="428"/>
-        <location filename="mainwindow.cpp" line="457"/>
-        <location filename="mainwindow.cpp" line="540"/>
-        <location filename="mainwindow.cpp" line="667"/>
-        <location filename="mainwindow.cpp" line="696"/>
-        <location filename="mainwindow.cpp" line="780"/>
+        <location filename="mainwindow.cpp" line="223"/>
+        <source>Download Model</source>
+        <translation>モデルをダウンロード</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="244"/>
+        <source>The current model is not the latest version.</source>
+        <translation>現在のZenzaiモデルは最新バージョンではありません。</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="245"/>
+        <source>Download Update</source>
+        <translation>更新をダウンロード</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="476"/>
+        <location filename="mainwindow.cpp" line="505"/>
+        <location filename="mainwindow.cpp" line="588"/>
+        <location filename="mainwindow.cpp" line="715"/>
+        <location filename="mainwindow.cpp" line="744"/>
+        <location filename="mainwindow.cpp" line="828"/>
         <source>[built-in]</source>
         <translation>[内蔵]</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="887"/>
-        <location filename="mainwindow.cpp" line="888"/>
-        <location filename="mainwindow.cpp" line="889"/>
-        <location filename="mainwindow.cpp" line="1002"/>
-        <location filename="mainwindow.cpp" line="1003"/>
-        <location filename="mainwindow.cpp" line="1004"/>
+        <location filename="mainwindow.cpp" line="935"/>
+        <location filename="mainwindow.cpp" line="936"/>
+        <location filename="mainwindow.cpp" line="937"/>
+        <location filename="mainwindow.cpp" line="1050"/>
+        <location filename="mainwindow.cpp" line="1051"/>
+        <location filename="mainwindow.cpp" line="1052"/>
         <source>Disabled in Kana mode</source>
         <translation>かなモードでは無効</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1171"/>
+        <location filename="mainwindow.cpp" line="1219"/>
         <source>&lt;b&gt;Warning:&lt;/b&gt; Current settings can only be edited in Advanced mode.</source>
         <translation>&lt;b&gt;警告:&lt;/b&gt; 現在の設定は詳細設定モードでのみ編集できます。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1177"/>
+        <location filename="mainwindow.cpp" line="1225"/>
         <source>Reset Input Style</source>
         <translation>入力スタイルをリセット</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1387"/>
+        <location filename="mainwindow.cpp" line="1435"/>
         <source>Clear Input History</source>
         <translation>入力履歴を削除</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1388"/>
+        <location filename="mainwindow.cpp" line="1436"/>
         <source>Are you sure you want to clear all input history data? This action cannot be undone.</source>
         <translation>この操作は取り消せません。本当に履歴を削除しますか？</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1398"/>
+        <location filename="mainwindow.cpp" line="1446"/>
         <source>Success</source>
         <translation>成功</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1399"/>
+        <location filename="mainwindow.cpp" line="1447"/>
         <source>Input history has been cleared successfully.</source>
         <translation>入力履歴が削除されました</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1403"/>
+        <location filename="mainwindow.cpp" line="1451"/>
         <source>Failed to clear input history. Please check your connection to the hazkey server.</source>
         <translation>入力履歴の削除に失敗しました。hazkey-serverとの接続を確認してください。</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1417"/>
+        <location filename="mainwindow.cpp" line="1465"/>
         <source>Japanese Symbol</source>
         <translation>日本語用記号</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1419"/>
+        <location filename="mainwindow.cpp" line="1467"/>
         <source>Fullwidth Period</source>
         <translation>全角ピリオド</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1421"/>
+        <location filename="mainwindow.cpp" line="1469"/>
         <source>Fullwidth Comma</source>
         <translation>全角カンマ</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1423"/>
+        <location filename="mainwindow.cpp" line="1471"/>
         <source>Fullwidth Number</source>
         <translation>全角数字</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1425"/>
+        <location filename="mainwindow.cpp" line="1473"/>
         <source>Fullwidth Symbol</source>
         <translation>全角記号</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="1427"/>
+        <location filename="mainwindow.cpp" line="1475"/>
         <source>Fullwidth Space</source>
         <translation>全角スペース</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1517"/>
+        <location filename="mainwindow.cpp" line="1613"/>
+        <location filename="mainwindow.cpp" line="1627"/>
+        <location filename="mainwindow.cpp" line="1634"/>
+        <location filename="mainwindow.cpp" line="1646"/>
+        <location filename="mainwindow.cpp" line="1654"/>
+        <location filename="mainwindow.cpp" line="1687"/>
+        <source>Download Error</source>
+        <translation>ダウンロードエラー</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1518"/>
+        <source>Failed to create directory: %1</source>
+        <translation>ディレクトリの作成に失敗しました: %1</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1524"/>
+        <source>File Exists</source>
+        <translation>ファイルが存在します</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1524"/>
+        <source>Overwrite the existing Zenzai model?</source>
+        <translation>既存のZenzaiモデルファイルを上書きしますか?</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1534"/>
+        <source>Downloading Zenzai model...</source>
+        <translation>Zenzaiモデルをダウンロード中...</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1534"/>
+        <source>Cancel</source>
+        <translation>キャンセル</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1573"/>
+        <source>Downloading Zenzai model... %1 MB / %2 MB</source>
+        <translation>Zenzaiモデルをダウンロード中... %1 MB / %2 MB</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1614"/>
+        <source>Downloaded file verification failed. Checksum mismatch.
+Expected: %1
+Got: %2</source>
+        <translation>ダウンロードされたファイルの検証に失敗しました。チェックサムが一致しません。
+期待値: %1
+取得地: %2</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1628"/>
+        <source>Failed to save model file: %1</source>
+        <translation>モデルファイルの保存に失敗しました: %1</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1635"/>
+        <source>Failed to write model file: %1</source>
+        <translation>モデルファイルの書き込みに失敗しました: %1</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1647"/>
+        <source>Failed to remove old model file.</source>
+        <translation>古いモデルファイルの削除に失敗しました。</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1655"/>
+        <source>Failed to rename model file.</source>
+        <translation>モデルファイルの名前変更に失敗しました。</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1664"/>
+        <source>Download Complete</source>
+        <translation>ダウンロード完了</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1665"/>
+        <source>Zenzai model has been downloaded successfully.
+Please push &apos;Reset&apos; to refresh the UI.</source>
+        <translation>Zenzaiモデルが正常にダウンロードされました。
+UIを更新するには「リセット」を押してください。</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1694"/>
+        <source>Reset Configuration</source>
+        <translation>設定をリセット</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1695"/>
+        <source>Resetting will discard any unsaved changes. Continue?</source>
+        <translation>リセットすると、保存されていない変更は失われます。続行しますか？</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1706"/>
+        <source>Failed to load configuration from server.</source>
+        <translation>サーバーから設定を読み込めませんでした。</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1712"/>
+        <source>Reset Complete</source>
+        <translation>リセット完了</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1713"/>
+        <source>Configuration has been reset successfully.</source>
+        <translation>設定が正常にリセットされました。</translation>
+    </message>
+    <message>
+        <location filename="mainwindow.cpp" line="1688"/>
+        <source>Failed to download Zenzai model: %1</source>
+        <translation>Zenzaiモデルのダウンロードに失敗しました: %1</translation>
     </message>
 </context>
 </TS>

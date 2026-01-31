@@ -57,6 +57,11 @@ class ProtocolHandler {
                 req.fileHashes, req.profiles, state: state)
         case .clearAllHistory_p:
             response = state.clearProfileLearningData()
+        case .reloadZenzaiModel:
+            state.serverConfig.reloadZenzaiModel()
+            response = Hazkey_ResponseEnvelope.with {
+                $0.status = .success
+            }
         case .getDefaultProfile:
             NSLog("Unimplemented: getDefaultProfile")
             response = Hazkey_ResponseEnvelope.with {

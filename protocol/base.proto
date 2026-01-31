@@ -26,6 +26,7 @@ message RequestEnvelope {
         hazkey.config.SetConfig set_config = 101;
         hazkey.config.GetDefaultProfile get_default_profile = 102;
         hazkey.config.ClearAllHistory clear_all_history = 103;
+        hazkey.config.ReloadZenzaiModel reload_zenzai_model = 104;
     }
 }
 

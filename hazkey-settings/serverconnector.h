@@ -12,10 +12,10 @@ class ServerConnector {
     std::optional<hazkey::config::CurrentConfig> getConfig();
     void setCurrentConfig(hazkey::config::CurrentConfig);
     bool clearAllHistory(const std::string& profileId);
+    bool reloadZenzaiModel();
 
    private:
     std::string get_socket_path();
-    void restart_hazkey_server();
     void kill_existing_hazkey_server();
     int create_connection();
     std::optional<hazkey::ResponseEnvelope> transact(

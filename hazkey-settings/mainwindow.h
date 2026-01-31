@@ -2,6 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QAbstractButton>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QProgressDialog>
 #include <QWidget>
 
 #include "serverconnector.h"
@@ -42,6 +45,11 @@ class MainWindow : public QWidget {
     void onCheckAllConversion();
     void onUncheckAllConversion();
     void onClearLearningData();
+    void onDownloadZenzaiModel();
+    void onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+    void onDownloadFinished();
+    void onDownloadError(QNetworkReply::NetworkError error);
+    void onResetConfiguration();
 
    private:
     void connectSignals();
@@ -71,10 +79,19 @@ class MainWindow : public QWidget {
     void clearKeymapsAndTables();
     QString translateKeymapName(const QString& keymapName, bool isBuiltin);
     QString translateTableName(const QString& tableName, bool isBuiltin);
+    QString calculateFileSHA256(const QString& filePath);
+    QWidget* createWarningWidget(
+        const QString& message, const QString& backgroundColor,
+        const QString& buttonText = QString(),
+        std::function<void()> buttonCallback = nullptr);
     Ui::MainWindow* ui_;
     ServerConnector server_;
     hazkey::config::CurrentConfig currentConfig_;
     hazkey::config::Profile* currentProfile_;
     bool isUpdatingFromAdvanced_;
+    QNetworkAccessManager* networkManager_;
+    QNetworkReply* currentDownload_;
+    QProgressDialog* downloadProgressDialog_;
+    QString zenzaiModelPath_;
 };
 #endif  // MAINWINDOW_H

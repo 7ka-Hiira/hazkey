@@ -35,14 +35,6 @@ std::string ServerConnector::get_socket_path() {
     }
 }
 
-void ServerConnector::restart_hazkey_server() {
-    bool success = QProcess::startDetached("hazkey-server");
-
-    if (!success) {
-        qWarning() << "Failed to start hazkey-server.";
-    }
-}
-
 void ServerConnector::kill_existing_hazkey_server() {
     DIR* proc_dir = opendir("/proc");
     if (!proc_dir) {
@@ -190,7 +182,7 @@ int ServerConnector::create_connection() {
             }
         }
         close(sock);
-        restart_hazkey_server();
+        QProcess::startDetached("hazkey-server", {"-r"});
         std::this_thread::sleep_for(
             std::chrono::milliseconds(RETRY_INTERVAL_MS));
     }
@@ -294,6 +286,17 @@ bool ServerConnector::clearAllHistory(const std::string& profileId) {
     hazkey::RequestEnvelope request;
     auto clearRequest = request.mutable_clear_all_history();
     clearRequest->set_profile_id(profileId);
+    auto response = transact(request);
+    if (response == std::nullopt) {
+        return false;
+    }
+    auto responseVal = response.value();
+    return responseVal.status() == hazkey::SUCCESS;
+}
+
+bool ServerConnector::reloadZenzaiModel() {
+    hazkey::RequestEnvelope request;
+    auto _ = request.mutable_reload_zenzai_model();
     auto response = transact(request);
     if (response == std::nullopt) {
         return false;

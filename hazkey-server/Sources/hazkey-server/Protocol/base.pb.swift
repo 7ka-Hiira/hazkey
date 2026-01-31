@@ -193,6 +193,14 @@ struct Hazkey_RequestEnvelope: Sendable {
     set {payload = .clearAllHistory_p(newValue)}
   }
 
+  var reloadZenzaiModel: Hazkey_Config_ReloadZenzaiModel {
+    get {
+      if case .reloadZenzaiModel(let v)? = payload {return v}
+      return Hazkey_Config_ReloadZenzaiModel()
+    }
+    set {payload = .reloadZenzaiModel(newValue)}
+  }
+
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   enum OneOf_Payload: Equatable, Sendable {
@@ -212,6 +220,7 @@ struct Hazkey_RequestEnvelope: Sendable {
     case setConfig(Hazkey_Config_SetConfig)
     case getDefaultProfile(Hazkey_Config_GetDefaultProfile)
     case clearAllHistory_p(Hazkey_Config_ClearAllHistory)
+    case reloadZenzaiModel(Hazkey_Config_ReloadZenzaiModel)
 
   }
 
@@ -314,6 +323,7 @@ extension Hazkey_RequestEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     101: .standard(proto: "set_config"),
     102: .standard(proto: "get_default_profile"),
     103: .standard(proto: "clear_all_history"),
+    104: .standard(proto: "reload_zenzai_model"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -530,6 +540,19 @@ extension Hazkey_RequestEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageI
           self.payload = .clearAllHistory_p(v)
         }
       }()
+      case 104: try {
+        var v: Hazkey_Config_ReloadZenzaiModel?
+        var hadOneofValue = false
+        if let current = self.payload {
+          hadOneofValue = true
+          if case .reloadZenzaiModel(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.payload = .reloadZenzaiModel(v)
+        }
+      }()
       default: break
       }
     }
@@ -604,6 +627,10 @@ extension Hazkey_RequestEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     case .clearAllHistory_p?: try {
       guard case .clearAllHistory_p(let v)? = self.payload else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 103)
+    }()
+    case .reloadZenzaiModel?: try {
+      guard case .reloadZenzaiModel(let v)? = self.payload else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 104)
     }()
     case nil: break
     }

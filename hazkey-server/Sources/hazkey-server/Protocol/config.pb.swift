@@ -773,6 +773,16 @@ struct Hazkey_Config_ClearAllHistory: Sendable {
   init() {}
 }
 
+struct Hazkey_Config_ReloadZenzaiModel: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
 struct Hazkey_Config_CurrentConfig: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
@@ -790,7 +800,7 @@ struct Hazkey_Config_CurrentConfig: Sendable {
 
   var zenzaiModelAvailable: Bool = false
 
-  var zenzaiModelUpdated: Bool = false
+  var zenzaiModelPath: String = String()
 
   var xdgConfigHomePath: String = String()
 
@@ -1631,6 +1641,25 @@ extension Hazkey_Config_ClearAllHistory: SwiftProtobuf.Message, SwiftProtobuf._M
   }
 }
 
+extension Hazkey_Config_ReloadZenzaiModel: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".ReloadZenzaiModel"
+  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    // Load everything into unknown fields
+    while try decoder.nextFieldNumber() != nil {}
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Hazkey_Config_ReloadZenzaiModel, rhs: Hazkey_Config_ReloadZenzaiModel) -> Bool {
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
 extension Hazkey_Config_CurrentConfig: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".CurrentConfig"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
@@ -1640,7 +1669,7 @@ extension Hazkey_Config_CurrentConfig: SwiftProtobuf.Message, SwiftProtobuf._Mes
     4: .standard(proto: "available_tables"),
     7: .standard(proto: "available_zenzai_backend_devices"),
     8: .standard(proto: "zenzai_model_available"),
-    9: .standard(proto: "zenzai_model_updated"),
+    9: .standard(proto: "zenzai_model_path"),
     6: .standard(proto: "xdg_config_home_path"),
   ]
 
@@ -1657,7 +1686,7 @@ extension Hazkey_Config_CurrentConfig: SwiftProtobuf.Message, SwiftProtobuf._Mes
       case 6: try { try decoder.decodeSingularStringField(value: &self.xdgConfigHomePath) }()
       case 7: try { try decoder.decodeRepeatedMessageField(value: &self.availableZenzaiBackendDevices) }()
       case 8: try { try decoder.decodeSingularBoolField(value: &self.zenzaiModelAvailable) }()
-      case 9: try { try decoder.decodeSingularBoolField(value: &self.zenzaiModelUpdated) }()
+      case 9: try { try decoder.decodeSingularStringField(value: &self.zenzaiModelPath) }()
       default: break
       }
     }
@@ -1685,8 +1714,8 @@ extension Hazkey_Config_CurrentConfig: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if self.zenzaiModelAvailable != false {
       try visitor.visitSingularBoolField(value: self.zenzaiModelAvailable, fieldNumber: 8)
     }
-    if self.zenzaiModelUpdated != false {
-      try visitor.visitSingularBoolField(value: self.zenzaiModelUpdated, fieldNumber: 9)
+    if !self.zenzaiModelPath.isEmpty {
+      try visitor.visitSingularStringField(value: self.zenzaiModelPath, fieldNumber: 9)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
@@ -1698,7 +1727,7 @@ extension Hazkey_Config_CurrentConfig: SwiftProtobuf.Message, SwiftProtobuf._Mes
     if lhs.availableTables != rhs.availableTables {return false}
     if lhs.availableZenzaiBackendDevices != rhs.availableZenzaiBackendDevices {return false}
     if lhs.zenzaiModelAvailable != rhs.zenzaiModelAvailable {return false}
-    if lhs.zenzaiModelUpdated != rhs.zenzaiModelUpdated {return false}
+    if lhs.zenzaiModelPath != rhs.zenzaiModelPath {return false}
     if lhs.xdgConfigHomePath != rhs.xdgConfigHomePath {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true

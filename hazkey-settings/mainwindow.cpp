@@ -5,13 +5,21 @@
 
 #include <QAbstractButton>
 #include <QCheckBox>
+#include <QCoreApplication>
+#include <QCryptographicHash>
 #include <QDialogButtonBox>
+#include <QDir>
+#include <QFile>
 #include <QHBoxLayout>
 #include <QListWidget>
 #include <QListWidgetItem>
 #include <QMenu>
 #include <QMessageBox>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QPushButton>
+#include <QStandardPaths>
+#include <QTimer>
 #include <QVBoxLayout>
 #include <QWidget>
 
@@ -24,7 +32,10 @@ MainWindow::MainWindow(QWidget* parent)
     : QWidget(parent),
       ui_(new Ui::MainWindow),
       server_(ServerConnector()),
-      isUpdatingFromAdvanced_(false) {
+      isUpdatingFromAdvanced_(false),
+      networkManager_(new QNetworkAccessManager(this)),
+      currentDownload_(nullptr),
+      downloadProgressDialog_(nullptr) {
     ui_->setupUi(this);
 
     // Expand table settings mode change tab
@@ -56,6 +67,14 @@ void MainWindow::connectSignals() {
             &MainWindow::onApply);
     connect(ui_->dialogButtonBox, &QDialogButtonBox::clicked, this,
             &MainWindow::onButtonClicked);
+
+    // Connect Reset button
+    QPushButton* resetButton =
+        ui_->dialogButtonBox->button(QDialogButtonBox::Reset);
+    if (resetButton) {
+        connect(resetButton, &QPushButton::clicked, this,
+                &MainWindow::onResetConfiguration);
+    }
 
     // Connect history checkbox to enable/disable dependent controls
     connect(ui_->useHistory, &QCheckBox::toggled, this,
@@ -169,36 +188,65 @@ bool MainWindow::loadCurrentConfig() {
         return false;
     }
 
+    // Remove any existing warning widgets on AI tab
+    if (ui_->aiTabScrollContentsLayout->count() > 1) {
+        QLayoutItem* item = ui_->aiTabScrollContentsLayout->itemAt(1);
+        if (item && item->widget()) {
+            QWidget* widget = item->widget();
+            if (widget->styleSheet().contains("background-color: yellow") ||
+                widget->styleSheet().contains("background-color: lightblue")) {
+                ui_->aiTabScrollContentsLayout->removeWidget(widget);
+                widget->deleteLater();
+            }
+        }
+    }
+
     if (currentConfig_.available_zenzai_backend_devices_size() <= 0) {
         ui_->enableZenzai->setEnabled(false);
         ui_->zenzaiContextualConversion->setEnabled(false);
         ui_->zenzaiInferenceLimit->setEnabled(false);
         ui_->zenzaiUserPlofile->setEnabled(false);
         ui_->zenzaiBackendDevice->setEnabled(false);
-        QLabel* warningLabel =
-            new QLabel(tr("<b>Warning:</b> Zenzai support not installed."));
-        warningLabel->setStyleSheet("background-color: yellow; padding: 5px;");
-        ui_->aiTabScrollContentsLayout->insertWidget(1, warningLabel);
+
+        QWidget* warningWidget = createWarningWidget(
+            tr("<b>Warning:</b> Zenzai support not installed."), "yellow");
+        ui_->aiTabScrollContentsLayout->insertWidget(1, warningWidget);
     } else if (!currentConfig_.zenzai_model_available()) {
         ui_->enableZenzai->setEnabled(false);
         ui_->zenzaiContextualConversion->setEnabled(false);
         ui_->zenzaiInferenceLimit->setEnabled(false);
         ui_->zenzaiUserPlofile->setEnabled(false);
         ui_->zenzaiBackendDevice->setEnabled(false);
-        QLabel* warningLabel =
-            new QLabel(tr("<b>Warning:</b> Zenzai model not found."));
-        warningLabel->setStyleSheet("background-color: yellow; padding: 5px;");
-        ui_->aiTabScrollContentsLayout->insertWidget(1, warningLabel);
-    } else if (!currentConfig_.zenzai_model_updated()) {
-        ui_->enableZenzai->setEnabled(false);
-        ui_->zenzaiContextualConversion->setEnabled(false);
-        ui_->zenzaiInferenceLimit->setEnabled(false);
-        ui_->zenzaiUserPlofile->setEnabled(false);
-        ui_->zenzaiBackendDevice->setEnabled(false);
-        QLabel* warningLabel =
-            new QLabel(tr("<b>Warning:</b> Zenzai model not found."));
-        warningLabel->setStyleSheet("background-color: yellow; padding: 5px;");
-        ui_->aiTabScrollContentsLayout->insertWidget(1, warningLabel);
+
+        QWidget* warningWidget = createWarningWidget(
+            tr("<b>Warning:</b> Zenzai model not found."), "yellow",
+            tr("Download Model"), [this]() { onDownloadZenzaiModel(); });
+        ui_->aiTabScrollContentsLayout->insertWidget(1, warningWidget);
+    } else {
+        ui_->enableZenzai->setEnabled(true);
+        ui_->zenzaiContextualConversion->setEnabled(true);
+        ui_->zenzaiInferenceLimit->setEnabled(true);
+        ui_->zenzaiUserPlofile->setEnabled(true);
+        ui_->zenzaiBackendDevice->setEnabled(true);
+
+        // Check if model needs update by comparing checksums
+        QString modelPath =
+            QString::fromStdString(currentConfig_.zenzai_model_path());
+        if (!modelPath.isEmpty()) {
+            QString currentChecksum = calculateFileSHA256(modelPath);
+            QString expectedChecksum =
+                "4de930c06bef8c263aa1aa40684af206db4ce1b96375b3b8ed0ea508e0b14f"
+                "6c";
+
+            if (!currentChecksum.isEmpty() &&
+                currentChecksum != expectedChecksum) {
+                QWidget* warningWidget = createWarningWidget(
+                    tr("The current model is not the latest version."),
+                    "lightblue", tr("Download Update"),
+                    [this]() { onDownloadZenzaiModel(); });
+                ui_->aiTabScrollContentsLayout->insertWidget(1, warningWidget);
+            }
+        }
     }
 
     // Load zenzai backend devices
@@ -1442,4 +1490,264 @@ QString MainWindow::translateTableName(const QString& tableName,
     return tableName;
 }
 
-MainWindow::~MainWindow() { delete ui_; }
+MainWindow::~MainWindow() {
+    if (currentDownload_) {
+        currentDownload_->abort();
+        currentDownload_->deleteLater();
+    }
+    if (downloadProgressDialog_) {
+        delete downloadProgressDialog_;
+    }
+    delete ui_;
+}
+
+void MainWindow::onDownloadZenzaiModel() {
+    // Determine the download path
+    QString dataHome = qEnvironmentVariable("XDG_DATA_HOME");
+    if (dataHome.isEmpty()) {
+        dataHome = QDir::homePath() + "/.local/share";
+    }
+
+    QString zenzaiDir = dataHome + "/hazkey/zenzai";
+    zenzaiModelPath_ = zenzaiDir + "/zenzai.gguf";
+
+    QDir dir;
+    if (!dir.mkpath(zenzaiDir)) {
+        QMessageBox::critical(
+            this, tr("Download Error"),
+            tr("Failed to create directory: %1").arg(zenzaiDir));
+        return;
+    }
+
+    if (QFile::exists(zenzaiModelPath_)) {
+        QMessageBox::StandardButton reply = QMessageBox::question(
+            this, tr("File Exists"), tr("Overwrite the existing Zenzai model?"),
+            QMessageBox::Yes | QMessageBox::No);
+
+        if (reply == QMessageBox::No) {
+            return;
+        }
+    }
+
+    // Progress dialog
+    downloadProgressDialog_ = new QProgressDialog(
+        tr("Downloading Zenzai model..."), tr("Cancel"), 0, 100, this);
+    downloadProgressDialog_->setWindowModality(Qt::WindowModal);
+    downloadProgressDialog_->setMinimumDuration(0);
+    downloadProgressDialog_->setValue(0);
+
+    connect(downloadProgressDialog_, &QProgressDialog::canceled, this,
+            [this]() {
+                if (currentDownload_) {
+                    currentDownload_->abort();
+                }
+            });
+
+    // Start download
+    QUrl url(
+        "https://huggingface.co/Miwa-Keita/zenz-v3.1-small-gguf/resolve/main/"
+        "ggml-model-Q5_K_M.gguf");
+    QNetworkRequest request(url);
+
+    currentDownload_ = networkManager_->get(request);
+
+    connect(currentDownload_, &QNetworkReply::downloadProgress, this,
+            &MainWindow::onDownloadProgress);
+    connect(currentDownload_, &QNetworkReply::finished, this,
+            &MainWindow::onDownloadFinished);
+    connect(currentDownload_,
+            QOverload<QNetworkReply::NetworkError>::of(
+                &QNetworkReply::errorOccurred),
+            this, &MainWindow::onDownloadError);
+}
+
+void MainWindow::onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal) {
+    if (downloadProgressDialog_ && bytesTotal > 0) {
+        int progress = static_cast<int>((bytesReceived * 100) / bytesTotal);
+        downloadProgressDialog_->setValue(progress);
+
+        // Show download size in MB
+        double receivedMB = bytesReceived / 1024.0 / 1024.0;
+        double totalMB = bytesTotal / 1024.0 / 1024.0;
+        downloadProgressDialog_->setLabelText(
+            tr("Downloading Zenzai model... %1 MB / %2 MB")
+                .arg(receivedMB, 0, 'f', 2)
+                .arg(totalMB, 0, 'f', 2));
+    }
+}
+
+void MainWindow::onDownloadFinished() {
+    if (!currentDownload_) {
+        return;
+    }
+
+    // Close progress dialog
+    if (downloadProgressDialog_) {
+        downloadProgressDialog_->deleteLater();
+        downloadProgressDialog_ = nullptr;
+    }
+
+    // Check for errors
+    if (currentDownload_->error() != QNetworkReply::NoError) {
+        currentDownload_->deleteLater();
+        currentDownload_ = nullptr;
+        return;  // Error already handled by onDownloadError
+    }
+
+    // Read downloaded data
+    QByteArray downloadedData = currentDownload_->readAll();
+    currentDownload_->deleteLater();
+    currentDownload_ = nullptr;
+
+    // Verify SHA256
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    hash.addData(downloadedData);
+    QByteArray calculatedHash = hash.result();
+    QString calculatedHashHex = calculatedHash.toHex();
+
+    QString expectedHash =
+        "4de930c06bef8c263aa1aa40684af206db4ce1b96375b3b8ed0ea508e0b14f6c";
+
+    if (calculatedHashHex != expectedHash) {
+        QMessageBox::critical(
+            this, tr("Download Error"),
+            tr("Downloaded file verification failed. Checksum mismatch.\n"
+               "Expected: %1\n"
+               "Got: %2")
+                .arg(expectedHash)
+                .arg(calculatedHashHex));
+        return;
+    }
+
+    // Save to temporary file first
+    QString tempPath = zenzaiModelPath_ + ".tmp";
+    QFile tempFile(tempPath);
+    if (!tempFile.open(QIODevice::WriteOnly)) {
+        QMessageBox::critical(
+            this, tr("Download Error"),
+            tr("Failed to save model file: %1").arg(tempFile.errorString()));
+        return;
+    }
+
+    if (tempFile.write(downloadedData) == -1) {
+        QMessageBox::critical(
+            this, tr("Download Error"),
+            tr("Failed to write model file: %1").arg(tempFile.errorString()));
+        tempFile.close();
+        QFile::remove(tempPath);
+        return;
+    }
+
+    tempFile.close();
+
+    // Remove old file if it exists and rename temp file
+    if (QFile::exists(zenzaiModelPath_)) {
+        if (!QFile::remove(zenzaiModelPath_)) {
+            QMessageBox::critical(this, tr("Download Error"),
+                                  tr("Failed to remove old model file."));
+            QFile::remove(tempPath);
+            return;
+        }
+    }
+
+    if (!QFile::rename(tempPath, zenzaiModelPath_)) {
+        QMessageBox::critical(this, tr("Download Error"),
+                              tr("Failed to rename model file."));
+        QFile::remove(tempPath);
+        return;
+    }
+
+    // Reload Zenzai model in server
+    server_.reloadZenzaiModel();
+
+    QMessageBox::information(
+        this, tr("Download Complete"),
+        tr("Zenzai model has been downloaded successfully.\n"
+           "Please push 'Reset' to refresh the UI."));
+}
+
+void MainWindow::onDownloadError(QNetworkReply::NetworkError error) {
+    // Close progress dialog first
+    if (downloadProgressDialog_) {
+        downloadProgressDialog_->deleteLater();
+        downloadProgressDialog_ = nullptr;
+    }
+
+    if (!currentDownload_) {
+        return;
+    }
+
+    QString errorString = currentDownload_->errorString();
+    currentDownload_->deleteLater();
+    currentDownload_ = nullptr;
+
+    // Don't show error if user cancelled
+    if (error != QNetworkReply::OperationCanceledError) {
+        QMessageBox::critical(
+            this, tr("Download Error"),
+            tr("Failed to download Zenzai model: %1").arg(errorString));
+    }
+}
+
+void MainWindow::onResetConfiguration() {
+    QMessageBox::StandardButton reply = QMessageBox::question(
+        this, tr("Reset Configuration"),
+        tr("Resetting will discard any unsaved changes. Continue?"),
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::No) {
+        return;
+    }
+
+    server_.reloadZenzaiModel();
+
+    if (!loadCurrentConfig()) {
+        QMessageBox::critical(this, tr("Configuration Error"),
+                              tr("Failed to load configuration from server."));
+        return;
+    }
+
+    QTimer::singleShot(0, this, [this]() {
+        QMessageBox::information(
+            this, tr("Reset Complete"),
+            tr("Configuration has been reset successfully."));
+    });
+}
+
+QWidget* MainWindow::createWarningWidget(const QString& message,
+                                         const QString& backgroundColor,
+                                         const QString& buttonText,
+                                         std::function<void()> buttonCallback) {
+    QWidget* warningWidget = new QWidget();
+    warningWidget->setStyleSheet(
+        QString("background-color: %1; padding: 5px;").arg(backgroundColor));
+    QHBoxLayout* warningLayout = new QHBoxLayout(warningWidget);
+
+    QLabel* warningLabel = new QLabel(message);
+    warningLabel->setWordWrap(true);
+    warningLayout->addWidget(warningLabel);
+
+    if (!buttonText.isEmpty() && buttonCallback) {
+        QPushButton* button = new QPushButton(buttonText);
+        connect(button, &QPushButton::clicked, this, buttonCallback);
+        warningLayout->addWidget(button);
+    }
+
+    return warningWidget;
+}
+
+QString MainWindow::calculateFileSHA256(const QString& filePath) {
+    QFile file(filePath);
+    if (!file.open(QIODevice::ReadOnly)) {
+        return QString();
+    }
+
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    if (!hash.addData(&file)) {
+        file.close();
+        return QString();
+    }
+
+    file.close();
+    return QString(hash.result().toHex());
+}

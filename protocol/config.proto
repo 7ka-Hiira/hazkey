@@ -139,6 +139,8 @@ message ClearAllHistory {
     string profile_id = 1;
 }
 
+message ReloadZenzaiModel {}
+
 // Response messages
 
 message CurrentConfig {
@@ -148,6 +150,6 @@ message CurrentConfig {
     repeated InputTable available_tables = 4;
     repeated BackendDevice available_zenzai_backend_devices = 7;
     bool zenzai_model_available = 8;
-    bool zenzai_model_updated = 9;
+    string zenzai_model_path = 9;
     string xdg_config_home_path = 6;
 }
