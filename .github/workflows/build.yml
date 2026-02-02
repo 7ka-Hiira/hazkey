@@ -8,7 +8,20 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: ubuntu-22.04
+            arch: x86_64
+            swift_url: https://download.swift.org/swift-6.2-release/ubuntu2204/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu22.04.tar.gz
+          - runner: ubuntu-24.04
+            arch: x86_64
+            swift_url: https://download.swift.org/swift-6.2-release/ubuntu2404/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu24.04.tar.gz
+          - runner: ubuntu-24.04-arm
+            arch: aarch64
+            swift_url: https://download.swift.org/swift-6.2-release/ubuntu2404-aarch64/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu24.04-aarch64.tar.gz
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -21,14 +34,14 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ github.workspace }}/swift
-          key: ${{ runner.os }}-swift-6.2-RELEASE
+          key: ${{ matrix.runner }}-${{ matrix.arch }}-swift-6.2-RELEASE
 
       - name: Install Swift Environment
         if: steps.cache-swift.outputs.cache-hit != 'true'
         run: |
-          wget https://download.swift.org/swift-6.2-release/ubuntu2204/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu22.04.tar.gz
-          tar xf swift-6.2-RELEASE-ubuntu22.04.tar.gz
-          mv swift-6.2-RELEASE-ubuntu22.04 ${{ github.workspace }}/swift
+          mkdir -p ${{ github.workspace }}/swift
+          wget ${{ matrix.swift_url }}
+          tar xf $(basename ${{ matrix.swift_url }}) --strip-components=1 -C ${{ github.workspace }}/swift
 
       - name: Add Swift to PATH
         run: |
@@ -44,14 +57,20 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y wget gnupg2
           sudo apt-get install -y build-essential gettext fakeroot libfcitx5core-dev libfcitx5config-dev libfcitx5utils-dev
-          sudo apt-get install -y ninja-build qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6widgets6 libqt6gui6 qt6-l10n-tools libglx-dev libgl1-mesa-dev libxkbcommon-dev
+          sudo apt-get install -y ninja-build qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6widgets6 libqt6gui6 qt6-l10n-tools libglx-dev libgl1-mesa-dev libxkbcommon-dev protobuf-compiler libprotoc-dev
 
-      - name: Vulkan Dependencies
+      - name: Vulkan Dependencies (Ubuntu 22.04)
+        if: matrix.runner == 'ubuntu-22.04'
         run: |
           wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
           sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list https://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
           sudo apt-get update -y
           sudo apt-get install -y mesa-vulkan-drivers vulkan-sdk
+
+      - name: Vulkan Dependencies (Ubuntu 24.04+)
+        if: matrix.runner == 'ubuntu-24.04' || matrix.runner == 'ubuntu-24.04-arm'
+        run: |
+          sudo apt-get install -y libvulkan-dev glslc
 
       - name: Create Directories
         run: |
@@ -60,61 +79,15 @@ jobs:
           mkdir -p ${{ github.workspace }}/packages
           mkdir -p ${{ github.workspace }}/ggml-cuda
 
-      - name: Cache C++ Dependencies
-        id: cache-deps
-        uses: actions/cache@v4
-        with:
-          path: ${{ github.workspace }}/local_deps
-          key: ${{ runner.os }}-deps-abseil-v33.0-proto-20240722.1-v1
-
-      - name: Add local_deps to PATH
-        run: |
-          echo "PATH=${{ github.workspace }}/local_deps/bin:$PATH" >> $GITHUB_ENV
-
-      - name: Add local_deps/lib to LIBRARY_PATH
-        run: |
-          echo "LIBRARY_PATH=${{ github.workspace }}/local_deps/lib:$LIBRARY_PATH" >> $GITHUB_ENV
-
-      - name: Build and Install Abseil
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-        run: |
-          git clone --branch 20240722.1 --depth 1 https://github.com/abseil/abseil-cpp.git
-          cd abseil-cpp
-          mkdir build && cd build
-          cmake .. \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_SHARED_LIBS=OFF \
-            -DABSL_ENABLE_INSTALL=ON \
-            -DCMAKE_CXX_FLAGS="-fPIC" \
-            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/local_deps
-          make -j$(nproc)
-          sudo make install
-
-      - name: Build and Install Protobuf
-        if: steps.cache-deps.outputs.cache-hit != 'true'
-        run: |
-          git clone --branch v33.0 --depth 1 https://github.com/protocolbuffers/protobuf.git
-          cd protobuf
-          mkdir build && cd build
-          cmake .. \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_SHARED_LIBS=OFF \
-            -Dprotobuf_BUILD_TESTS=OFF \
-            -Dprotobuf_ABSL_PROVIDER=package \
-            -DCMAKE_CXX_FLAGS="-fPIC" \
-            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/local_deps
-          make -j$(nproc)
-          sudo make install
-
-      - name: Apply static link patch
-        run: |
-          git apply ${{ github.workspace }}/.github/patches/static-link.patch
-
       - name: Build hazkey-server
         run: |
           mkdir -p ${{ github.workspace }}/hazkey-server/build
           cd ${{ github.workspace }}/hazkey-server/build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -G Ninja ..
+          if [ "${{ matrix.arch }}" = "aarch64" ]; then
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DGGML_CPU_ALL_VARIANTS=OFF -DGGML_CPU_ARM_ARCH=armv8-a -G Ninja ..
+          else
+            cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -G Ninja ..
+          fi
           ninja -j$(nproc)
           env DESTDIR=${{ github.workspace }}/workdir ninja install
 
@@ -146,10 +119,10 @@ jobs:
       - name: Create tar.gz fcitx5-hazkey package
         run: |
           cd ${{ github.workspace }}/workdir
-          tar -czvf ${{ github.workspace }}/packages/fcitx5-hazkey-${{ github.ref_name }}-x86_64.tar.gz ./usr
+          tar -czvf ${{ github.workspace }}/packages/fcitx5-hazkey-${{ github.ref_name }}-${{ matrix.arch }}.tar.gz ./usr
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: fcitx5-hazkey-x86_64
+          name: fcitx5-hazkey-${{ matrix.runner }}-${{ matrix.arch }}
           path: ${{ github.workspace }}/packages/*
