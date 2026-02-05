@@ -34,14 +34,18 @@ class HazkeyServer: SocketManagerDelegate {
     func start() throws {
         processManager.parseCommandLineArguments()
         try processManager.checkExistingServer()
-        try processManager.createPidFile()
-        try? processManager.createInfoFile() // less important
         try socketManager.setupSocket()
-
+        // ソケット失敗した時にpid fileが残るのを防止
+        // 必ずsocket->pidの順番で実行する
+        try processManager.createPidFile()
+        try? processManager.createInfoFile()  // less important
         NSLog("start listening...")
-        socketManager.startListening()
+        // DispatchQueue.global(qos: .userInitiated).async {
+            socketManager.startListening()
+        // }
 
         let _ = state.saveLearningData()
+
         // Leave them to stabilize
         // processManager.removeInfoFile()
         // processManager.removePidFile()

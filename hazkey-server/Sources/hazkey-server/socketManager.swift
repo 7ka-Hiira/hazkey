@@ -72,22 +72,21 @@ class SocketManager {
     }
 
     private func setupSignalHandlers() {
-        // just ignore sigpipe
         signal(SIGPIPE, SIG_IGN)
 
-        // exit process
-        signal(SIGINT, SIG_IGN)
-        signal(SIGTERM, SIG_IGN)
-        signal(SIGHUP, SIG_IGN)
+        let signalQueue = DispatchQueue(label: "dev.hiira.hazkey.server.socketmanager.signals")
         let signals = [SIGINT, SIGTERM, SIGHUP]
+
         for sig in signals {
-            let source = DispatchSource.makeSignalSource(signal: sig, queue: .main)
+            let source = DispatchSource.makeSignalSource(signal: sig, queue: signalQueue)
             source.setEventHandler { [weak self] in
                 NSLog("Signal \(sig) received, shutting down...")
                 self?.continueServing = false
                 // stop poll
-                var val: UInt8 = 1
-                write(self?.pipeFds[1] ?? -1, &val, 1)
+                if let pipeFd = self?.pipeFds[1] {
+                    close(pipeFd)
+                    self?.pipeFds[1] = -1
+                }
             }
             source.resume()
             self.signalSources.append(source)
@@ -110,10 +109,13 @@ class SocketManager {
                 pollFds.append(pollfd(fd: clientFd, events: Int16(POLLIN), revents: 0))
             }
 
-            // add timeout?
-            let pollRes = poll(&pollFds, nfds_t(pollFds.count), -1)
+            let pollRes = poll(&pollFds, nfds_t(pollFds.count), 1000)
 
             if pollRes < 0 {
+                if errno == EINTR {
+                    // signal received
+                    continue
+                }
                 NSLog("Poll failed: \(errno)")
                 break
             }
@@ -123,10 +125,9 @@ class SocketManager {
                 continue
             }
 
-            if pollFds[1].revents & Int16(POLLIN) != 0 {
-                var buf: UInt8 = 0
-                read(pipeFds[0], &buf, 1)
-                if !continueServing { break }
+            // pipe closed by signalhandler
+            if pollFds[1].revents & Int16(POLLIN|POLLHUP) != 0 {
+                break
             }
 
             // Check if server socket has a new connection
