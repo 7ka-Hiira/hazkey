@@ -28,11 +28,19 @@ class HazkeyServerState {
 
         // Create user state directories (history data)
         do {
-            try FileManager.default.createDirectory(
-                at: HazkeyServerConfig.getStateDirectory().appendingPathComponent(
-                    "memory", isDirectory: true), withIntermediateDirectories: true)
+            let newPath = HazkeyServerConfig.getStateDirectory().appendingPathComponent("memory", isDirectory: true)
+            if !FileManager.default.fileExists(atPath: newPath.path) {
+                let oldPath = HazkeyServerConfig.getDataDirectory().appendingPathComponent("memory", isDirectory: true)
+                if FileManager.default.fileExists(atPath: oldPath.path) {
+                    // v0.2.0の保存パスからの移動対応
+                    try FileManager.default.createDirectory(at: HazkeyServerConfig.getStateDirectory(), withIntermediateDirectories: true)
+                    try FileManager.default.moveItem(at: oldPath, to: newPath)
+                    } else {
+                    try FileManager.default.createDirectory(at: newPath, withIntermediateDirectories: true)
+                }
+            }
         } catch {
-            NSLog("Failed to create user state directory")
+            NSLog("Failed to create user memory directory: \(error.localizedDescription)")
         }
 
         // Create user cache directories (user dictionary)
@@ -41,7 +49,7 @@ class HazkeyServerState {
                 at: HazkeyServerConfig.getCacheDirectory().appendingPathComponent(
                     "shared", isDirectory: true), withIntermediateDirectories: true)
         } catch {
-            NSLog("Failed to create user cache directory")
+            NSLog("Failed to create user cache directory: \(error.localizedDescription)")
         }
 
         // Initialize base convert options
