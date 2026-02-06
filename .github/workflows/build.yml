@@ -40,14 +40,14 @@ jobs:
     runs-on: ${{ matrix.runner }}
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Update submodules
         run: git submodule update --init --recursive
 
       - name: Cache Swift Environment
         id: cache-swift
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ github.workspace }}/swift
           key: ${{ matrix.runner }}-${{ matrix.arch }}-swift-6.2-RELEASE
@@ -80,7 +80,6 @@ jobs:
         run: |
           sudo apt-get install -y protobuf-compiler libprotoc-dev
 
-
       - name: Vulkan Dependencies (Ubuntu 22.04)
         if: matrix.runner == 'ubuntu-22.04'
         run: |
@@ -103,7 +102,7 @@ jobs:
       - name: Cache C++ Dependencies
         if: matrix.static_protobuf
         id: cache-deps
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ${{ github.workspace }}/local_deps
           key: ${{ matrix.runner }}-{{ matrix.arch }}-protobuf-21-12-v1
@@ -174,7 +173,7 @@ jobs:
           tar -czvf ${{ github.workspace }}/packages/fcitx5-hazkey-${{ github.ref_name }}-${{ matrix.arch }}.tar.gz ./usr
 
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: fcitx5-hazkey-${{ matrix.label }}-${{ matrix.arch }}
           path: ${{ github.workspace }}/packages/*
