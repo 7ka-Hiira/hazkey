@@ -26,6 +26,8 @@ class HazkeyServerConnector {
 
     void connect_server();
 
+    void start_hazkey_server();
+
     std::optional<hazkey::ResponseEnvelope> transact(
         const hazkey::RequestEnvelope& send_data);
 
@@ -70,7 +72,6 @@ class HazkeyServerConnector {
 
    private:
     bool retry_connect();
-    void start_hazkey_server();
     bool is_hazkey_server_running();
     bool requestSuccess(hazkey::ResponseEnvelope);
     int sock_ = -1;

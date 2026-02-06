@@ -4,6 +4,7 @@
 
 #include "hazkey_server_connector.h"
 #include "hazkey_state.h"
+#include "hazkey_constants.h"
 
 namespace fcitx {
 
@@ -14,7 +15,7 @@ HazkeyEngine::HazkeyEngine(Instance *instance)
     server_ = HazkeyServerConnector();
 
     instance->inputContextManager().registerProperty("hazkeyState", &factory_);
-    // reloadConfig();
+    reloadConfig();
 }
 
 void HazkeyEngine::keyEvent([[maybe_unused]] const InputMethodEntry &entry,
@@ -56,17 +57,18 @@ void HazkeyEngine::setConfig(const RawConfig &config) {
 }
 
 void HazkeyEngine::reloadConfig() {
-    // server will directly read config
-    //
     readAsIni(config_, "conf/hazkey.conf");
-    // server_.setServerConfig(
-    //     *config().zenzaiEnabled, *config().zenzaiInferenceLimit,
-    //     static_cast<int>(*config().numberStyle),
-    //     static_cast<int>(*config().symbolStyle),
-    //     static_cast<int>(*config().periodStyle),
-    //     static_cast<int>(*config().commaStyle),
-    //     static_cast<int>(*config().spaceStyle),
-    //     static_cast<int>(*config().diacriticStyle), *config().zenzaiProfile);
+
+    std::string lastVersion = config_.lastVersion.value();
+
+    if (lastVersion != HAZKEY_VERSION) {
+        FCITX_DEBUG() << "Update detected. restarting server..";
+        // server automatically restarts if current server is newer than running server.
+        server_.start_hazkey_server();
+
+        config_.lastVersion.setValue(HAZKEY_VERSION);
+        safeSaveAsIni(config_, "conf/hazkey.conf");
+    }
 }
 
 void HazkeyEngine::save() {

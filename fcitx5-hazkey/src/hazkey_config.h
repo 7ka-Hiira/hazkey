@@ -7,11 +7,15 @@
 #include <fcitx-utils/library.h>
 #include <fcitx/menu.h>
 
+#include "hazkey_constants.h"
+
 namespace fcitx {
 
 /// Config
 
 FCITX_CONFIGURATION(HazkeyEngineConfig,
+                    HiddenOption<std::string> lastVersion{
+                        this, "LastVersion", "", ""};
                     Option<bool> showTabToSelect{
                         this, "showTabToSelect",
                         _("Show [Press Tab to Select] indicator"), true};

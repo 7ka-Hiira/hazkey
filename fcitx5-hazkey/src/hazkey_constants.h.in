@@ -1,0 +1,8 @@
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
+
+#include <string>
+
+const std::string HAZKEY_VERSION = "@PROJECT_VERSION@";
+
+#endif

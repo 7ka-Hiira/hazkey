@@ -34,7 +34,8 @@ class ProcessManager {
                 return versionString != hazkeyVersion
             }
         }
-        return false
+        // restart if file does not exists
+        return true
     }
 
     func checkExistingServer() throws {
