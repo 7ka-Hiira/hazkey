@@ -285,7 +285,7 @@ class HazkeyServerConfig {
         }
 
         let jsonData = try JSONSerialization.data(
-            withJSONObject: jsonObjects, options: [.prettyPrinted])
+            withJSONObject: jsonObjects, options: [.prettyPrinted, .sortedKeys])
 
         try jsonData.write(to: configPath)
 
