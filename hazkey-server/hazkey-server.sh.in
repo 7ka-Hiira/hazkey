@@ -1,16 +1,7 @@
 #!/usr/bin/env sh
 
 # hazkey-server wrapper script
-
-if [ -z "$XDG_DATA_HOME" ]; then
-    XDG_DATA_HOME="$HOME/.local/share"
-fi
-
-if [ -z "$XDG_CONFIG_HOME" ]; then
-    XDG_CONFIG_HOME="$HOME/.config"
-fi
-
-ENV_FILE="$XDG_CONFIG_HOME/hazkey/environment"
+ENV_FILE="$XDG_CONFIG_HOME/hazkey/env"
 # Load user defiend environment variables
 if [ -f "$ENV_FILE" ]; then
     source "$ENV_FILE"
