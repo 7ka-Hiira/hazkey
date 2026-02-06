@@ -3,6 +3,7 @@
 #include <arpa/inet.h>
 #include <dirent.h>
 #include <fcntl.h>
+#include <qcontainerfwd.h>
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <sys/wait.h>
@@ -26,7 +27,7 @@ ServerConnector::ServerConnector() : session_socket_(-1) {}
 
 ServerConnector::~ServerConnector() { endSession(); }
 
-std::string ServerConnector::get_socket_path() {
+std::string ServerConnector::getSocketPath() {
     const char* xdg_runtime_dir = std::getenv("XDG_RUNTIME_DIR");
     uid_t uid = getuid();
     std::string sockname = "hazkey-server." + std::to_string(uid) + ".sock";
@@ -84,11 +85,17 @@ bool readAll(int fd, void* data, size_t len) {
     return true;
 }
 
-int ServerConnector::create_connection() {
-    std::string socket_path = get_socket_path();
+int ServerConnector::createConnection() {
+    std::string socket_path = getSocketPath();
 
-    constexpr int MAX_RETRIES = 3;
-    constexpr int RETRY_INTERVAL_MS = 100;
+    // try restarting server only 1 time
+    // on 1st attempt (minus 1)
+    constexpr int ATTEMPT_TRY_START = 0;
+    // on 4th attempt (minus 1)
+    constexpr int ATTEMPT_TRY_START_FORCE = 3;
+
+    constexpr int MAX_RETRIES = 8;
+    constexpr int RETRY_INTERVAL_MS = 150;
 
     for (int attempt = 0; attempt < MAX_RETRIES; ++attempt) {
         int sock = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -133,14 +140,18 @@ int ServerConnector::create_connection() {
             }
         }
         close(sock);
-        QProcess::startDetached("hazkey-server");
+        if (attempt == ATTEMPT_TRY_START) {
+            QProcess::startDetached("hazkey-server", {}, "/");
+        } else if (attempt == ATTEMPT_TRY_START_FORCE) {
+            QProcess::startDetached("hazkey-server", {"-r"}, "/");
+        }
         std::this_thread::sleep_for(
             std::chrono::milliseconds(RETRY_INTERVAL_MS));
     }
     return -1;
 }
 
-std::optional<hazkey::ResponseEnvelope> ServerConnector::transact_on_socket(
+std::optional<hazkey::ResponseEnvelope> ServerConnector::transactOnSocket(
     int sock, const hazkey::RequestEnvelope& send_data) {
     std::string msg;
     if (!send_data.SerializeToString(&msg)) {
@@ -189,12 +200,12 @@ std::optional<hazkey::ResponseEnvelope> ServerConnector::transact(
     std::lock_guard<std::mutex> lock(transact_mutex);
 
     // Create new connection for each transaction
-    int sock = create_connection();
+    int sock = createConnection();
     if (sock == -1) {
         return std::nullopt;
     }
 
-    auto resp = transact_on_socket(sock, send_data);
+    auto resp = transactOnSocket(sock, send_data);
 
     // Close connection after transaction
     close(sock);
@@ -210,7 +221,7 @@ bool ServerConnector::beginSession() {
         session_socket_ = -1;
     }
 
-    session_socket_ = create_connection();
+    session_socket_ = createConnection();
     return session_socket_ != -1;
 }
 
@@ -233,7 +244,7 @@ ServerConnector::getConfigInSession() {
 
     hazkey::RequestEnvelope request;
     auto _ = request.mutable_get_config();
-    auto response = transact_on_socket(session_socket_, request);
+    auto response = transactOnSocket(session_socket_, request);
     if (response == std::nullopt) {
         return std::nullopt;
     }
@@ -256,7 +267,7 @@ bool ServerConnector::reloadZenzaiModelInSession() {
 
     hazkey::RequestEnvelope request;
     auto _ = request.mutable_reload_zenzai_model();
-    auto response = transact_on_socket(session_socket_, request);
+    auto response = transactOnSocket(session_socket_, request);
     if (response == std::nullopt) {
         return false;
     }

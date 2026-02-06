@@ -24,11 +24,11 @@ class ServerConnector {
     bool reloadZenzaiModelInSession();
 
    private:
-    std::string get_socket_path();
-    int create_connection();
+    std::string getSocketPath();
+    int createConnection();
     std::optional<hazkey::ResponseEnvelope> transact(
         const hazkey::RequestEnvelope& send_data);
-    std::optional<hazkey::ResponseEnvelope> transact_on_socket(
+    std::optional<hazkey::ResponseEnvelope> transactOnSocket(
         int sock, const hazkey::RequestEnvelope& send_data);
 
     int session_socket_;

@@ -27,7 +27,7 @@
 
 static std::mutex transact_mutex;
 
-std::string HazkeyServerConnector::get_socket_path() {
+std::string HazkeyServerConnector::getSocketPath() {
     const char* xdg_runtime_dir = std::getenv("XDG_RUNTIME_DIR");
     uid_t uid = getuid();
     std::string sockname = "hazkey-server." + std::to_string(uid) + ".sock";
@@ -38,32 +38,14 @@ std::string HazkeyServerConnector::get_socket_path() {
     }
 }
 
-void HazkeyServerConnector::start_hazkey_server() {
-    pid_t pid = fork();
-    FCITX_DEBUG() << "First fork PID: " << pid;
-    if (pid == 0) {
-        // First child process
-        pid_t second_pid = fork();
-        FCITX_DEBUG() << "Second fork PID: " << second_pid;
-
-        if (second_pid == 0) {
-            // Grandchild process - this will run the actual server
-            execlp("hazkey-server", "hazkey-server", (char*)NULL);
-            FCITX_ERROR() << "Failed to start hazkey-server\n";
-            exit(1);
-        } else if (second_pid < 0) {
-            FCITX_ERROR() << "Failed to create second fork\n";
-            exit(1);
-        } else {
-            exit(0);
-        }
-    } else if (pid < 0) {
-        FCITX_ERROR() << "Failed to start hazkey-server (first fork failed)\n";
-    } else {
-        int status;
-        waitpid(pid, &status, 0);
-        FCITX_DEBUG() << "First child exited with status: " << status;
+void HazkeyServerConnector::startHazkeyServer(bool force_restart) {
+    std::vector<std::string> args;
+    args.reserve(2);
+    args.push_back("hazkey-server");
+    if (force_restart) {
+        args.push_back("-r");
     }
+    fcitx::startProcess(args, "/");
 }
 
 bool writeAll(int fd, const void* data, size_t len) {
@@ -115,11 +97,18 @@ bool readAll(int fd, void* data, size_t len) {
     return true;
 }
 
-void HazkeyServerConnector::connect_server() {
-    std::string socket_path = get_socket_path();
+void HazkeyServerConnector::connectServer() {
+    std::string socket_path = getSocketPath();
 
-    constexpr int MAX_RETRIES = 3;
-    constexpr int RETRY_INTERVAL_MS = 100;
+    // try restarting server only 1 time
+    // on 1st attempt (minus 1)
+    constexpr int ATTEMPT_TRY_START = 0;
+    // on 4th attempt (minus 1)
+    constexpr int ATTEMPT_TRY_START_FORCE = 3;
+
+    constexpr int MAX_RETRIES = 8;
+    constexpr int RETRY_INTERVAL_MS = 150;
+
     int attempt;
     for (attempt = 0; attempt < MAX_RETRIES; ++attempt) {
         sock_ = socket(AF_UNIX, SOCK_STREAM, 0);
@@ -169,7 +158,11 @@ void HazkeyServerConnector::connect_server() {
                      << (attempt + 1);
         close(sock_);
         sock_ = -1;
-        start_hazkey_server();
+        if (attempt == ATTEMPT_TRY_START) {
+            startHazkeyServer(false);
+        } else if (attempt == ATTEMPT_TRY_START_FORCE) {
+            startHazkeyServer(true);
+        }
         std::this_thread::sleep_for(
             std::chrono::milliseconds(RETRY_INTERVAL_MS));
     }
@@ -183,7 +176,7 @@ std::optional<hazkey::ResponseEnvelope> HazkeyServerConnector::transact(
 
     if (sock_ == -1) {
         FCITX_INFO() << "Socket not connected, attempting to connect...";
-        connect_server();
+        connectServer();
         if (sock_ == -1) {
             FCITX_ERROR() << "Failed to establish connection to hazkey-server";
             return std::nullopt;
@@ -206,7 +199,7 @@ std::optional<hazkey::ResponseEnvelope> HazkeyServerConnector::transact(
                "reconnecting to hazkey-server...";
         close(sock_);
         sock_ = -1;
-        connect_server();
+        connectServer();
         return std::nullopt;
     }
 
@@ -216,7 +209,7 @@ std::optional<hazkey::ResponseEnvelope> HazkeyServerConnector::transact(
                         "reconnecting to hazkey-server...";
         close(sock_);
         sock_ = -1;
-        connect_server();
+        connectServer();
         return std::nullopt;
     }
 

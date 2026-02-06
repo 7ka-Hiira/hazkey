@@ -18,15 +18,15 @@ class HazkeyServerConnector {
 
     HazkeyServerConnector() {
         // kill_existing_hazkey_server();
-        connect_server();
+        connectServer();
         FCITX_DEBUG() << "Connector initialized";
     };
 
-    std::string get_socket_path();
+    std::string getSocketPath();
 
-    void connect_server();
+    void connectServer();
 
-    void start_hazkey_server();
+    void startHazkeyServer(bool force_restart);
 
     std::optional<hazkey::ResponseEnvelope> transact(
         const hazkey::RequestEnvelope& send_data);
@@ -71,8 +71,8 @@ class HazkeyServerConnector {
     hazkey::commands::CandidatesResult getCandidates(bool isSuggest);
 
    private:
-    bool retry_connect();
-    bool is_hazkey_server_running();
+    bool retryConnect();
+    bool isHazkeyServerRunning();
     bool requestSuccess(hazkey::ResponseEnvelope);
     int sock_ = -1;
     std::string socket_path_;
