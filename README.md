@@ -38,7 +38,7 @@ ninjaを利用します。
 
 ```sh
 git clone --recursive https://github.com/7ka-Hiira/hazkey.git
-cd fcitx5-hazkey
+cd hazkey
 mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DGGML_VULKAN=OFF -G Ninja ..
 ninja
