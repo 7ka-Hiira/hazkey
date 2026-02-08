@@ -44,6 +44,14 @@ MainWindow::MainWindow(QWidget* parent)
     // Expand table settings mode change tab
     ui_->inputTableConfigModeTabWidget->tabBar()->setExpanding(true);
 
+    // Change name of reset button to reload
+    QPushButton *reloadButton = ui_->dialogButtonBox->button(QDialogButtonBox::Reset);
+    if (reloadButton) {
+        reloadButton->setText(tr("Reload"));
+        QIcon reloadIcon = QApplication::style()->standardIcon(QStyle::SP_BrowserReload);
+        reloadButton->setIcon(reloadIcon);
+    }
+
     // Set version
     QString hazkeyVersionText =
         QString(
@@ -1686,7 +1694,7 @@ void MainWindow::onDownloadFinished() {
     QMessageBox::information(
         this, tr("Download Complete"),
         tr("Zenzai model has been downloaded successfully.\n"
-           "Please push 'Reset' to refresh the UI."));
+           "Please push 'Reload' to refresh the UI."));
 }
 
 void MainWindow::onDownloadError(QNetworkReply::NetworkError error) {
@@ -1714,8 +1722,8 @@ void MainWindow::onDownloadError(QNetworkReply::NetworkError error) {
 
 void MainWindow::onResetConfiguration() {
     QMessageBox::StandardButton reply = QMessageBox::question(
-        this, tr("Reset Configuration"),
-        tr("Resetting will discard any unsaved changes. Continue?"),
+        this, tr("Reload Configuration"),
+        tr("Reloading will discard any unsaved changes. Continue?"),
         QMessageBox::Yes | QMessageBox::No);
 
     if (reply == QMessageBox::No) {
@@ -1769,8 +1777,8 @@ void MainWindow::onResetConfiguration() {
 
     QTimer::singleShot(0, this, [this]() {
         QMessageBox::information(
-            this, tr("Reset Complete"),
-            tr("Configuration has been reset successfully."));
+            this, tr("Reload Complete"),
+            tr("Configuration has been reloaded successfully."));
     });
 }
 
