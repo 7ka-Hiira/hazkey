@@ -17,7 +17,7 @@ set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR})
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Network)
+find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools Network Test)
 find_package(Protobuf REQUIRED)
 
 set(TS_FILES hazkey-settings_ja_JP.ts)
@@ -131,6 +131,82 @@ target_link_libraries(hazkey-settings PRIVATE
     Qt6::Network
     ${Protobuf_LITE_LIBRARIES}
 )
+
+enable_testing()
+
+set(TEST_SOURCES
+    tests/settings_tests.cpp
+    controllers/input_style_tab_controller.cpp
+    controllers/conversion_tab_controller.cpp
+    controllers/ai_tab_controller.cpp
+    controllers/dual_list_controller.cpp
+    controllers/warning_widget_factory.cpp
+    controllers/dictionary_tab_controller.cpp
+    serverconnector.cpp
+    constants.h
+    config_definitions.h
+    config_macros.h
+    mainwindow.ui
+)
+
+qt_add_executable(hazkey-settings-tests ${TEST_SOURCES})
+
+set(TEST_PROTO_GEN_DIR ${CMAKE_CURRENT_BINARY_DIR}/tests_proto)
+
+if(Protobuf_VERSION VERSION_GREATER_EQUAL "3.15")
+    protobuf_generate(
+        TARGET hazkey-settings-tests
+        LANGUAGE cpp
+        PROTOS ${PROTO_FILES}
+        IMPORT_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../protocol
+        PROTOC_OUT_DIR ${TEST_PROTO_GEN_DIR}
+    )
+elseif(Protobuf_VERSION VERSION_GREATER_EQUAL "3.12")
+    set(TEST_PROTO_SRCS)
+    set(TEST_PROTO_HDRS)
+
+    foreach(PROTO_FILE ${PROTO_FILES})
+        get_filename_component(PROTO_NAME ${PROTO_FILE} NAME_WE)
+        get_filename_component(PROTO_PATH ${PROTO_FILE} ABSOLUTE)
+        set(PROTO_SRC "${TEST_PROTO_GEN_DIR}/${PROTO_NAME}.pb.cc")
+        set(PROTO_HDR "${TEST_PROTO_GEN_DIR}/${PROTO_NAME}.pb.h")
+
+        list(APPEND TEST_PROTO_SRCS ${PROTO_SRC})
+        list(APPEND TEST_PROTO_HDRS ${PROTO_HDR})
+
+        add_custom_command(
+            OUTPUT ${PROTO_SRC} ${PROTO_HDR}
+            COMMAND ${Protobuf_PROTOC_EXECUTABLE}
+            ARGS --cpp_out=${TEST_PROTO_GEN_DIR}
+                 --experimental_allow_proto3_optional
+                 --proto_path=${CMAKE_CURRENT_SOURCE_DIR}/../protocol
+                 ${CMAKE_CURRENT_SOURCE_DIR}/../protocol/${PROTO_NAME}.proto
+            DEPENDS ${PROTO_FILE}
+            COMMENT "Generating C++ protobuf files for tests from ${PROTO_FILE}"
+            VERBATIM
+        )
+    endforeach()
+
+    target_sources(hazkey-settings-tests PRIVATE ${TEST_PROTO_SRCS} ${TEST_PROTO_HDRS})
+else()
+    message(FATAL_ERROR "protobuf 3.12+ required for proto3 optional support. Current version: ${Protobuf_VERSION}")
+endif()
+
+target_include_directories(hazkey-settings-tests PRIVATE
+    ${TEST_PROTO_GEN_DIR}
+    ${CMAKE_CURRENT_BINARY_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${Protobuf_INCLUDE_DIRS}
+)
+
+target_link_libraries(hazkey-settings-tests PRIVATE
+    Qt6::Widgets
+    Qt6::Network
+    Qt6::Test
+    ${Protobuf_LITE_LIBRARIES}
+)
+
+add_test(NAME hazkey-settings-tests COMMAND hazkey-settings-tests)
 
 include(GNUInstallDirs)
 install(TARGETS hazkey-settings
