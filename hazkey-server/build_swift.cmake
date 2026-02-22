@@ -4,9 +4,17 @@ set(SWIFT_COMMAND
     "--scratch-path=${CMAKE_CURRENT_BINARY_DIR}/swift-build"
 )
 
+if(HAZKEY_SERVER_SWIFT_SDK)
+    list(APPEND SWIFT_COMMAND "--swift-sdk" "${HAZKEY_SERVER_SWIFT_SDK}")
+endif()
+
 if(HAZKEY_SERVER_ZENZAI_TRAIT)
     list(APPEND SWIFT_COMMAND "--traits" "ZenzaiSupport")
     list(APPEND SWIFT_COMMAND "-Xlinker" "-L${LIBLLAMA_DIR}")
+endif()
+
+if(HAZKEY_SERVER_SWIFT_LTO_MODE)
+    list(APPEND SWIFT_COMMAND "--experimental-lto-mode" "${HAZKEY_SERVER_SWIFT_LTO_MODE}")
 endif()
 
 if(SWIFT_STATIC_STDLIB)
