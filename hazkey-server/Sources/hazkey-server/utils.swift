@@ -12,3 +12,10 @@ public func debugLog(
         }
     #endif
 }
+
+extension Int {
+    func positiveMod(_ m: Int) -> Int {
+        let r = self % m
+        return r < 0 ? r + m : r
+    }
+}

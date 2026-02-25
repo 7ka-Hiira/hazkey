@@ -303,6 +303,7 @@ struct Hazkey_Config_Profile: @unchecked Sendable {
     set {_uniqueStorage()._enabledTables = newValue}
   }
 
+  /// will be removed
   var submodeEntryPointChars: String {
     get {return _storage._submodeEntryPointChars ?? String()}
     set {_uniqueStorage()._submodeEntryPointChars = newValue}

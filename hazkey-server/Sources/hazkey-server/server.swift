@@ -72,7 +72,11 @@ class HazkeyServer: SocketManagerDelegate {
         return handler.processProto(data: data)
     }
 
-    func socketManager(_ manager: SocketManager, clientDidConnect clientFd: Int32) {}
+    func socketManager(_ manager: SocketManager, clientDidConnect clientFd: Int32) {
+        protocolHandler?.resetSession()
+    }
 
-    func socketManager(_ manager: SocketManager, clientDidDisconnect clientFd: Int32) {}
+    func socketManager(_ manager: SocketManager, clientDidDisconnect clientFd: Int32) {
+        protocolHandler?.resetSession()
+    }
 }

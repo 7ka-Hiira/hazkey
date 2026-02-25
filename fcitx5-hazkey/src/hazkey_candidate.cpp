@@ -27,7 +27,7 @@ void HazkeyCandidateWord::select(InputContext* ic) const {
 
 HazkeyCandidateList::HazkeyCandidateList(
     const google::protobuf::RepeatedPtrField<
-        ::hazkey::commands::CandidatesResult_Candidate>
+        ::hazkey::commands::ShowCandidates::Candidate>
         candidates)
     : CommonCandidateList() {
     // CandidateWord needs to know their own index

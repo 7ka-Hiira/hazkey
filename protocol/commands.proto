@@ -4,83 +4,320 @@ package hazkey.commands;
 
 option optimize_for = LITE_RUNTIME;
 
-// Request messages
+// based on w3c keycode / USB HID Usage Tables
+enum KeyCode {
+    KEY_CODE_UNSPECIFIED = 0;
 
-message NewComposingText {}
+    KEY_CODE_KEY_A = 4;
+    KEY_CODE_KEY_B = 5;
+    KEY_CODE_KEY_C = 6;
+    KEY_CODE_KEY_D = 7;
+    KEY_CODE_KEY_E = 8;
+    KEY_CODE_KEY_F = 9;
+    KEY_CODE_KEY_G = 10;
+    KEY_CODE_KEY_H = 11;
+    KEY_CODE_KEY_I = 12;
+    KEY_CODE_KEY_J = 13;
+    KEY_CODE_KEY_K = 14;
+    KEY_CODE_KEY_L = 15;
+    KEY_CODE_KEY_M = 16;
+    KEY_CODE_KEY_N = 17;
+    KEY_CODE_KEY_O = 18;
+    KEY_CODE_KEY_P = 19;
+    KEY_CODE_KEY_Q = 20;
+    KEY_CODE_KEY_R = 21;
+    KEY_CODE_KEY_S = 22;
+    KEY_CODE_KEY_T = 23;
+    KEY_CODE_KEY_U = 24;
+    KEY_CODE_KEY_V = 25;
+    KEY_CODE_KEY_W = 26;
+    KEY_CODE_KEY_X = 27;
+    KEY_CODE_KEY_Y = 28;
+    KEY_CODE_KEY_Z = 29;
 
-message SetContext {
-    string context = 1;
-    int32 anchor = 2;
+    KEY_CODE_DIGIT_1 = 30;
+    KEY_CODE_DIGIT_2 = 31;
+    KEY_CODE_DIGIT_3 = 32;
+    KEY_CODE_DIGIT_4 = 33;
+    KEY_CODE_DIGIT_5 = 34;
+    KEY_CODE_DIGIT_6 = 35;
+    KEY_CODE_DIGIT_7 = 36;
+    KEY_CODE_DIGIT_8 = 37;
+    KEY_CODE_DIGIT_9 = 38;
+    KEY_CODE_DIGIT_0 = 39;
+
+    KEY_CODE_ENTER = 40;
+    KEY_CODE_ESCAPE = 41;
+    KEY_CODE_BACKSPACE = 42;
+    KEY_CODE_TAB = 43;
+    KEY_CODE_SPACE = 44;
+    KEY_CODE_MINUS = 45;
+    KEY_CODE_EQUAL = 46;
+    KEY_CODE_BRACKET_LEFT = 47;
+    KEY_CODE_BRACKET_RIGHT = 48;
+    KEY_CODE_ISO_BACKSLASH = 49;
+    KEY_CODE_SEMICOLON = 51;
+    KEY_CODE_QUOTE = 52;
+    KEY_CODE_BACKQUOTE = 53;
+    KEY_CODE_COMMA = 54;
+    KEY_CODE_PERIOD = 55;
+    KEY_CODE_SLASH = 56;
+    KEY_CODE_CAPS_LOCK = 57;
+
+    KEY_CODE_F1 = 58;
+    KEY_CODE_F2 = 59;
+    KEY_CODE_F3 = 60;
+    KEY_CODE_F4 = 61;
+    KEY_CODE_F5 = 62;
+    KEY_CODE_F6 = 63;
+    KEY_CODE_F7 = 64;
+    KEY_CODE_F8 = 65;
+    KEY_CODE_F9 = 66;
+    KEY_CODE_F10 = 67;
+    KEY_CODE_F11 = 68;
+    KEY_CODE_F12 = 69;
+
+    KEY_CODE_HOME = 74;
+    KEY_CODE_PAGE_UP = 75;
+    KEY_CODE_DELETE = 76;
+    KEY_CODE_END = 77;
+    KEY_CODE_PAGE_DOWN = 78;
+    KEY_CODE_ARROW_RIGHT = 79;
+    KEY_CODE_ARROW_LEFT = 80;
+    KEY_CODE_ARROW_DOWN = 81;
+    KEY_CODE_ARROW_UP = 82;
+
+    KEY_CODE_NUM_LOCK = 83;
+    KEY_CODE_NUMPAD_DIVIDE = 84;
+    KEY_CODE_NUMPAD_MULTIPLY = 85;
+    KEY_CODE_NUMPAD_SUBTRACT = 86;
+    KEY_CODE_NUMPAD_ADD = 87;
+    KEY_CODE_NUMPAD_ENTER = 88;
+    KEY_CODE_NUMPAD_1 = 89;
+    KEY_CODE_NUMPAD_2 = 90;
+    KEY_CODE_NUMPAD_3 = 91;
+    KEY_CODE_NUMPAD_4 = 92;
+    KEY_CODE_NUMPAD_5 = 93;
+    KEY_CODE_NUMPAD_6 = 94;
+    KEY_CODE_NUMPAD_7 = 95;
+    KEY_CODE_NUMPAD_8 = 96;
+    KEY_CODE_NUMPAD_9 = 97;
+    KEY_CODE_NUMPAD_0 = 98;
+    KEY_CODE_NUMPAD_DECIMAL = 99;
+
+    KEY_CODE_INTL_BACKSLASH = 100;
+    KEY_CODE_CONTEXT_MENU = 101;
+    KEY_CODE_POWER = 102;
+    KEY_CODE_NUMPAD_EQUAL = 103;
+    KEY_CODE_F13 = 104;
+    KEY_CODE_F14 = 105;
+    KEY_CODE_F15 = 106;
+    KEY_CODE_F16 = 107;
+    KEY_CODE_F17 = 108;
+    KEY_CODE_F18 = 109;
+    KEY_CODE_F19 = 110;
+    KEY_CODE_F20 = 111;
+    KEY_CODE_F21 = 112;
+    KEY_CODE_F22 = 113;
+    KEY_CODE_F23 = 114;
+    KEY_CODE_F24 = 115;
+
+    KEY_CODE_INTL_RO = 135;
+    KEY_CODE_KANA_MODE = 136;
+    KEY_CODE_INTL_YEN = 137;
+    KEY_CODE_CONVERT = 138;
+    KEY_CODE_NON_CONVERT = 139;
+
+    KEY_CODE_LANG_1 = 144;
+    KEY_CODE_LANG_2 = 145;
+    KEY_CODE_LANG_3 = 146;
+    KEY_CODE_LANG_4 = 147;
+    KEY_CODE_LANG_5 = 148;
+
+    KEY_CODE_CONTROL_LEFT = 224;
+    KEY_CODE_SHIFT_LEFT = 225;
+    KEY_CODE_ALT_LEFT = 226;
+    KEY_CODE_META_LEFT = 227;
+    KEY_CODE_CONTROL_RIGHT = 228;
+    KEY_CODE_SHIFT_RIGHT = 229;
+    KEY_CODE_ALT_RIGHT = 230;
+    KEY_CODE_META_RIGHT = 231;
 }
 
-message InputChar {
-    string text = 1;
+enum SpecialKey {
+    SPECIAL_KEY_KEY_UNSPECIFIED = 0;
+
+    SPECIAL_KEY_ENTER = 40;
+    SPECIAL_KEY_ESCAPE = 41;
+    SPECIAL_KEY_BACKSPACE = 42;
+    SPECIAL_KEY_TAB = 43;
+    SPECIAL_KEY_SPACE = 44;
+    SPECIAL_KEY_CAPS_LOCK = 57;
+
+    SPECIAL_KEY_F1 = 58;
+    SPECIAL_KEY_F2 = 59;
+    SPECIAL_KEY_F3 = 60;
+    SPECIAL_KEY_F4 = 61;
+    SPECIAL_KEY_F5 = 62;
+    SPECIAL_KEY_F6 = 63;
+    SPECIAL_KEY_F7 = 64;
+    SPECIAL_KEY_F8 = 65;
+    SPECIAL_KEY_F9 = 66;
+    SPECIAL_KEY_F10 = 67;
+    SPECIAL_KEY_F11 = 68;
+    SPECIAL_KEY_F12 = 69;
+
+    SPECIAL_KEY_HOME = 74;
+    SPECIAL_KEY_PAGE_UP = 75;
+    SPECIAL_KEY_DELETE = 76;
+    SPECIAL_KEY_END = 77;
+    SPECIAL_KEY_PAGE_DOWN = 78;
+    SPECIAL_KEY_ARROW_RIGHT = 79;
+    SPECIAL_KEY_ARROW_LEFT = 80;
+    SPECIAL_KEY_ARROW_DOWN = 81;
+    SPECIAL_KEY_ARROW_UP = 82;
+
+    SPECIAL_KEY_NUM_LOCK = 83;
+    SPECIAL_KEY_NUMPAD_DIVIDE = 84;
+    SPECIAL_KEY_NUMPAD_MULTIPLY = 85;
+    SPECIAL_KEY_NUMPAD_SUBTRACT = 86;
+    SPECIAL_KEY_NUMPAD_ADD = 87;
+    SPECIAL_KEY_NUMPAD_ENTER = 88;
+    SPECIAL_KEY_NUMPAD_1 = 89;
+    SPECIAL_KEY_NUMPAD_2 = 90;
+    SPECIAL_KEY_NUMPAD_3 = 91;
+    SPECIAL_KEY_NUMPAD_4 = 92;
+    SPECIAL_KEY_NUMPAD_5 = 93;
+    SPECIAL_KEY_NUMPAD_6 = 94;
+    SPECIAL_KEY_NUMPAD_7 = 95;
+    SPECIAL_KEY_NUMPAD_8 = 96;
+    SPECIAL_KEY_NUMPAD_9 = 97;
+    SPECIAL_KEY_NUMPAD_0 = 98;
+    SPECIAL_KEY_NUMPAD_DECIMAL = 99;
+
+    SPECIAL_KEY_INTL_BACKSLASH = 100;
+    SPECIAL_KEY_CONTEXT_MENU = 101;
+    SPECIAL_KEY_POWER = 102;
+    SPECIAL_KEY_NUMPAD_EQUAL = 103;
+    SPECIAL_KEY_F13 = 104;
+    SPECIAL_KEY_F14 = 105;
+    SPECIAL_KEY_F15 = 106;
+    SPECIAL_KEY_F16 = 107;
+    SPECIAL_KEY_F17 = 108;
+    SPECIAL_KEY_F18 = 109;
+    SPECIAL_KEY_F19 = 110;
+    SPECIAL_KEY_F20 = 111;
+    SPECIAL_KEY_F21 = 112;
+    SPECIAL_KEY_F22 = 113;
+    SPECIAL_KEY_F23 = 114;
+    SPECIAL_KEY_F24 = 115;
+
+    SPECIAL_KEY_KANA_MODE = 136;
+    SPECIAL_KEY_CONVERT = 138;
+    SPECIAL_KEY_NON_CONVERT = 139;
+
+    SPECIAL_KEY_LANG_1 = 144;
+    SPECIAL_KEY_LANG_2 = 145;
+    SPECIAL_KEY_LANG_3 = 146;
+    SPECIAL_KEY_LANG_4 = 147;
+    SPECIAL_KEY_LANG_5 = 148;
+
+    SPECIAL_KEY_CONTROL_LEFT = 224;
+    SPECIAL_KEY_SHIFT_LEFT = 225;
+    SPECIAL_KEY_ALT_LEFT = 226;
+    SPECIAL_KEY_META_LEFT = 227;
+    SPECIAL_KEY_CONTROL_RIGHT = 228;
+    SPECIAL_KEY_SHIFT_RIGHT = 229;
+    SPECIAL_KEY_ALT_RIGHT = 230;
+    SPECIAL_KEY_META_RIGHT = 231;
 }
 
-message ModifierEvent {
-    enum ModifierType {
-        MODIFIER_TYPE_UNSPECIFIED = 0;
-        SHIFT = 1;
+message KeyEvent {
+    message Context {
+        string context = 1;
+        int32 anchor = 2;
     }
 
     enum EventType {
         EVENT_TYPE_UNSPECIFIED = 0;
-        PRESS = 1;
-        RELEASE = 2;
+        EVENT_TYPE_DOWN = 1;
+        EVENT_TYPE_PRESS = 2;
+        EVENT_TYPE_RELEASE = 3;
     }
 
-    ModifierType mod_type = 1;
-    EventType event_type = 2;
-}
+    EventType event_type = 1;
 
-message MoveCursor {
-    int32 offset = 1;
-}
+    // physical key location
+    optional KeyCode code = 2;
 
-message PrefixComplete {
-    int32 index = 1;
-}
-
-message DeleteLeft {}
-
-message DeleteRight {}
-
-message GetComposingString {
-    enum CharType {
-        HIRAGANA = 0;
-        KATAKANA_FULL = 1;
-        KATAKANA_HALF = 2;
-        ALPHABET_FULL = 3;
-        ALPHABET_HALF = 4;
+    // key symbol
+    oneof input {
+        SpecialKey special_key = 5;
+        uint32 character = 6;
     }
 
-    CharType char_type = 1;
-    string current_preedit = 2;
+    uint32 modifier = 20;
+
+    optional Context context = 30;
 }
 
-message GetHiraganaWithCursor {}
+message ClientAction {
+    message ShowCandidates {
+        message Candidate {
+            string text = 1;
+            string sub_hiragana = 2;
+        }
 
-message GetCandidates {
-    bool is_suggest = 1;
+        repeated Candidate candidates = 1;
+        int32 page_size = 4;
+    }
+
+    message CloseCandidates {}
+
+    oneof action {
+        ShowCandidates show_candidates = 100;
+        CloseCandidates close_candidates = 101;
+        string complete = 104;
+        // Add as needed
+    }
 }
 
-message GetCurrentInputModeInfo {}
+message ClientState {
+    enum TextDecoration {
+        TEXT_DECORATION_NONE = 0;
+        TEXT_DECORATION_UNDERLINE = 1;
+    }
+
+    message DecoratedTextPart {
+        string text = 1;
+        repeated TextDecoration decoration = 2;
+    }
+
+    enum InputMode {
+        INPUT_MODE_NORMAL = 0;
+        INPUT_MODE_DIRECT = 1;
+    }
+
+    bool filtered = 1;
+    bool accepted = 2;
+
+    int32 list_selected_index = 5;
+
+    InputMode current_input_mode = 10;
+    repeated DecoratedTextPart preedit_text = 15;
+    repeated DecoratedTextPart aux_text = 20;
+
+    repeated ClientAction actions = 100;
+}
 
 message SaveLearningData {}
 
-// Response messages
-
-message Text {
-    string text = 1;
+message ResetState {
+    bool completed_preedit = 1;
 }
 
-message TextWithCursor {
-    string beforeCursosr = 1;
-    string onCursor = 2;
-    string afterCursor = 3;
-}
-
-message CandidatesResult {
+// message CandidatesResult {
+message ShowCandidates {
     message Candidate {
         string text = 1;
         string sub_hiragana = 2;
@@ -92,11 +329,3 @@ message CandidatesResult {
     int32 page_size = 4;
 }
 
-message CurrentInputModeInfo {
-    enum InputMode {
-        NORMAL = 0;
-        DIRECT = 1;
-    }
-
-    InputMode input_mode = 1;
-}

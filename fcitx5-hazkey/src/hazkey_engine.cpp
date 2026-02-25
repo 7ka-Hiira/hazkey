@@ -34,7 +34,7 @@ void HazkeyEngine::activate([[maybe_unused]] const InputMethodEntry &entry,
     FCITX_DEBUG() << "HazkeyEngine activate";
     auto inputContext = event.inputContext();
     auto state = inputContext->propertyFor(&factory_);
-    state->reset();
+    state->resetClient();
     inputContext->updatePreedit();
     inputContext->updateUserInterface(UserInterfaceComponent::InputPanel);
 }
@@ -45,7 +45,8 @@ void HazkeyEngine::deactivate([[maybe_unused]] const InputMethodEntry &entry,
     auto inputContext = event.inputContext();
     auto state = inputContext->propertyFor(&factory_);
     state->commitPreedit();
-    state->reset();
+    server_.resetServerState(true);
+    state->resetClient();
     inputContext->updatePreedit();
     inputContext->updateUserInterface(UserInterfaceComponent::InputPanel);
 }

@@ -71,17 +71,34 @@ class HazkeyServerConfig {
         self.zenzaiAvailable = (ggmlBackendDevices.count > 0) && (zenzaiModelPath != nil)
     }
 
-    func getCurrentConfig() -> Hazkey_ResponseEnvelope {
-        let profiles: [Hazkey_Config_Profile]
-        do {
-            profiles = try Self.loadConfig()
-        } catch {
-            return Hazkey_ResponseEnvelope.with {
-                $0.status = .failed
-                $0.errorMessage = "\(error)"
-            }
+    func getCurrentConfig() throws -> Hazkey_Config_CurrentConfig {
+        let profiles = try Self.loadConfig()
+        let keymaps = try loadAvailableKeymaps()
+        let inputTables = try loadAvailableInputTables()
+
+        var zenzaiDevices: [Hazkey_Config_BackendDevice] = []
+        for devices in ggmlBackendDevices {
+            zenzaiDevices.append(
+                Hazkey_Config_BackendDevice.with {
+                    $0.name = devices.name
+                    $0.desc = devices.description
+                }
+            )
         }
 
+        return Hazkey_Config_CurrentConfig.with {
+            $0.fileHashes = []
+            $0.zenzaiModelAvailable = zenzaiModelPath != nil
+            $0.zenzaiModelPath = zenzaiModelPath?.path ?? ""
+            $0.xdgConfigHomePath = Self.getConfigDirectory().path
+            $0.availableKeymaps = keymaps
+            $0.availableTables = inputTables
+            $0.availableZenzaiBackendDevices = zenzaiDevices
+            $0.profiles = profiles
+        }
+    }
+
+    private func loadAvailableKeymaps() throws -> [Hazkey_Config_Keymap] {
         let userKeymapDir = Self.getConfigDirectory().appendingPathComponent(
             "keymap", isDirectory: true
         )
@@ -113,12 +130,15 @@ class HazkeyServerConfig {
                     })
             }
         } catch {
-            return Hazkey_ResponseEnvelope.with {
-                $0.status = .failed
-                $0.errorMessage = "Failed to get user keymap files: \(error)"
-            }
+            throw NSError(domain: "HazkeyServerConfig", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: "Failed to get user keymap files: \(error)"
+            ])
         }
 
+        return keymaps
+    }
+
+    private func loadAvailableInputTables() throws -> [Hazkey_Config_InputTable] {
         let userInputTableDir = Self.getConfigDirectory().appendingPathComponent(
             "table", isDirectory: true
         )
@@ -150,36 +170,12 @@ class HazkeyServerConfig {
                     })
             }
         } catch {
-            return Hazkey_ResponseEnvelope.with {
-                $0.status = .failed
-                $0.errorMessage = "Failed to get user input table files: \(error)"
-            }
+            throw NSError(domain: "HazkeyServerConfig", code: 1, userInfo: [
+                NSLocalizedDescriptionKey: "Failed to get user input table files: \(error)"
+            ])
         }
 
-        var zenzaiDevices: [Hazkey_Config_BackendDevice] = []
-        for devices in ggmlBackendDevices {
-            zenzaiDevices.append(
-                Hazkey_Config_BackendDevice.with {
-                    $0.name = devices.name
-                    $0.desc = devices.description
-                }
-            )
-        }
-
-        let currentConfig = Hazkey_Config_CurrentConfig.with {
-            $0.fileHashes = []
-            $0.zenzaiModelAvailable = zenzaiModelPath != nil
-            $0.zenzaiModelPath = zenzaiModelPath?.path ?? ""
-            $0.xdgConfigHomePath = Self.getConfigDirectory().path
-            $0.availableKeymaps = keymaps
-            $0.availableTables = inputTables
-            $0.availableZenzaiBackendDevices = zenzaiDevices
-            $0.profiles = profiles
-        }
-        return Hazkey_ResponseEnvelope.with {
-            $0.status = .success
-            $0.currentConfig = currentConfig
-        }
+        return inputTables
     }
 
     func setCurrentConfig(

@@ -6,6 +6,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
+#include <optional>
 #include <string>
 
 #include "base.pb.h"
@@ -31,44 +32,18 @@ class HazkeyServerConnector {
     std::optional<hazkey::ResponseEnvelope> transact(
         const hazkey::RequestEnvelope& send_data);
 
-    std::string getComposingText(
-        hazkey::commands::GetComposingString::CharType type,
-        std::string currentPreedit);
-
-    fcitx::Text getComposingHiraganaWithCursor();
-
-    void inputChar(std::string text);
-
-    void shiftKeyEvent(bool isRelease);
-
-    bool currentInputModeIsDirect();
-
-    void deleteLeft();
-
-    void deleteRight();
-
-    void moveCursor(int offset);
-
-    void setContext(std::string context, int anchor);
-
-    void setServerConfig(int zenzaiEnabled, int zenzaiInferLimit,
-                         int numberFullwidth, int symbolFullwidth,
-                         int periodStyleIndex, int commaStyleIndex,
-                         int spaceFullwidth, int tenCombining,
-                         std::string profileText);
-
-    void newComposingText();
-
-    void completePrefix(int index);
-
     void saveLearningData();
+
+    std::optional<hazkey::commands::ClientState> processKeyEvent(
+        const hazkey::commands::KeyEvent &event);
 
     struct CandidateData {
         std::string candidateText;
         std::string subHiragana;
     };
 
-    hazkey::commands::CandidatesResult getCandidates(bool isSuggest);
+    hazkey::commands::ShowCandidates::Candidate getCandidates(bool isSuggest);
+    void resetServerState(bool completedPreedit);
 
    private:
     bool retryConnect();

@@ -65,108 +65,40 @@ struct Hazkey_RequestEnvelope: Sendable {
 
   var payload: Hazkey_RequestEnvelope.OneOf_Payload? = nil
 
-  var newComposingText: Hazkey_Commands_NewComposingText {
+  var keyEvent: Hazkey_Commands_KeyEvent {
     get {
-      if case .newComposingText(let v)? = payload {return v}
-      return Hazkey_Commands_NewComposingText()
+      if case .keyEvent(let v)? = payload {return v}
+      return Hazkey_Commands_KeyEvent()
     }
-    set {payload = .newComposingText(newValue)}
+    set {payload = .keyEvent(newValue)}
   }
 
-  var setContext: Hazkey_Commands_SetContext {
-    get {
-      if case .setContext(let v)? = payload {return v}
-      return Hazkey_Commands_SetContext()
-    }
-    set {payload = .setContext(newValue)}
-  }
-
-  var inputChar: Hazkey_Commands_InputChar {
-    get {
-      if case .inputChar(let v)? = payload {return v}
-      return Hazkey_Commands_InputChar()
-    }
-    set {payload = .inputChar(newValue)}
-  }
-
-  var modifierEvent: Hazkey_Commands_ModifierEvent {
-    get {
-      if case .modifierEvent(let v)? = payload {return v}
-      return Hazkey_Commands_ModifierEvent()
-    }
-    set {payload = .modifierEvent(newValue)}
-  }
-
-  var moveCursor: Hazkey_Commands_MoveCursor {
-    get {
-      if case .moveCursor(let v)? = payload {return v}
-      return Hazkey_Commands_MoveCursor()
-    }
-    set {payload = .moveCursor(newValue)}
-  }
-
-  var prefixComplete: Hazkey_Commands_PrefixComplete {
-    get {
-      if case .prefixComplete(let v)? = payload {return v}
-      return Hazkey_Commands_PrefixComplete()
-    }
-    set {payload = .prefixComplete(newValue)}
-  }
-
-  var deleteLeft: Hazkey_Commands_DeleteLeft {
-    get {
-      if case .deleteLeft(let v)? = payload {return v}
-      return Hazkey_Commands_DeleteLeft()
-    }
-    set {payload = .deleteLeft(newValue)}
-  }
-
-  var deleteRight: Hazkey_Commands_DeleteRight {
-    get {
-      if case .deleteRight(let v)? = payload {return v}
-      return Hazkey_Commands_DeleteRight()
-    }
-    set {payload = .deleteRight(newValue)}
-  }
-
-  var getComposingString: Hazkey_Commands_GetComposingString {
-    get {
-      if case .getComposingString(let v)? = payload {return v}
-      return Hazkey_Commands_GetComposingString()
-    }
-    set {payload = .getComposingString(newValue)}
-  }
-
-  var getHiraganaWithCursor: Hazkey_Commands_GetHiraganaWithCursor {
-    get {
-      if case .getHiraganaWithCursor(let v)? = payload {return v}
-      return Hazkey_Commands_GetHiraganaWithCursor()
-    }
-    set {payload = .getHiraganaWithCursor(newValue)}
-  }
-
-  var getCandidates: Hazkey_Commands_GetCandidates {
-    get {
-      if case .getCandidates(let v)? = payload {return v}
-      return Hazkey_Commands_GetCandidates()
-    }
-    set {payload = .getCandidates(newValue)}
-  }
-
-  var getCurrentInputMode: Hazkey_Commands_GetCurrentInputModeInfo {
-    get {
-      if case .getCurrentInputMode(let v)? = payload {return v}
-      return Hazkey_Commands_GetCurrentInputModeInfo()
-    }
-    set {payload = .getCurrentInputMode(newValue)}
-  }
-
+  /// hazkey.commands.NewComposingText new_composing_text = 1;
+  /// hazkey.commands.SetContext set_context = 2;
+  /// hazkey.commands.InputChar input_char = 3;
+  /// hazkey.commands.ModifierEvent modifier_event = 4;
+  /// hazkey.commands.MoveCursor move_cursor = 5;
+  /// hazkey.commands.PrefixComplete prefix_complete = 6;
+  /// hazkey.commands.DeleteLeft delete_left = 7;
+  /// hazkey.commands.DeleteRight delete_right = 8;
+  /// hazkey.commands.GetComposingString get_composing_string = 9;
+  /// hazkey.commands.GetHiraganaWithCursor get_hiragana_with_cursor = 10;
+  /// hazkey.commands.GetCandidates get_candidates = 11;
+  /// hazkey.commands.GetCurrentInputModeInfo get_current_input_mode = 12;
   var saveLearningData: Hazkey_Commands_SaveLearningData {
     get {
       if case .saveLearningData(let v)? = payload {return v}
       return Hazkey_Commands_SaveLearningData()
     }
     set {payload = .saveLearningData(newValue)}
+  }
+
+  var resetState: Hazkey_Commands_ResetState {
+    get {
+      if case .resetState(let v)? = payload {return v}
+      return Hazkey_Commands_ResetState()
+    }
+    set {payload = .resetState(newValue)}
   }
 
   var getConfig: Hazkey_Config_GetConfig {
@@ -212,19 +144,21 @@ struct Hazkey_RequestEnvelope: Sendable {
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
   enum OneOf_Payload: Equatable, Sendable {
-    case newComposingText(Hazkey_Commands_NewComposingText)
-    case setContext(Hazkey_Commands_SetContext)
-    case inputChar(Hazkey_Commands_InputChar)
-    case modifierEvent(Hazkey_Commands_ModifierEvent)
-    case moveCursor(Hazkey_Commands_MoveCursor)
-    case prefixComplete(Hazkey_Commands_PrefixComplete)
-    case deleteLeft(Hazkey_Commands_DeleteLeft)
-    case deleteRight(Hazkey_Commands_DeleteRight)
-    case getComposingString(Hazkey_Commands_GetComposingString)
-    case getHiraganaWithCursor(Hazkey_Commands_GetHiraganaWithCursor)
-    case getCandidates(Hazkey_Commands_GetCandidates)
-    case getCurrentInputMode(Hazkey_Commands_GetCurrentInputModeInfo)
+    case keyEvent(Hazkey_Commands_KeyEvent)
+    /// hazkey.commands.NewComposingText new_composing_text = 1;
+    /// hazkey.commands.SetContext set_context = 2;
+    /// hazkey.commands.InputChar input_char = 3;
+    /// hazkey.commands.ModifierEvent modifier_event = 4;
+    /// hazkey.commands.MoveCursor move_cursor = 5;
+    /// hazkey.commands.PrefixComplete prefix_complete = 6;
+    /// hazkey.commands.DeleteLeft delete_left = 7;
+    /// hazkey.commands.DeleteRight delete_right = 8;
+    /// hazkey.commands.GetComposingString get_composing_string = 9;
+    /// hazkey.commands.GetHiraganaWithCursor get_hiragana_with_cursor = 10;
+    /// hazkey.commands.GetCandidates get_candidates = 11;
+    /// hazkey.commands.GetCurrentInputModeInfo get_current_input_mode = 12;
     case saveLearningData(Hazkey_Commands_SaveLearningData)
+    case resetState(Hazkey_Commands_ResetState)
     case getConfig(Hazkey_Config_GetConfig)
     case setConfig(Hazkey_Config_SetConfig)
     case getDefaultProfile(Hazkey_Config_GetDefaultProfile)
@@ -255,28 +189,15 @@ struct Hazkey_ResponseEnvelope: Sendable {
     set {payload = .text(newValue)}
   }
 
-  var candidates: Hazkey_Commands_CandidatesResult {
+  /// hazkey.commands.CandidatesResult candidates = 4;
+  /// hazkey.commands.TextWithCursor text_with_cursor = 5;
+  /// hazkey.commands.CurrentInputModeInfo current_input_mode_info = 6;
+  var clientState: Hazkey_Commands_ClientState {
     get {
-      if case .candidates(let v)? = payload {return v}
-      return Hazkey_Commands_CandidatesResult()
+      if case .clientState(let v)? = payload {return v}
+      return Hazkey_Commands_ClientState()
     }
-    set {payload = .candidates(newValue)}
-  }
-
-  var textWithCursor: Hazkey_Commands_TextWithCursor {
-    get {
-      if case .textWithCursor(let v)? = payload {return v}
-      return Hazkey_Commands_TextWithCursor()
-    }
-    set {payload = .textWithCursor(newValue)}
-  }
-
-  var currentInputModeInfo: Hazkey_Commands_CurrentInputModeInfo {
-    get {
-      if case .currentInputModeInfo(let v)? = payload {return v}
-      return Hazkey_Commands_CurrentInputModeInfo()
-    }
-    set {payload = .currentInputModeInfo(newValue)}
+    set {payload = .clientState(newValue)}
   }
 
   var currentConfig: Hazkey_Config_CurrentConfig {
@@ -291,9 +212,10 @@ struct Hazkey_ResponseEnvelope: Sendable {
 
   enum OneOf_Payload: Equatable, Sendable {
     case text(String)
-    case candidates(Hazkey_Commands_CandidatesResult)
-    case textWithCursor(Hazkey_Commands_TextWithCursor)
-    case currentInputModeInfo(Hazkey_Commands_CurrentInputModeInfo)
+    /// hazkey.commands.CandidatesResult candidates = 4;
+    /// hazkey.commands.TextWithCursor text_with_cursor = 5;
+    /// hazkey.commands.CurrentInputModeInfo current_input_mode_info = 6;
+    case clientState(Hazkey_Commands_ClientState)
     case currentConfig(Hazkey_Config_CurrentConfig)
 
   }
@@ -316,19 +238,9 @@ extension Hazkey_StatusCode: SwiftProtobuf._ProtoNameProviding {
 extension Hazkey_RequestEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
   static let protoMessageName: String = _protobuf_package + ".RequestEnvelope"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "new_composing_text"),
-    2: .standard(proto: "set_context"),
-    3: .standard(proto: "input_char"),
-    4: .standard(proto: "modifier_event"),
-    5: .standard(proto: "move_cursor"),
-    6: .standard(proto: "prefix_complete"),
-    7: .standard(proto: "delete_left"),
-    8: .standard(proto: "delete_right"),
-    9: .standard(proto: "get_composing_string"),
-    10: .standard(proto: "get_hiragana_with_cursor"),
-    11: .standard(proto: "get_candidates"),
-    12: .standard(proto: "get_current_input_mode"),
+    1: .standard(proto: "key_event"),
     13: .standard(proto: "save_learning_data"),
+    14: .standard(proto: "reset_state"),
     100: .standard(proto: "get_config"),
     101: .standard(proto: "set_config"),
     102: .standard(proto: "get_default_profile"),
@@ -343,159 +255,16 @@ extension Hazkey_RequestEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageI
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try {
-        var v: Hazkey_Commands_NewComposingText?
+        var v: Hazkey_Commands_KeyEvent?
         var hadOneofValue = false
         if let current = self.payload {
           hadOneofValue = true
-          if case .newComposingText(let m) = current {v = m}
+          if case .keyEvent(let m) = current {v = m}
         }
         try decoder.decodeSingularMessageField(value: &v)
         if let v = v {
           if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .newComposingText(v)
-        }
-      }()
-      case 2: try {
-        var v: Hazkey_Commands_SetContext?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .setContext(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .setContext(v)
-        }
-      }()
-      case 3: try {
-        var v: Hazkey_Commands_InputChar?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .inputChar(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .inputChar(v)
-        }
-      }()
-      case 4: try {
-        var v: Hazkey_Commands_ModifierEvent?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .modifierEvent(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .modifierEvent(v)
-        }
-      }()
-      case 5: try {
-        var v: Hazkey_Commands_MoveCursor?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .moveCursor(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .moveCursor(v)
-        }
-      }()
-      case 6: try {
-        var v: Hazkey_Commands_PrefixComplete?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .prefixComplete(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .prefixComplete(v)
-        }
-      }()
-      case 7: try {
-        var v: Hazkey_Commands_DeleteLeft?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .deleteLeft(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .deleteLeft(v)
-        }
-      }()
-      case 8: try {
-        var v: Hazkey_Commands_DeleteRight?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .deleteRight(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .deleteRight(v)
-        }
-      }()
-      case 9: try {
-        var v: Hazkey_Commands_GetComposingString?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .getComposingString(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .getComposingString(v)
-        }
-      }()
-      case 10: try {
-        var v: Hazkey_Commands_GetHiraganaWithCursor?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .getHiraganaWithCursor(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .getHiraganaWithCursor(v)
-        }
-      }()
-      case 11: try {
-        var v: Hazkey_Commands_GetCandidates?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .getCandidates(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .getCandidates(v)
-        }
-      }()
-      case 12: try {
-        var v: Hazkey_Commands_GetCurrentInputModeInfo?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .getCurrentInputMode(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .getCurrentInputMode(v)
+          self.payload = .keyEvent(v)
         }
       }()
       case 13: try {
@@ -509,6 +278,19 @@ extension Hazkey_RequestEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageI
         if let v = v {
           if hadOneofValue {try decoder.handleConflictingOneOf()}
           self.payload = .saveLearningData(v)
+        }
+      }()
+      case 14: try {
+        var v: Hazkey_Commands_ResetState?
+        var hadOneofValue = false
+        if let current = self.payload {
+          hadOneofValue = true
+          if case .resetState(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.payload = .resetState(v)
         }
       }()
       case 100: try {
@@ -587,57 +369,17 @@ extension Hazkey_RequestEnvelope: SwiftProtobuf.Message, SwiftProtobuf._MessageI
     // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
     // https://github.com/apple/swift-protobuf/issues/1182
     switch self.payload {
-    case .newComposingText?: try {
-      guard case .newComposingText(let v)? = self.payload else { preconditionFailure() }
+    case .keyEvent?: try {
+      guard case .keyEvent(let v)? = self.payload else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 1)
-    }()
-    case .setContext?: try {
-      guard case .setContext(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 2)
-    }()
-    case .inputChar?: try {
-      guard case .inputChar(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 3)
-    }()
-    case .modifierEvent?: try {
-      guard case .modifierEvent(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    }()
-    case .moveCursor?: try {
-      guard case .moveCursor(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-    }()
-    case .prefixComplete?: try {
-      guard case .prefixComplete(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
-    }()
-    case .deleteLeft?: try {
-      guard case .deleteLeft(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 7)
-    }()
-    case .deleteRight?: try {
-      guard case .deleteRight(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 8)
-    }()
-    case .getComposingString?: try {
-      guard case .getComposingString(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 9)
-    }()
-    case .getHiraganaWithCursor?: try {
-      guard case .getHiraganaWithCursor(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 10)
-    }()
-    case .getCandidates?: try {
-      guard case .getCandidates(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 11)
-    }()
-    case .getCurrentInputMode?: try {
-      guard case .getCurrentInputMode(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 12)
     }()
     case .saveLearningData?: try {
       guard case .saveLearningData(let v)? = self.payload else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 13)
+    }()
+    case .resetState?: try {
+      guard case .resetState(let v)? = self.payload else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 14)
     }()
     case .getConfig?: try {
       guard case .getConfig(let v)? = self.payload else { preconditionFailure() }
@@ -677,9 +419,7 @@ extension Hazkey_ResponseEnvelope: SwiftProtobuf.Message, SwiftProtobuf._Message
     1: .same(proto: "status"),
     2: .standard(proto: "error_message"),
     3: .same(proto: "text"),
-    4: .same(proto: "candidates"),
-    5: .standard(proto: "text_with_cursor"),
-    6: .standard(proto: "current_input_mode_info"),
+    4: .standard(proto: "client_state"),
     100: .standard(proto: "current_config"),
   ]
 
@@ -700,42 +440,16 @@ extension Hazkey_ResponseEnvelope: SwiftProtobuf.Message, SwiftProtobuf._Message
         }
       }()
       case 4: try {
-        var v: Hazkey_Commands_CandidatesResult?
+        var v: Hazkey_Commands_ClientState?
         var hadOneofValue = false
         if let current = self.payload {
           hadOneofValue = true
-          if case .candidates(let m) = current {v = m}
+          if case .clientState(let m) = current {v = m}
         }
         try decoder.decodeSingularMessageField(value: &v)
         if let v = v {
           if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .candidates(v)
-        }
-      }()
-      case 5: try {
-        var v: Hazkey_Commands_TextWithCursor?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .textWithCursor(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .textWithCursor(v)
-        }
-      }()
-      case 6: try {
-        var v: Hazkey_Commands_CurrentInputModeInfo?
-        var hadOneofValue = false
-        if let current = self.payload {
-          hadOneofValue = true
-          if case .currentInputModeInfo(let m) = current {v = m}
-        }
-        try decoder.decodeSingularMessageField(value: &v)
-        if let v = v {
-          if hadOneofValue {try decoder.handleConflictingOneOf()}
-          self.payload = .currentInputModeInfo(v)
+          self.payload = .clientState(v)
         }
       }()
       case 100: try {
@@ -772,17 +486,9 @@ extension Hazkey_ResponseEnvelope: SwiftProtobuf.Message, SwiftProtobuf._Message
       guard case .text(let v)? = self.payload else { preconditionFailure() }
       try visitor.visitSingularStringField(value: v, fieldNumber: 3)
     }()
-    case .candidates?: try {
-      guard case .candidates(let v)? = self.payload else { preconditionFailure() }
+    case .clientState?: try {
+      guard case .clientState(let v)? = self.payload else { preconditionFailure() }
       try visitor.visitSingularMessageField(value: v, fieldNumber: 4)
-    }()
-    case .textWithCursor?: try {
-      guard case .textWithCursor(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 5)
-    }()
-    case .currentInputModeInfo?: try {
-      guard case .currentInputModeInfo(let v)? = self.payload else { preconditionFailure() }
-      try visitor.visitSingularMessageField(value: v, fieldNumber: 6)
     }()
     case .currentConfig?: try {
       guard case .currentConfig(let v)? = self.payload else { preconditionFailure() }

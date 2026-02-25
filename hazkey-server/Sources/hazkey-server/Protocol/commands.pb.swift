@@ -20,92 +20,933 @@ fileprivate struct _GeneratedWithProtocGenSwiftVersion: SwiftProtobuf.ProtobufAP
   typealias Version = _2
 }
 
-struct Hazkey_Commands_NewComposingText: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+/// based on w3c keycode / USB HID Usage Tables
+enum Hazkey_Commands_KeyCode: SwiftProtobuf.Enum, Swift.CaseIterable {
+  typealias RawValue = Int
+  case unspecified // = 0
+  case keyA // = 4
+  case keyB // = 5
+  case keyC // = 6
+  case keyD // = 7
+  case keyE // = 8
+  case keyF // = 9
+  case keyG // = 10
+  case keyH // = 11
+  case keyI // = 12
+  case keyJ // = 13
+  case keyK // = 14
+  case keyL // = 15
+  case keyM // = 16
+  case keyN // = 17
+  case keyO // = 18
+  case keyP // = 19
+  case keyQ // = 20
+  case keyR // = 21
+  case keyS // = 22
+  case keyT // = 23
+  case keyU // = 24
+  case keyV // = 25
+  case keyW // = 26
+  case keyX // = 27
+  case keyY // = 28
+  case keyZ // = 29
+  case digit1 // = 30
+  case digit2 // = 31
+  case digit3 // = 32
+  case digit4 // = 33
+  case digit5 // = 34
+  case digit6 // = 35
+  case digit7 // = 36
+  case digit8 // = 37
+  case digit9 // = 38
+  case digit0 // = 39
+  case enter // = 40
+  case escape // = 41
+  case backspace // = 42
+  case tab // = 43
+  case space // = 44
+  case minus // = 45
+  case equal // = 46
+  case bracketLeft // = 47
+  case bracketRight // = 48
+  case isoBackslash // = 49
+  case semicolon // = 51
+  case quote // = 52
+  case backquote // = 53
+  case comma // = 54
+  case period // = 55
+  case slash // = 56
+  case capsLock // = 57
+  case f1 // = 58
+  case f2 // = 59
+  case f3 // = 60
+  case f4 // = 61
+  case f5 // = 62
+  case f6 // = 63
+  case f7 // = 64
+  case f8 // = 65
+  case f9 // = 66
+  case f10 // = 67
+  case f11 // = 68
+  case f12 // = 69
+  case home // = 74
+  case pageUp // = 75
+  case delete // = 76
+  case end // = 77
+  case pageDown // = 78
+  case arrowRight // = 79
+  case arrowLeft // = 80
+  case arrowDown // = 81
+  case arrowUp // = 82
+  case numLock // = 83
+  case numpadDivide // = 84
+  case numpadMultiply // = 85
+  case numpadSubtract // = 86
+  case numpadAdd // = 87
+  case numpadEnter // = 88
+  case numpad1 // = 89
+  case numpad2 // = 90
+  case numpad3 // = 91
+  case numpad4 // = 92
+  case numpad5 // = 93
+  case numpad6 // = 94
+  case numpad7 // = 95
+  case numpad8 // = 96
+  case numpad9 // = 97
+  case numpad0 // = 98
+  case numpadDecimal // = 99
+  case intlBackslash // = 100
+  case contextMenu // = 101
+  case power // = 102
+  case numpadEqual // = 103
+  case f13 // = 104
+  case f14 // = 105
+  case f15 // = 106
+  case f16 // = 107
+  case f17 // = 108
+  case f18 // = 109
+  case f19 // = 110
+  case f20 // = 111
+  case f21 // = 112
+  case f22 // = 113
+  case f23 // = 114
+  case f24 // = 115
+  case intlRo // = 135
+  case kanaMode // = 136
+  case intlYen // = 137
+  case convert // = 138
+  case nonConvert // = 139
+  case lang1 // = 144
+  case lang2 // = 145
+  case lang3 // = 146
+  case lang4 // = 147
+  case lang5 // = 148
+  case controlLeft // = 224
+  case shiftLeft // = 225
+  case altLeft // = 226
+  case metaLeft // = 227
+  case controlRight // = 228
+  case shiftRight // = 229
+  case altRight // = 230
+  case metaRight // = 231
+  case UNRECOGNIZED(Int)
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  init() {
+    self = .unspecified
+  }
 
-  init() {}
+  init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .unspecified
+    case 4: self = .keyA
+    case 5: self = .keyB
+    case 6: self = .keyC
+    case 7: self = .keyD
+    case 8: self = .keyE
+    case 9: self = .keyF
+    case 10: self = .keyG
+    case 11: self = .keyH
+    case 12: self = .keyI
+    case 13: self = .keyJ
+    case 14: self = .keyK
+    case 15: self = .keyL
+    case 16: self = .keyM
+    case 17: self = .keyN
+    case 18: self = .keyO
+    case 19: self = .keyP
+    case 20: self = .keyQ
+    case 21: self = .keyR
+    case 22: self = .keyS
+    case 23: self = .keyT
+    case 24: self = .keyU
+    case 25: self = .keyV
+    case 26: self = .keyW
+    case 27: self = .keyX
+    case 28: self = .keyY
+    case 29: self = .keyZ
+    case 30: self = .digit1
+    case 31: self = .digit2
+    case 32: self = .digit3
+    case 33: self = .digit4
+    case 34: self = .digit5
+    case 35: self = .digit6
+    case 36: self = .digit7
+    case 37: self = .digit8
+    case 38: self = .digit9
+    case 39: self = .digit0
+    case 40: self = .enter
+    case 41: self = .escape
+    case 42: self = .backspace
+    case 43: self = .tab
+    case 44: self = .space
+    case 45: self = .minus
+    case 46: self = .equal
+    case 47: self = .bracketLeft
+    case 48: self = .bracketRight
+    case 49: self = .isoBackslash
+    case 51: self = .semicolon
+    case 52: self = .quote
+    case 53: self = .backquote
+    case 54: self = .comma
+    case 55: self = .period
+    case 56: self = .slash
+    case 57: self = .capsLock
+    case 58: self = .f1
+    case 59: self = .f2
+    case 60: self = .f3
+    case 61: self = .f4
+    case 62: self = .f5
+    case 63: self = .f6
+    case 64: self = .f7
+    case 65: self = .f8
+    case 66: self = .f9
+    case 67: self = .f10
+    case 68: self = .f11
+    case 69: self = .f12
+    case 74: self = .home
+    case 75: self = .pageUp
+    case 76: self = .delete
+    case 77: self = .end
+    case 78: self = .pageDown
+    case 79: self = .arrowRight
+    case 80: self = .arrowLeft
+    case 81: self = .arrowDown
+    case 82: self = .arrowUp
+    case 83: self = .numLock
+    case 84: self = .numpadDivide
+    case 85: self = .numpadMultiply
+    case 86: self = .numpadSubtract
+    case 87: self = .numpadAdd
+    case 88: self = .numpadEnter
+    case 89: self = .numpad1
+    case 90: self = .numpad2
+    case 91: self = .numpad3
+    case 92: self = .numpad4
+    case 93: self = .numpad5
+    case 94: self = .numpad6
+    case 95: self = .numpad7
+    case 96: self = .numpad8
+    case 97: self = .numpad9
+    case 98: self = .numpad0
+    case 99: self = .numpadDecimal
+    case 100: self = .intlBackslash
+    case 101: self = .contextMenu
+    case 102: self = .power
+    case 103: self = .numpadEqual
+    case 104: self = .f13
+    case 105: self = .f14
+    case 106: self = .f15
+    case 107: self = .f16
+    case 108: self = .f17
+    case 109: self = .f18
+    case 110: self = .f19
+    case 111: self = .f20
+    case 112: self = .f21
+    case 113: self = .f22
+    case 114: self = .f23
+    case 115: self = .f24
+    case 135: self = .intlRo
+    case 136: self = .kanaMode
+    case 137: self = .intlYen
+    case 138: self = .convert
+    case 139: self = .nonConvert
+    case 144: self = .lang1
+    case 145: self = .lang2
+    case 146: self = .lang3
+    case 147: self = .lang4
+    case 148: self = .lang5
+    case 224: self = .controlLeft
+    case 225: self = .shiftLeft
+    case 226: self = .altLeft
+    case 227: self = .metaLeft
+    case 228: self = .controlRight
+    case 229: self = .shiftRight
+    case 230: self = .altRight
+    case 231: self = .metaRight
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
+
+  var rawValue: Int {
+    switch self {
+    case .unspecified: return 0
+    case .keyA: return 4
+    case .keyB: return 5
+    case .keyC: return 6
+    case .keyD: return 7
+    case .keyE: return 8
+    case .keyF: return 9
+    case .keyG: return 10
+    case .keyH: return 11
+    case .keyI: return 12
+    case .keyJ: return 13
+    case .keyK: return 14
+    case .keyL: return 15
+    case .keyM: return 16
+    case .keyN: return 17
+    case .keyO: return 18
+    case .keyP: return 19
+    case .keyQ: return 20
+    case .keyR: return 21
+    case .keyS: return 22
+    case .keyT: return 23
+    case .keyU: return 24
+    case .keyV: return 25
+    case .keyW: return 26
+    case .keyX: return 27
+    case .keyY: return 28
+    case .keyZ: return 29
+    case .digit1: return 30
+    case .digit2: return 31
+    case .digit3: return 32
+    case .digit4: return 33
+    case .digit5: return 34
+    case .digit6: return 35
+    case .digit7: return 36
+    case .digit8: return 37
+    case .digit9: return 38
+    case .digit0: return 39
+    case .enter: return 40
+    case .escape: return 41
+    case .backspace: return 42
+    case .tab: return 43
+    case .space: return 44
+    case .minus: return 45
+    case .equal: return 46
+    case .bracketLeft: return 47
+    case .bracketRight: return 48
+    case .isoBackslash: return 49
+    case .semicolon: return 51
+    case .quote: return 52
+    case .backquote: return 53
+    case .comma: return 54
+    case .period: return 55
+    case .slash: return 56
+    case .capsLock: return 57
+    case .f1: return 58
+    case .f2: return 59
+    case .f3: return 60
+    case .f4: return 61
+    case .f5: return 62
+    case .f6: return 63
+    case .f7: return 64
+    case .f8: return 65
+    case .f9: return 66
+    case .f10: return 67
+    case .f11: return 68
+    case .f12: return 69
+    case .home: return 74
+    case .pageUp: return 75
+    case .delete: return 76
+    case .end: return 77
+    case .pageDown: return 78
+    case .arrowRight: return 79
+    case .arrowLeft: return 80
+    case .arrowDown: return 81
+    case .arrowUp: return 82
+    case .numLock: return 83
+    case .numpadDivide: return 84
+    case .numpadMultiply: return 85
+    case .numpadSubtract: return 86
+    case .numpadAdd: return 87
+    case .numpadEnter: return 88
+    case .numpad1: return 89
+    case .numpad2: return 90
+    case .numpad3: return 91
+    case .numpad4: return 92
+    case .numpad5: return 93
+    case .numpad6: return 94
+    case .numpad7: return 95
+    case .numpad8: return 96
+    case .numpad9: return 97
+    case .numpad0: return 98
+    case .numpadDecimal: return 99
+    case .intlBackslash: return 100
+    case .contextMenu: return 101
+    case .power: return 102
+    case .numpadEqual: return 103
+    case .f13: return 104
+    case .f14: return 105
+    case .f15: return 106
+    case .f16: return 107
+    case .f17: return 108
+    case .f18: return 109
+    case .f19: return 110
+    case .f20: return 111
+    case .f21: return 112
+    case .f22: return 113
+    case .f23: return 114
+    case .f24: return 115
+    case .intlRo: return 135
+    case .kanaMode: return 136
+    case .intlYen: return 137
+    case .convert: return 138
+    case .nonConvert: return 139
+    case .lang1: return 144
+    case .lang2: return 145
+    case .lang3: return 146
+    case .lang4: return 147
+    case .lang5: return 148
+    case .controlLeft: return 224
+    case .shiftLeft: return 225
+    case .altLeft: return 226
+    case .metaLeft: return 227
+    case .controlRight: return 228
+    case .shiftRight: return 229
+    case .altRight: return 230
+    case .metaRight: return 231
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
+
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  static let allCases: [Hazkey_Commands_KeyCode] = [
+    .unspecified,
+    .keyA,
+    .keyB,
+    .keyC,
+    .keyD,
+    .keyE,
+    .keyF,
+    .keyG,
+    .keyH,
+    .keyI,
+    .keyJ,
+    .keyK,
+    .keyL,
+    .keyM,
+    .keyN,
+    .keyO,
+    .keyP,
+    .keyQ,
+    .keyR,
+    .keyS,
+    .keyT,
+    .keyU,
+    .keyV,
+    .keyW,
+    .keyX,
+    .keyY,
+    .keyZ,
+    .digit1,
+    .digit2,
+    .digit3,
+    .digit4,
+    .digit5,
+    .digit6,
+    .digit7,
+    .digit8,
+    .digit9,
+    .digit0,
+    .enter,
+    .escape,
+    .backspace,
+    .tab,
+    .space,
+    .minus,
+    .equal,
+    .bracketLeft,
+    .bracketRight,
+    .isoBackslash,
+    .semicolon,
+    .quote,
+    .backquote,
+    .comma,
+    .period,
+    .slash,
+    .capsLock,
+    .f1,
+    .f2,
+    .f3,
+    .f4,
+    .f5,
+    .f6,
+    .f7,
+    .f8,
+    .f9,
+    .f10,
+    .f11,
+    .f12,
+    .home,
+    .pageUp,
+    .delete,
+    .end,
+    .pageDown,
+    .arrowRight,
+    .arrowLeft,
+    .arrowDown,
+    .arrowUp,
+    .numLock,
+    .numpadDivide,
+    .numpadMultiply,
+    .numpadSubtract,
+    .numpadAdd,
+    .numpadEnter,
+    .numpad1,
+    .numpad2,
+    .numpad3,
+    .numpad4,
+    .numpad5,
+    .numpad6,
+    .numpad7,
+    .numpad8,
+    .numpad9,
+    .numpad0,
+    .numpadDecimal,
+    .intlBackslash,
+    .contextMenu,
+    .power,
+    .numpadEqual,
+    .f13,
+    .f14,
+    .f15,
+    .f16,
+    .f17,
+    .f18,
+    .f19,
+    .f20,
+    .f21,
+    .f22,
+    .f23,
+    .f24,
+    .intlRo,
+    .kanaMode,
+    .intlYen,
+    .convert,
+    .nonConvert,
+    .lang1,
+    .lang2,
+    .lang3,
+    .lang4,
+    .lang5,
+    .controlLeft,
+    .shiftLeft,
+    .altLeft,
+    .metaLeft,
+    .controlRight,
+    .shiftRight,
+    .altRight,
+    .metaRight,
+  ]
+
 }
 
-struct Hazkey_Commands_SetContext: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
+enum Hazkey_Commands_SpecialKey: SwiftProtobuf.Enum, Swift.CaseIterable {
+  typealias RawValue = Int
+  case keyUnspecified // = 0
+  case enter // = 40
+  case escape // = 41
+  case backspace // = 42
+  case tab // = 43
+  case space // = 44
+  case capsLock // = 57
+  case f1 // = 58
+  case f2 // = 59
+  case f3 // = 60
+  case f4 // = 61
+  case f5 // = 62
+  case f6 // = 63
+  case f7 // = 64
+  case f8 // = 65
+  case f9 // = 66
+  case f10 // = 67
+  case f11 // = 68
+  case f12 // = 69
+  case home // = 74
+  case pageUp // = 75
+  case delete // = 76
+  case end // = 77
+  case pageDown // = 78
+  case arrowRight // = 79
+  case arrowLeft // = 80
+  case arrowDown // = 81
+  case arrowUp // = 82
+  case numLock // = 83
+  case numpadDivide // = 84
+  case numpadMultiply // = 85
+  case numpadSubtract // = 86
+  case numpadAdd // = 87
+  case numpadEnter // = 88
+  case numpad1 // = 89
+  case numpad2 // = 90
+  case numpad3 // = 91
+  case numpad4 // = 92
+  case numpad5 // = 93
+  case numpad6 // = 94
+  case numpad7 // = 95
+  case numpad8 // = 96
+  case numpad9 // = 97
+  case numpad0 // = 98
+  case numpadDecimal // = 99
+  case intlBackslash // = 100
+  case contextMenu // = 101
+  case power // = 102
+  case numpadEqual // = 103
+  case f13 // = 104
+  case f14 // = 105
+  case f15 // = 106
+  case f16 // = 107
+  case f17 // = 108
+  case f18 // = 109
+  case f19 // = 110
+  case f20 // = 111
+  case f21 // = 112
+  case f22 // = 113
+  case f23 // = 114
+  case f24 // = 115
+  case kanaMode // = 136
+  case convert // = 138
+  case nonConvert // = 139
+  case lang1 // = 144
+  case lang2 // = 145
+  case lang3 // = 146
+  case lang4 // = 147
+  case lang5 // = 148
+  case controlLeft // = 224
+  case shiftLeft // = 225
+  case altLeft // = 226
+  case metaLeft // = 227
+  case controlRight // = 228
+  case shiftRight // = 229
+  case altRight // = 230
+  case metaRight // = 231
+  case UNRECOGNIZED(Int)
 
-  var context: String = String()
+  init() {
+    self = .keyUnspecified
+  }
 
-  var anchor: Int32 = 0
+  init?(rawValue: Int) {
+    switch rawValue {
+    case 0: self = .keyUnspecified
+    case 40: self = .enter
+    case 41: self = .escape
+    case 42: self = .backspace
+    case 43: self = .tab
+    case 44: self = .space
+    case 57: self = .capsLock
+    case 58: self = .f1
+    case 59: self = .f2
+    case 60: self = .f3
+    case 61: self = .f4
+    case 62: self = .f5
+    case 63: self = .f6
+    case 64: self = .f7
+    case 65: self = .f8
+    case 66: self = .f9
+    case 67: self = .f10
+    case 68: self = .f11
+    case 69: self = .f12
+    case 74: self = .home
+    case 75: self = .pageUp
+    case 76: self = .delete
+    case 77: self = .end
+    case 78: self = .pageDown
+    case 79: self = .arrowRight
+    case 80: self = .arrowLeft
+    case 81: self = .arrowDown
+    case 82: self = .arrowUp
+    case 83: self = .numLock
+    case 84: self = .numpadDivide
+    case 85: self = .numpadMultiply
+    case 86: self = .numpadSubtract
+    case 87: self = .numpadAdd
+    case 88: self = .numpadEnter
+    case 89: self = .numpad1
+    case 90: self = .numpad2
+    case 91: self = .numpad3
+    case 92: self = .numpad4
+    case 93: self = .numpad5
+    case 94: self = .numpad6
+    case 95: self = .numpad7
+    case 96: self = .numpad8
+    case 97: self = .numpad9
+    case 98: self = .numpad0
+    case 99: self = .numpadDecimal
+    case 100: self = .intlBackslash
+    case 101: self = .contextMenu
+    case 102: self = .power
+    case 103: self = .numpadEqual
+    case 104: self = .f13
+    case 105: self = .f14
+    case 106: self = .f15
+    case 107: self = .f16
+    case 108: self = .f17
+    case 109: self = .f18
+    case 110: self = .f19
+    case 111: self = .f20
+    case 112: self = .f21
+    case 113: self = .f22
+    case 114: self = .f23
+    case 115: self = .f24
+    case 136: self = .kanaMode
+    case 138: self = .convert
+    case 139: self = .nonConvert
+    case 144: self = .lang1
+    case 145: self = .lang2
+    case 146: self = .lang3
+    case 147: self = .lang4
+    case 148: self = .lang5
+    case 224: self = .controlLeft
+    case 225: self = .shiftLeft
+    case 226: self = .altLeft
+    case 227: self = .metaLeft
+    case 228: self = .controlRight
+    case 229: self = .shiftRight
+    case 230: self = .altRight
+    case 231: self = .metaRight
+    default: self = .UNRECOGNIZED(rawValue)
+    }
+  }
 
-  var unknownFields = SwiftProtobuf.UnknownStorage()
+  var rawValue: Int {
+    switch self {
+    case .keyUnspecified: return 0
+    case .enter: return 40
+    case .escape: return 41
+    case .backspace: return 42
+    case .tab: return 43
+    case .space: return 44
+    case .capsLock: return 57
+    case .f1: return 58
+    case .f2: return 59
+    case .f3: return 60
+    case .f4: return 61
+    case .f5: return 62
+    case .f6: return 63
+    case .f7: return 64
+    case .f8: return 65
+    case .f9: return 66
+    case .f10: return 67
+    case .f11: return 68
+    case .f12: return 69
+    case .home: return 74
+    case .pageUp: return 75
+    case .delete: return 76
+    case .end: return 77
+    case .pageDown: return 78
+    case .arrowRight: return 79
+    case .arrowLeft: return 80
+    case .arrowDown: return 81
+    case .arrowUp: return 82
+    case .numLock: return 83
+    case .numpadDivide: return 84
+    case .numpadMultiply: return 85
+    case .numpadSubtract: return 86
+    case .numpadAdd: return 87
+    case .numpadEnter: return 88
+    case .numpad1: return 89
+    case .numpad2: return 90
+    case .numpad3: return 91
+    case .numpad4: return 92
+    case .numpad5: return 93
+    case .numpad6: return 94
+    case .numpad7: return 95
+    case .numpad8: return 96
+    case .numpad9: return 97
+    case .numpad0: return 98
+    case .numpadDecimal: return 99
+    case .intlBackslash: return 100
+    case .contextMenu: return 101
+    case .power: return 102
+    case .numpadEqual: return 103
+    case .f13: return 104
+    case .f14: return 105
+    case .f15: return 106
+    case .f16: return 107
+    case .f17: return 108
+    case .f18: return 109
+    case .f19: return 110
+    case .f20: return 111
+    case .f21: return 112
+    case .f22: return 113
+    case .f23: return 114
+    case .f24: return 115
+    case .kanaMode: return 136
+    case .convert: return 138
+    case .nonConvert: return 139
+    case .lang1: return 144
+    case .lang2: return 145
+    case .lang3: return 146
+    case .lang4: return 147
+    case .lang5: return 148
+    case .controlLeft: return 224
+    case .shiftLeft: return 225
+    case .altLeft: return 226
+    case .metaLeft: return 227
+    case .controlRight: return 228
+    case .shiftRight: return 229
+    case .altRight: return 230
+    case .metaRight: return 231
+    case .UNRECOGNIZED(let i): return i
+    }
+  }
 
-  init() {}
+  // The compiler won't synthesize support with the UNRECOGNIZED case.
+  static let allCases: [Hazkey_Commands_SpecialKey] = [
+    .keyUnspecified,
+    .enter,
+    .escape,
+    .backspace,
+    .tab,
+    .space,
+    .capsLock,
+    .f1,
+    .f2,
+    .f3,
+    .f4,
+    .f5,
+    .f6,
+    .f7,
+    .f8,
+    .f9,
+    .f10,
+    .f11,
+    .f12,
+    .home,
+    .pageUp,
+    .delete,
+    .end,
+    .pageDown,
+    .arrowRight,
+    .arrowLeft,
+    .arrowDown,
+    .arrowUp,
+    .numLock,
+    .numpadDivide,
+    .numpadMultiply,
+    .numpadSubtract,
+    .numpadAdd,
+    .numpadEnter,
+    .numpad1,
+    .numpad2,
+    .numpad3,
+    .numpad4,
+    .numpad5,
+    .numpad6,
+    .numpad7,
+    .numpad8,
+    .numpad9,
+    .numpad0,
+    .numpadDecimal,
+    .intlBackslash,
+    .contextMenu,
+    .power,
+    .numpadEqual,
+    .f13,
+    .f14,
+    .f15,
+    .f16,
+    .f17,
+    .f18,
+    .f19,
+    .f20,
+    .f21,
+    .f22,
+    .f23,
+    .f24,
+    .kanaMode,
+    .convert,
+    .nonConvert,
+    .lang1,
+    .lang2,
+    .lang3,
+    .lang4,
+    .lang5,
+    .controlLeft,
+    .shiftLeft,
+    .altLeft,
+    .metaLeft,
+    .controlRight,
+    .shiftRight,
+    .altRight,
+    .metaRight,
+  ]
+
 }
 
-struct Hazkey_Commands_InputChar: Sendable {
+struct Hazkey_Commands_KeyEvent: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var text: String = String()
+  var eventType: Hazkey_Commands_KeyEvent.EventType = .unspecified
+
+  /// physical key location
+  var code: Hazkey_Commands_KeyCode {
+    get {return _code ?? .unspecified}
+    set {_code = newValue}
+  }
+  /// Returns true if `code` has been explicitly set.
+  var hasCode: Bool {return self._code != nil}
+  /// Clears the value of `code`. Subsequent reads from it will return its default value.
+  mutating func clearCode() {self._code = nil}
+
+  /// key symbol
+  var input: Hazkey_Commands_KeyEvent.OneOf_Input? = nil
+
+  var specialKey: Hazkey_Commands_SpecialKey {
+    get {
+      if case .specialKey(let v)? = input {return v}
+      return .keyUnspecified
+    }
+    set {input = .specialKey(newValue)}
+  }
+
+  var character: UInt32 {
+    get {
+      if case .character(let v)? = input {return v}
+      return 0
+    }
+    set {input = .character(newValue)}
+  }
+
+  var modifier: UInt32 = 0
+
+  var context: Hazkey_Commands_KeyEvent.Context {
+    get {return _context ?? Hazkey_Commands_KeyEvent.Context()}
+    set {_context = newValue}
+  }
+  /// Returns true if `context` has been explicitly set.
+  var hasContext: Bool {return self._context != nil}
+  /// Clears the value of `context`. Subsequent reads from it will return its default value.
+  mutating func clearContext() {self._context = nil}
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
 
-  init() {}
-}
-
-struct Hazkey_Commands_ModifierEvent: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var modType: Hazkey_Commands_ModifierEvent.ModifierType = .unspecified
-
-  var eventType: Hazkey_Commands_ModifierEvent.EventType = .unspecified
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  enum ModifierType: SwiftProtobuf.Enum, Swift.CaseIterable {
-    typealias RawValue = Int
-    case unspecified // = 0
-    case shift // = 1
-    case UNRECOGNIZED(Int)
-
-    init() {
-      self = .unspecified
-    }
-
-    init?(rawValue: Int) {
-      switch rawValue {
-      case 0: self = .unspecified
-      case 1: self = .shift
-      default: self = .UNRECOGNIZED(rawValue)
-      }
-    }
-
-    var rawValue: Int {
-      switch self {
-      case .unspecified: return 0
-      case .shift: return 1
-      case .UNRECOGNIZED(let i): return i
-      }
-    }
-
-    // The compiler won't synthesize support with the UNRECOGNIZED case.
-    static let allCases: [Hazkey_Commands_ModifierEvent.ModifierType] = [
-      .unspecified,
-      .shift,
-    ]
+  /// key symbol
+  enum OneOf_Input: Equatable, Sendable {
+    case specialKey(Hazkey_Commands_SpecialKey)
+    case character(UInt32)
 
   }
 
   enum EventType: SwiftProtobuf.Enum, Swift.CaseIterable {
     typealias RawValue = Int
     case unspecified // = 0
-    case press // = 1
-    case release // = 2
+    case down // = 1
+    case press // = 2
+    case release // = 3
     case UNRECOGNIZED(Int)
 
     init() {
@@ -115,8 +956,9 @@ struct Hazkey_Commands_ModifierEvent: Sendable {
     init?(rawValue: Int) {
       switch rawValue {
       case 0: self = .unspecified
-      case 1: self = .press
-      case 2: self = .release
+      case 1: self = .down
+      case 2: self = .press
+      case 3: self = .release
       default: self = .UNRECOGNIZED(rawValue)
       }
     }
@@ -124,221 +966,117 @@ struct Hazkey_Commands_ModifierEvent: Sendable {
     var rawValue: Int {
       switch self {
       case .unspecified: return 0
-      case .press: return 1
-      case .release: return 2
+      case .down: return 1
+      case .press: return 2
+      case .release: return 3
       case .UNRECOGNIZED(let i): return i
       }
     }
 
     // The compiler won't synthesize support with the UNRECOGNIZED case.
-    static let allCases: [Hazkey_Commands_ModifierEvent.EventType] = [
+    static let allCases: [Hazkey_Commands_KeyEvent.EventType] = [
       .unspecified,
+      .down,
       .press,
       .release,
     ]
 
   }
 
-  init() {}
-}
-
-struct Hazkey_Commands_MoveCursor: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var offset: Int32 = 0
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_PrefixComplete: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var index: Int32 = 0
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_DeleteLeft: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_DeleteRight: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_GetComposingString: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var charType: Hazkey_Commands_GetComposingString.CharType = .hiragana
-
-  var currentPreedit: String = String()
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  enum CharType: SwiftProtobuf.Enum, Swift.CaseIterable {
-    typealias RawValue = Int
-    case hiragana // = 0
-    case katakanaFull // = 1
-    case katakanaHalf // = 2
-    case alphabetFull // = 3
-    case alphabetHalf // = 4
-    case UNRECOGNIZED(Int)
-
-    init() {
-      self = .hiragana
-    }
-
-    init?(rawValue: Int) {
-      switch rawValue {
-      case 0: self = .hiragana
-      case 1: self = .katakanaFull
-      case 2: self = .katakanaHalf
-      case 3: self = .alphabetFull
-      case 4: self = .alphabetHalf
-      default: self = .UNRECOGNIZED(rawValue)
-      }
-    }
-
-    var rawValue: Int {
-      switch self {
-      case .hiragana: return 0
-      case .katakanaFull: return 1
-      case .katakanaHalf: return 2
-      case .alphabetFull: return 3
-      case .alphabetHalf: return 4
-      case .UNRECOGNIZED(let i): return i
-      }
-    }
-
-    // The compiler won't synthesize support with the UNRECOGNIZED case.
-    static let allCases: [Hazkey_Commands_GetComposingString.CharType] = [
-      .hiragana,
-      .katakanaFull,
-      .katakanaHalf,
-      .alphabetFull,
-      .alphabetHalf,
-    ]
-
-  }
-
-  init() {}
-}
-
-struct Hazkey_Commands_GetHiraganaWithCursor: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_GetCandidates: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var isSuggest: Bool = false
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_GetCurrentInputModeInfo: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_SaveLearningData: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_Text: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var text: String = String()
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_TextWithCursor: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var beforeCursosr: String = String()
-
-  var onCursor: String = String()
-
-  var afterCursor: String = String()
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  init() {}
-}
-
-struct Hazkey_Commands_CandidatesResult: Sendable {
-  // SwiftProtobuf.Message conformance is added in an extension below. See the
-  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
-  // methods supported on all messages.
-
-  var candidates: [Hazkey_Commands_CandidatesResult.Candidate] = []
-
-  var liveText: String = String()
-
-  var liveTextIndex: Int32 = 0
-
-  var pageSize: Int32 = 0
-
-  var unknownFields = SwiftProtobuf.UnknownStorage()
-
-  struct Candidate: Sendable {
+  struct Context: Sendable {
     // SwiftProtobuf.Message conformance is added in an extension below. See the
     // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
     // methods supported on all messages.
 
-    var text: String = String()
+    var context: String = String()
 
-    var subHiragana: String = String()
+    var anchor: Int32 = 0
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  init() {}
+
+  fileprivate var _code: Hazkey_Commands_KeyCode? = nil
+  fileprivate var _context: Hazkey_Commands_KeyEvent.Context? = nil
+}
+
+struct Hazkey_Commands_ClientAction: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var action: Hazkey_Commands_ClientAction.OneOf_Action? = nil
+
+  var showCandidates: Hazkey_Commands_ClientAction.ShowCandidates {
+    get {
+      if case .showCandidates(let v)? = action {return v}
+      return Hazkey_Commands_ClientAction.ShowCandidates()
+    }
+    set {action = .showCandidates(newValue)}
+  }
+
+  var closeCandidates: Hazkey_Commands_ClientAction.CloseCandidates {
+    get {
+      if case .closeCandidates(let v)? = action {return v}
+      return Hazkey_Commands_ClientAction.CloseCandidates()
+    }
+    set {action = .closeCandidates(newValue)}
+  }
+
+  /// Add as needed
+  var complete: String {
+    get {
+      if case .complete(let v)? = action {return v}
+      return String()
+    }
+    set {action = .complete(newValue)}
+  }
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  enum OneOf_Action: Equatable, Sendable {
+    case showCandidates(Hazkey_Commands_ClientAction.ShowCandidates)
+    case closeCandidates(Hazkey_Commands_ClientAction.CloseCandidates)
+    /// Add as needed
+    case complete(String)
+
+  }
+
+  struct ShowCandidates: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var candidates: [Hazkey_Commands_ClientAction.ShowCandidates.Candidate] = []
+
+    var pageSize: Int32 = 0
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    struct Candidate: Sendable {
+      // SwiftProtobuf.Message conformance is added in an extension below. See the
+      // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+      // methods supported on all messages.
+
+      var text: String = String()
+
+      var subHiragana: String = String()
+
+      var unknownFields = SwiftProtobuf.UnknownStorage()
+
+      init() {}
+    }
+
+    init() {}
+  }
+
+  struct CloseCandidates: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
 
     var unknownFields = SwiftProtobuf.UnknownStorage()
 
@@ -348,14 +1086,60 @@ struct Hazkey_Commands_CandidatesResult: Sendable {
   init() {}
 }
 
-struct Hazkey_Commands_CurrentInputModeInfo: Sendable {
+struct Hazkey_Commands_ClientState: Sendable {
   // SwiftProtobuf.Message conformance is added in an extension below. See the
   // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
   // methods supported on all messages.
 
-  var inputMode: Hazkey_Commands_CurrentInputModeInfo.InputMode = .normal
+  var filtered: Bool = false
+
+  var accepted: Bool = false
+
+  var listSelectedIndex: Int32 = 0
+
+  var currentInputMode: Hazkey_Commands_ClientState.InputMode = .normal
+
+  var preeditText: [Hazkey_Commands_ClientState.DecoratedTextPart] = []
+
+  var auxText: [Hazkey_Commands_ClientState.DecoratedTextPart] = []
+
+  var actions: [Hazkey_Commands_ClientAction] = []
 
   var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  enum TextDecoration: SwiftProtobuf.Enum, Swift.CaseIterable {
+    typealias RawValue = Int
+    case none // = 0
+    case underline // = 1
+    case UNRECOGNIZED(Int)
+
+    init() {
+      self = .none
+    }
+
+    init?(rawValue: Int) {
+      switch rawValue {
+      case 0: self = .none
+      case 1: self = .underline
+      default: self = .UNRECOGNIZED(rawValue)
+      }
+    }
+
+    var rawValue: Int {
+      switch self {
+      case .none: return 0
+      case .underline: return 1
+      case .UNRECOGNIZED(let i): return i
+      }
+    }
+
+    // The compiler won't synthesize support with the UNRECOGNIZED case.
+    static let allCases: [Hazkey_Commands_ClientState.TextDecoration] = [
+      .none,
+      .underline,
+    ]
+
+  }
 
   enum InputMode: SwiftProtobuf.Enum, Swift.CaseIterable {
     typealias RawValue = Int
@@ -384,11 +1168,80 @@ struct Hazkey_Commands_CurrentInputModeInfo: Sendable {
     }
 
     // The compiler won't synthesize support with the UNRECOGNIZED case.
-    static let allCases: [Hazkey_Commands_CurrentInputModeInfo.InputMode] = [
+    static let allCases: [Hazkey_Commands_ClientState.InputMode] = [
       .normal,
       .direct,
     ]
 
+  }
+
+  struct DecoratedTextPart: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var text: String = String()
+
+    var decoration: [Hazkey_Commands_ClientState.TextDecoration] = []
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
+  }
+
+  init() {}
+}
+
+struct Hazkey_Commands_SaveLearningData: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+struct Hazkey_Commands_ResetState: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var completedPreedit: Bool = false
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  init() {}
+}
+
+/// message CandidatesResult {
+struct Hazkey_Commands_ShowCandidates: Sendable {
+  // SwiftProtobuf.Message conformance is added in an extension below. See the
+  // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+  // methods supported on all messages.
+
+  var candidates: [Hazkey_Commands_ShowCandidates.Candidate] = []
+
+  var liveText: String = String()
+
+  var liveTextIndex: Int32 = 0
+
+  var pageSize: Int32 = 0
+
+  var unknownFields = SwiftProtobuf.UnknownStorage()
+
+  struct Candidate: Sendable {
+    // SwiftProtobuf.Message conformance is added in an extension below. See the
+    // `Message` and `Message+*Additions` files in the SwiftProtobuf library for
+    // methods supported on all messages.
+
+    var text: String = String()
+
+    var subHiragana: String = String()
+
+    var unknownFields = SwiftProtobuf.UnknownStorage()
+
+    init() {}
   }
 
   init() {}
@@ -398,27 +1251,314 @@ struct Hazkey_Commands_CurrentInputModeInfo: Sendable {
 
 fileprivate let _protobuf_package = "hazkey.commands"
 
-extension Hazkey_Commands_NewComposingText: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".NewComposingText"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
+extension Hazkey_Commands_KeyCode: SwiftProtobuf._ProtoNameProviding {
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "KEY_CODE_UNSPECIFIED"),
+    4: .same(proto: "KEY_CODE_KEY_A"),
+    5: .same(proto: "KEY_CODE_KEY_B"),
+    6: .same(proto: "KEY_CODE_KEY_C"),
+    7: .same(proto: "KEY_CODE_KEY_D"),
+    8: .same(proto: "KEY_CODE_KEY_E"),
+    9: .same(proto: "KEY_CODE_KEY_F"),
+    10: .same(proto: "KEY_CODE_KEY_G"),
+    11: .same(proto: "KEY_CODE_KEY_H"),
+    12: .same(proto: "KEY_CODE_KEY_I"),
+    13: .same(proto: "KEY_CODE_KEY_J"),
+    14: .same(proto: "KEY_CODE_KEY_K"),
+    15: .same(proto: "KEY_CODE_KEY_L"),
+    16: .same(proto: "KEY_CODE_KEY_M"),
+    17: .same(proto: "KEY_CODE_KEY_N"),
+    18: .same(proto: "KEY_CODE_KEY_O"),
+    19: .same(proto: "KEY_CODE_KEY_P"),
+    20: .same(proto: "KEY_CODE_KEY_Q"),
+    21: .same(proto: "KEY_CODE_KEY_R"),
+    22: .same(proto: "KEY_CODE_KEY_S"),
+    23: .same(proto: "KEY_CODE_KEY_T"),
+    24: .same(proto: "KEY_CODE_KEY_U"),
+    25: .same(proto: "KEY_CODE_KEY_V"),
+    26: .same(proto: "KEY_CODE_KEY_W"),
+    27: .same(proto: "KEY_CODE_KEY_X"),
+    28: .same(proto: "KEY_CODE_KEY_Y"),
+    29: .same(proto: "KEY_CODE_KEY_Z"),
+    30: .same(proto: "KEY_CODE_DIGIT_1"),
+    31: .same(proto: "KEY_CODE_DIGIT_2"),
+    32: .same(proto: "KEY_CODE_DIGIT_3"),
+    33: .same(proto: "KEY_CODE_DIGIT_4"),
+    34: .same(proto: "KEY_CODE_DIGIT_5"),
+    35: .same(proto: "KEY_CODE_DIGIT_6"),
+    36: .same(proto: "KEY_CODE_DIGIT_7"),
+    37: .same(proto: "KEY_CODE_DIGIT_8"),
+    38: .same(proto: "KEY_CODE_DIGIT_9"),
+    39: .same(proto: "KEY_CODE_DIGIT_0"),
+    40: .same(proto: "KEY_CODE_ENTER"),
+    41: .same(proto: "KEY_CODE_ESCAPE"),
+    42: .same(proto: "KEY_CODE_BACKSPACE"),
+    43: .same(proto: "KEY_CODE_TAB"),
+    44: .same(proto: "KEY_CODE_SPACE"),
+    45: .same(proto: "KEY_CODE_MINUS"),
+    46: .same(proto: "KEY_CODE_EQUAL"),
+    47: .same(proto: "KEY_CODE_BRACKET_LEFT"),
+    48: .same(proto: "KEY_CODE_BRACKET_RIGHT"),
+    49: .same(proto: "KEY_CODE_ISO_BACKSLASH"),
+    51: .same(proto: "KEY_CODE_SEMICOLON"),
+    52: .same(proto: "KEY_CODE_QUOTE"),
+    53: .same(proto: "KEY_CODE_BACKQUOTE"),
+    54: .same(proto: "KEY_CODE_COMMA"),
+    55: .same(proto: "KEY_CODE_PERIOD"),
+    56: .same(proto: "KEY_CODE_SLASH"),
+    57: .same(proto: "KEY_CODE_CAPS_LOCK"),
+    58: .same(proto: "KEY_CODE_F1"),
+    59: .same(proto: "KEY_CODE_F2"),
+    60: .same(proto: "KEY_CODE_F3"),
+    61: .same(proto: "KEY_CODE_F4"),
+    62: .same(proto: "KEY_CODE_F5"),
+    63: .same(proto: "KEY_CODE_F6"),
+    64: .same(proto: "KEY_CODE_F7"),
+    65: .same(proto: "KEY_CODE_F8"),
+    66: .same(proto: "KEY_CODE_F9"),
+    67: .same(proto: "KEY_CODE_F10"),
+    68: .same(proto: "KEY_CODE_F11"),
+    69: .same(proto: "KEY_CODE_F12"),
+    74: .same(proto: "KEY_CODE_HOME"),
+    75: .same(proto: "KEY_CODE_PAGE_UP"),
+    76: .same(proto: "KEY_CODE_DELETE"),
+    77: .same(proto: "KEY_CODE_END"),
+    78: .same(proto: "KEY_CODE_PAGE_DOWN"),
+    79: .same(proto: "KEY_CODE_ARROW_RIGHT"),
+    80: .same(proto: "KEY_CODE_ARROW_LEFT"),
+    81: .same(proto: "KEY_CODE_ARROW_DOWN"),
+    82: .same(proto: "KEY_CODE_ARROW_UP"),
+    83: .same(proto: "KEY_CODE_NUM_LOCK"),
+    84: .same(proto: "KEY_CODE_NUMPAD_DIVIDE"),
+    85: .same(proto: "KEY_CODE_NUMPAD_MULTIPLY"),
+    86: .same(proto: "KEY_CODE_NUMPAD_SUBTRACT"),
+    87: .same(proto: "KEY_CODE_NUMPAD_ADD"),
+    88: .same(proto: "KEY_CODE_NUMPAD_ENTER"),
+    89: .same(proto: "KEY_CODE_NUMPAD_1"),
+    90: .same(proto: "KEY_CODE_NUMPAD_2"),
+    91: .same(proto: "KEY_CODE_NUMPAD_3"),
+    92: .same(proto: "KEY_CODE_NUMPAD_4"),
+    93: .same(proto: "KEY_CODE_NUMPAD_5"),
+    94: .same(proto: "KEY_CODE_NUMPAD_6"),
+    95: .same(proto: "KEY_CODE_NUMPAD_7"),
+    96: .same(proto: "KEY_CODE_NUMPAD_8"),
+    97: .same(proto: "KEY_CODE_NUMPAD_9"),
+    98: .same(proto: "KEY_CODE_NUMPAD_0"),
+    99: .same(proto: "KEY_CODE_NUMPAD_DECIMAL"),
+    100: .same(proto: "KEY_CODE_INTL_BACKSLASH"),
+    101: .same(proto: "KEY_CODE_CONTEXT_MENU"),
+    102: .same(proto: "KEY_CODE_POWER"),
+    103: .same(proto: "KEY_CODE_NUMPAD_EQUAL"),
+    104: .same(proto: "KEY_CODE_F13"),
+    105: .same(proto: "KEY_CODE_F14"),
+    106: .same(proto: "KEY_CODE_F15"),
+    107: .same(proto: "KEY_CODE_F16"),
+    108: .same(proto: "KEY_CODE_F17"),
+    109: .same(proto: "KEY_CODE_F18"),
+    110: .same(proto: "KEY_CODE_F19"),
+    111: .same(proto: "KEY_CODE_F20"),
+    112: .same(proto: "KEY_CODE_F21"),
+    113: .same(proto: "KEY_CODE_F22"),
+    114: .same(proto: "KEY_CODE_F23"),
+    115: .same(proto: "KEY_CODE_F24"),
+    135: .same(proto: "KEY_CODE_INTL_RO"),
+    136: .same(proto: "KEY_CODE_KANA_MODE"),
+    137: .same(proto: "KEY_CODE_INTL_YEN"),
+    138: .same(proto: "KEY_CODE_CONVERT"),
+    139: .same(proto: "KEY_CODE_NON_CONVERT"),
+    144: .same(proto: "KEY_CODE_LANG_1"),
+    145: .same(proto: "KEY_CODE_LANG_2"),
+    146: .same(proto: "KEY_CODE_LANG_3"),
+    147: .same(proto: "KEY_CODE_LANG_4"),
+    148: .same(proto: "KEY_CODE_LANG_5"),
+    224: .same(proto: "KEY_CODE_CONTROL_LEFT"),
+    225: .same(proto: "KEY_CODE_SHIFT_LEFT"),
+    226: .same(proto: "KEY_CODE_ALT_LEFT"),
+    227: .same(proto: "KEY_CODE_META_LEFT"),
+    228: .same(proto: "KEY_CODE_CONTROL_RIGHT"),
+    229: .same(proto: "KEY_CODE_SHIFT_RIGHT"),
+    230: .same(proto: "KEY_CODE_ALT_RIGHT"),
+    231: .same(proto: "KEY_CODE_META_RIGHT"),
+  ]
+}
+
+extension Hazkey_Commands_SpecialKey: SwiftProtobuf._ProtoNameProviding {
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "SPECIAL_KEY_KEY_UNSPECIFIED"),
+    40: .same(proto: "SPECIAL_KEY_ENTER"),
+    41: .same(proto: "SPECIAL_KEY_ESCAPE"),
+    42: .same(proto: "SPECIAL_KEY_BACKSPACE"),
+    43: .same(proto: "SPECIAL_KEY_TAB"),
+    44: .same(proto: "SPECIAL_KEY_SPACE"),
+    57: .same(proto: "SPECIAL_KEY_CAPS_LOCK"),
+    58: .same(proto: "SPECIAL_KEY_F1"),
+    59: .same(proto: "SPECIAL_KEY_F2"),
+    60: .same(proto: "SPECIAL_KEY_F3"),
+    61: .same(proto: "SPECIAL_KEY_F4"),
+    62: .same(proto: "SPECIAL_KEY_F5"),
+    63: .same(proto: "SPECIAL_KEY_F6"),
+    64: .same(proto: "SPECIAL_KEY_F7"),
+    65: .same(proto: "SPECIAL_KEY_F8"),
+    66: .same(proto: "SPECIAL_KEY_F9"),
+    67: .same(proto: "SPECIAL_KEY_F10"),
+    68: .same(proto: "SPECIAL_KEY_F11"),
+    69: .same(proto: "SPECIAL_KEY_F12"),
+    74: .same(proto: "SPECIAL_KEY_HOME"),
+    75: .same(proto: "SPECIAL_KEY_PAGE_UP"),
+    76: .same(proto: "SPECIAL_KEY_DELETE"),
+    77: .same(proto: "SPECIAL_KEY_END"),
+    78: .same(proto: "SPECIAL_KEY_PAGE_DOWN"),
+    79: .same(proto: "SPECIAL_KEY_ARROW_RIGHT"),
+    80: .same(proto: "SPECIAL_KEY_ARROW_LEFT"),
+    81: .same(proto: "SPECIAL_KEY_ARROW_DOWN"),
+    82: .same(proto: "SPECIAL_KEY_ARROW_UP"),
+    83: .same(proto: "SPECIAL_KEY_NUM_LOCK"),
+    84: .same(proto: "SPECIAL_KEY_NUMPAD_DIVIDE"),
+    85: .same(proto: "SPECIAL_KEY_NUMPAD_MULTIPLY"),
+    86: .same(proto: "SPECIAL_KEY_NUMPAD_SUBTRACT"),
+    87: .same(proto: "SPECIAL_KEY_NUMPAD_ADD"),
+    88: .same(proto: "SPECIAL_KEY_NUMPAD_ENTER"),
+    89: .same(proto: "SPECIAL_KEY_NUMPAD_1"),
+    90: .same(proto: "SPECIAL_KEY_NUMPAD_2"),
+    91: .same(proto: "SPECIAL_KEY_NUMPAD_3"),
+    92: .same(proto: "SPECIAL_KEY_NUMPAD_4"),
+    93: .same(proto: "SPECIAL_KEY_NUMPAD_5"),
+    94: .same(proto: "SPECIAL_KEY_NUMPAD_6"),
+    95: .same(proto: "SPECIAL_KEY_NUMPAD_7"),
+    96: .same(proto: "SPECIAL_KEY_NUMPAD_8"),
+    97: .same(proto: "SPECIAL_KEY_NUMPAD_9"),
+    98: .same(proto: "SPECIAL_KEY_NUMPAD_0"),
+    99: .same(proto: "SPECIAL_KEY_NUMPAD_DECIMAL"),
+    100: .same(proto: "SPECIAL_KEY_INTL_BACKSLASH"),
+    101: .same(proto: "SPECIAL_KEY_CONTEXT_MENU"),
+    102: .same(proto: "SPECIAL_KEY_POWER"),
+    103: .same(proto: "SPECIAL_KEY_NUMPAD_EQUAL"),
+    104: .same(proto: "SPECIAL_KEY_F13"),
+    105: .same(proto: "SPECIAL_KEY_F14"),
+    106: .same(proto: "SPECIAL_KEY_F15"),
+    107: .same(proto: "SPECIAL_KEY_F16"),
+    108: .same(proto: "SPECIAL_KEY_F17"),
+    109: .same(proto: "SPECIAL_KEY_F18"),
+    110: .same(proto: "SPECIAL_KEY_F19"),
+    111: .same(proto: "SPECIAL_KEY_F20"),
+    112: .same(proto: "SPECIAL_KEY_F21"),
+    113: .same(proto: "SPECIAL_KEY_F22"),
+    114: .same(proto: "SPECIAL_KEY_F23"),
+    115: .same(proto: "SPECIAL_KEY_F24"),
+    136: .same(proto: "SPECIAL_KEY_KANA_MODE"),
+    138: .same(proto: "SPECIAL_KEY_CONVERT"),
+    139: .same(proto: "SPECIAL_KEY_NON_CONVERT"),
+    144: .same(proto: "SPECIAL_KEY_LANG_1"),
+    145: .same(proto: "SPECIAL_KEY_LANG_2"),
+    146: .same(proto: "SPECIAL_KEY_LANG_3"),
+    147: .same(proto: "SPECIAL_KEY_LANG_4"),
+    148: .same(proto: "SPECIAL_KEY_LANG_5"),
+    224: .same(proto: "SPECIAL_KEY_CONTROL_LEFT"),
+    225: .same(proto: "SPECIAL_KEY_SHIFT_LEFT"),
+    226: .same(proto: "SPECIAL_KEY_ALT_LEFT"),
+    227: .same(proto: "SPECIAL_KEY_META_LEFT"),
+    228: .same(proto: "SPECIAL_KEY_CONTROL_RIGHT"),
+    229: .same(proto: "SPECIAL_KEY_SHIFT_RIGHT"),
+    230: .same(proto: "SPECIAL_KEY_ALT_RIGHT"),
+    231: .same(proto: "SPECIAL_KEY_META_RIGHT"),
+  ]
+}
+
+extension Hazkey_Commands_KeyEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".KeyEvent"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .standard(proto: "event_type"),
+    2: .same(proto: "code"),
+    5: .standard(proto: "special_key"),
+    6: .same(proto: "character"),
+    20: .same(proto: "modifier"),
+    30: .same(proto: "context"),
+  ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    // Load everything into unknown fields
-    while try decoder.nextFieldNumber() != nil {}
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeSingularEnumField(value: &self.eventType) }()
+      case 2: try { try decoder.decodeSingularEnumField(value: &self._code) }()
+      case 5: try {
+        var v: Hazkey_Commands_SpecialKey?
+        try decoder.decodeSingularEnumField(value: &v)
+        if let v = v {
+          if self.input != nil {try decoder.handleConflictingOneOf()}
+          self.input = .specialKey(v)
+        }
+      }()
+      case 6: try {
+        var v: UInt32?
+        try decoder.decodeSingularUInt32Field(value: &v)
+        if let v = v {
+          if self.input != nil {try decoder.handleConflictingOneOf()}
+          self.input = .character(v)
+        }
+      }()
+      case 20: try { try decoder.decodeSingularUInt32Field(value: &self.modifier) }()
+      case 30: try { try decoder.decodeSingularMessageField(value: &self._context) }()
+      default: break
+      }
+    }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    if self.eventType != .unspecified {
+      try visitor.visitSingularEnumField(value: self.eventType, fieldNumber: 1)
+    }
+    try { if let v = self._code {
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 2)
+    } }()
+    switch self.input {
+    case .specialKey?: try {
+      guard case .specialKey(let v)? = self.input else { preconditionFailure() }
+      try visitor.visitSingularEnumField(value: v, fieldNumber: 5)
+    }()
+    case .character?: try {
+      guard case .character(let v)? = self.input else { preconditionFailure() }
+      try visitor.visitSingularUInt32Field(value: v, fieldNumber: 6)
+    }()
+    case nil: break
+    }
+    if self.modifier != 0 {
+      try visitor.visitSingularUInt32Field(value: self.modifier, fieldNumber: 20)
+    }
+    try { if let v = self._context {
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 30)
+    } }()
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Hazkey_Commands_NewComposingText, rhs: Hazkey_Commands_NewComposingText) -> Bool {
+  static func ==(lhs: Hazkey_Commands_KeyEvent, rhs: Hazkey_Commands_KeyEvent) -> Bool {
+    if lhs.eventType != rhs.eventType {return false}
+    if lhs._code != rhs._code {return false}
+    if lhs.input != rhs.input {return false}
+    if lhs.modifier != rhs.modifier {return false}
+    if lhs._context != rhs._context {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
-extension Hazkey_Commands_SetContext: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".SetContext"
+extension Hazkey_Commands_KeyEvent.EventType: SwiftProtobuf._ProtoNameProviding {
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "EVENT_TYPE_UNSPECIFIED"),
+    1: .same(proto: "EVENT_TYPE_DOWN"),
+    2: .same(proto: "EVENT_TYPE_PRESS"),
+    3: .same(proto: "EVENT_TYPE_RELEASE"),
+  ]
+}
+
+extension Hazkey_Commands_KeyEvent.Context: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Hazkey_Commands_KeyEvent.protoMessageName + ".Context"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "context"),
     2: .same(proto: "anchor"),
@@ -447,7 +1587,7 @@ extension Hazkey_Commands_SetContext: SwiftProtobuf.Message, SwiftProtobuf._Mess
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Hazkey_Commands_SetContext, rhs: Hazkey_Commands_SetContext) -> Bool {
+  static func ==(lhs: Hazkey_Commands_KeyEvent.Context, rhs: Hazkey_Commands_KeyEvent.Context) -> Bool {
     if lhs.context != rhs.context {return false}
     if lhs.anchor != rhs.anchor {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
@@ -455,10 +1595,132 @@ extension Hazkey_Commands_SetContext: SwiftProtobuf.Message, SwiftProtobuf._Mess
   }
 }
 
-extension Hazkey_Commands_InputChar: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".InputChar"
+extension Hazkey_Commands_ClientAction: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".ClientAction"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    100: .standard(proto: "show_candidates"),
+    101: .standard(proto: "close_candidates"),
+    104: .same(proto: "complete"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 100: try {
+        var v: Hazkey_Commands_ClientAction.ShowCandidates?
+        var hadOneofValue = false
+        if let current = self.action {
+          hadOneofValue = true
+          if case .showCandidates(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.action = .showCandidates(v)
+        }
+      }()
+      case 101: try {
+        var v: Hazkey_Commands_ClientAction.CloseCandidates?
+        var hadOneofValue = false
+        if let current = self.action {
+          hadOneofValue = true
+          if case .closeCandidates(let m) = current {v = m}
+        }
+        try decoder.decodeSingularMessageField(value: &v)
+        if let v = v {
+          if hadOneofValue {try decoder.handleConflictingOneOf()}
+          self.action = .closeCandidates(v)
+        }
+      }()
+      case 104: try {
+        var v: String?
+        try decoder.decodeSingularStringField(value: &v)
+        if let v = v {
+          if self.action != nil {try decoder.handleConflictingOneOf()}
+          self.action = .complete(v)
+        }
+      }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    // The use of inline closures is to circumvent an issue where the compiler
+    // allocates stack space for every if/case branch local when no optimizations
+    // are enabled. https://github.com/apple/swift-protobuf/issues/1034 and
+    // https://github.com/apple/swift-protobuf/issues/1182
+    switch self.action {
+    case .showCandidates?: try {
+      guard case .showCandidates(let v)? = self.action else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 100)
+    }()
+    case .closeCandidates?: try {
+      guard case .closeCandidates(let v)? = self.action else { preconditionFailure() }
+      try visitor.visitSingularMessageField(value: v, fieldNumber: 101)
+    }()
+    case .complete?: try {
+      guard case .complete(let v)? = self.action else { preconditionFailure() }
+      try visitor.visitSingularStringField(value: v, fieldNumber: 104)
+    }()
+    case nil: break
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Hazkey_Commands_ClientAction, rhs: Hazkey_Commands_ClientAction) -> Bool {
+    if lhs.action != rhs.action {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Hazkey_Commands_ClientAction.ShowCandidates: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Hazkey_Commands_ClientAction.protoMessageName + ".ShowCandidates"
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    1: .same(proto: "candidates"),
+    4: .standard(proto: "page_size"),
+  ]
+
+  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
+    while let fieldNumber = try decoder.nextFieldNumber() {
+      // The use of inline closures is to circumvent an issue where the compiler
+      // allocates stack space for every case branch when no optimizations are
+      // enabled. https://github.com/apple/swift-protobuf/issues/1034
+      switch fieldNumber {
+      case 1: try { try decoder.decodeRepeatedMessageField(value: &self.candidates) }()
+      case 4: try { try decoder.decodeSingularInt32Field(value: &self.pageSize) }()
+      default: break
+      }
+    }
+  }
+
+  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
+    if !self.candidates.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.candidates, fieldNumber: 1)
+    }
+    if self.pageSize != 0 {
+      try visitor.visitSingularInt32Field(value: self.pageSize, fieldNumber: 4)
+    }
+    try unknownFields.traverse(visitor: &visitor)
+  }
+
+  static func ==(lhs: Hazkey_Commands_ClientAction.ShowCandidates, rhs: Hazkey_Commands_ClientAction.ShowCandidates) -> Bool {
+    if lhs.candidates != rhs.candidates {return false}
+    if lhs.pageSize != rhs.pageSize {return false}
+    if lhs.unknownFields != rhs.unknownFields {return false}
+    return true
+  }
+}
+
+extension Hazkey_Commands_ClientAction.ShowCandidates.Candidate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Hazkey_Commands_ClientAction.ShowCandidates.protoMessageName + ".Candidate"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "text"),
+    2: .standard(proto: "sub_hiragana"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -468,6 +1730,7 @@ extension Hazkey_Commands_InputChar: SwiftProtobuf.Message, SwiftProtobuf._Messa
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
       case 1: try { try decoder.decodeSingularStringField(value: &self.text) }()
+      case 2: try { try decoder.decodeSingularStringField(value: &self.subHiragana) }()
       default: break
       }
     }
@@ -477,135 +1740,22 @@ extension Hazkey_Commands_InputChar: SwiftProtobuf.Message, SwiftProtobuf._Messa
     if !self.text.isEmpty {
       try visitor.visitSingularStringField(value: self.text, fieldNumber: 1)
     }
+    if !self.subHiragana.isEmpty {
+      try visitor.visitSingularStringField(value: self.subHiragana, fieldNumber: 2)
+    }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Hazkey_Commands_InputChar, rhs: Hazkey_Commands_InputChar) -> Bool {
+  static func ==(lhs: Hazkey_Commands_ClientAction.ShowCandidates.Candidate, rhs: Hazkey_Commands_ClientAction.ShowCandidates.Candidate) -> Bool {
     if lhs.text != rhs.text {return false}
+    if lhs.subHiragana != rhs.subHiragana {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
-extension Hazkey_Commands_ModifierEvent: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".ModifierEvent"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "mod_type"),
-    2: .standard(proto: "event_type"),
-  ]
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularEnumField(value: &self.modType) }()
-      case 2: try { try decoder.decodeSingularEnumField(value: &self.eventType) }()
-      default: break
-      }
-    }
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.modType != .unspecified {
-      try visitor.visitSingularEnumField(value: self.modType, fieldNumber: 1)
-    }
-    if self.eventType != .unspecified {
-      try visitor.visitSingularEnumField(value: self.eventType, fieldNumber: 2)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Hazkey_Commands_ModifierEvent, rhs: Hazkey_Commands_ModifierEvent) -> Bool {
-    if lhs.modType != rhs.modType {return false}
-    if lhs.eventType != rhs.eventType {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Hazkey_Commands_ModifierEvent.ModifierType: SwiftProtobuf._ProtoNameProviding {
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "MODIFIER_TYPE_UNSPECIFIED"),
-    1: .same(proto: "SHIFT"),
-  ]
-}
-
-extension Hazkey_Commands_ModifierEvent.EventType: SwiftProtobuf._ProtoNameProviding {
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "EVENT_TYPE_UNSPECIFIED"),
-    1: .same(proto: "PRESS"),
-    2: .same(proto: "RELEASE"),
-  ]
-}
-
-extension Hazkey_Commands_MoveCursor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".MoveCursor"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "offset"),
-  ]
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularInt32Field(value: &self.offset) }()
-      default: break
-      }
-    }
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.offset != 0 {
-      try visitor.visitSingularInt32Field(value: self.offset, fieldNumber: 1)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Hazkey_Commands_MoveCursor, rhs: Hazkey_Commands_MoveCursor) -> Bool {
-    if lhs.offset != rhs.offset {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Hazkey_Commands_PrefixComplete: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".PrefixComplete"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "index"),
-  ]
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularInt32Field(value: &self.index) }()
-      default: break
-      }
-    }
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.index != 0 {
-      try visitor.visitSingularInt32Field(value: self.index, fieldNumber: 1)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Hazkey_Commands_PrefixComplete, rhs: Hazkey_Commands_PrefixComplete) -> Bool {
-    if lhs.index != rhs.index {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Hazkey_Commands_DeleteLeft: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".DeleteLeft"
+extension Hazkey_Commands_ClientAction.CloseCandidates: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Hazkey_Commands_ClientAction.protoMessageName + ".CloseCandidates"
   static let _protobuf_nameMap = SwiftProtobuf._NameMap()
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -617,36 +1767,22 @@ extension Hazkey_Commands_DeleteLeft: SwiftProtobuf.Message, SwiftProtobuf._Mess
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Hazkey_Commands_DeleteLeft, rhs: Hazkey_Commands_DeleteLeft) -> Bool {
+  static func ==(lhs: Hazkey_Commands_ClientAction.CloseCandidates, rhs: Hazkey_Commands_ClientAction.CloseCandidates) -> Bool {
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
-extension Hazkey_Commands_DeleteRight: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".DeleteRight"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    // Load everything into unknown fields
-    while try decoder.nextFieldNumber() != nil {}
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Hazkey_Commands_DeleteRight, rhs: Hazkey_Commands_DeleteRight) -> Bool {
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Hazkey_Commands_GetComposingString: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".GetComposingString"
+extension Hazkey_Commands_ClientState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".ClientState"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "char_type"),
-    2: .standard(proto: "current_preedit"),
+    1: .same(proto: "filtered"),
+    2: .same(proto: "accepted"),
+    5: .standard(proto: "list_selected_index"),
+    10: .standard(proto: "current_input_mode"),
+    15: .standard(proto: "preedit_text"),
+    20: .standard(proto: "aux_text"),
+    100: .same(proto: "actions"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -655,64 +1791,75 @@ extension Hazkey_Commands_GetComposingString: SwiftProtobuf.Message, SwiftProtob
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularEnumField(value: &self.charType) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.currentPreedit) }()
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.filtered) }()
+      case 2: try { try decoder.decodeSingularBoolField(value: &self.accepted) }()
+      case 5: try { try decoder.decodeSingularInt32Field(value: &self.listSelectedIndex) }()
+      case 10: try { try decoder.decodeSingularEnumField(value: &self.currentInputMode) }()
+      case 15: try { try decoder.decodeRepeatedMessageField(value: &self.preeditText) }()
+      case 20: try { try decoder.decodeRepeatedMessageField(value: &self.auxText) }()
+      case 100: try { try decoder.decodeRepeatedMessageField(value: &self.actions) }()
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.charType != .hiragana {
-      try visitor.visitSingularEnumField(value: self.charType, fieldNumber: 1)
+    if self.filtered != false {
+      try visitor.visitSingularBoolField(value: self.filtered, fieldNumber: 1)
     }
-    if !self.currentPreedit.isEmpty {
-      try visitor.visitSingularStringField(value: self.currentPreedit, fieldNumber: 2)
+    if self.accepted != false {
+      try visitor.visitSingularBoolField(value: self.accepted, fieldNumber: 2)
+    }
+    if self.listSelectedIndex != 0 {
+      try visitor.visitSingularInt32Field(value: self.listSelectedIndex, fieldNumber: 5)
+    }
+    if self.currentInputMode != .normal {
+      try visitor.visitSingularEnumField(value: self.currentInputMode, fieldNumber: 10)
+    }
+    if !self.preeditText.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.preeditText, fieldNumber: 15)
+    }
+    if !self.auxText.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.auxText, fieldNumber: 20)
+    }
+    if !self.actions.isEmpty {
+      try visitor.visitRepeatedMessageField(value: self.actions, fieldNumber: 100)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Hazkey_Commands_GetComposingString, rhs: Hazkey_Commands_GetComposingString) -> Bool {
-    if lhs.charType != rhs.charType {return false}
-    if lhs.currentPreedit != rhs.currentPreedit {return false}
+  static func ==(lhs: Hazkey_Commands_ClientState, rhs: Hazkey_Commands_ClientState) -> Bool {
+    if lhs.filtered != rhs.filtered {return false}
+    if lhs.accepted != rhs.accepted {return false}
+    if lhs.listSelectedIndex != rhs.listSelectedIndex {return false}
+    if lhs.currentInputMode != rhs.currentInputMode {return false}
+    if lhs.preeditText != rhs.preeditText {return false}
+    if lhs.auxText != rhs.auxText {return false}
+    if lhs.actions != rhs.actions {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
-extension Hazkey_Commands_GetComposingString.CharType: SwiftProtobuf._ProtoNameProviding {
+extension Hazkey_Commands_ClientState.TextDecoration: SwiftProtobuf._ProtoNameProviding {
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "HIRAGANA"),
-    1: .same(proto: "KATAKANA_FULL"),
-    2: .same(proto: "KATAKANA_HALF"),
-    3: .same(proto: "ALPHABET_FULL"),
-    4: .same(proto: "ALPHABET_HALF"),
+    0: .same(proto: "TEXT_DECORATION_NONE"),
+    1: .same(proto: "TEXT_DECORATION_UNDERLINE"),
   ]
 }
 
-extension Hazkey_Commands_GetHiraganaWithCursor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".GetHiraganaWithCursor"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    // Load everything into unknown fields
-    while try decoder.nextFieldNumber() != nil {}
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Hazkey_Commands_GetHiraganaWithCursor, rhs: Hazkey_Commands_GetHiraganaWithCursor) -> Bool {
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
+extension Hazkey_Commands_ClientState.InputMode: SwiftProtobuf._ProtoNameProviding {
+  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
+    0: .same(proto: "INPUT_MODE_NORMAL"),
+    1: .same(proto: "INPUT_MODE_DIRECT"),
+  ]
 }
 
-extension Hazkey_Commands_GetCandidates: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".GetCandidates"
+extension Hazkey_Commands_ClientState.DecoratedTextPart: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Hazkey_Commands_ClientState.protoMessageName + ".DecoratedTextPart"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "is_suggest"),
+    1: .same(proto: "text"),
+    2: .same(proto: "decoration"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -721,40 +1868,26 @@ extension Hazkey_Commands_GetCandidates: SwiftProtobuf.Message, SwiftProtobuf._M
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularBoolField(value: &self.isSuggest) }()
+      case 1: try { try decoder.decodeSingularStringField(value: &self.text) }()
+      case 2: try { try decoder.decodeRepeatedEnumField(value: &self.decoration) }()
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.isSuggest != false {
-      try visitor.visitSingularBoolField(value: self.isSuggest, fieldNumber: 1)
+    if !self.text.isEmpty {
+      try visitor.visitSingularStringField(value: self.text, fieldNumber: 1)
+    }
+    if !self.decoration.isEmpty {
+      try visitor.visitPackedEnumField(value: self.decoration, fieldNumber: 2)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Hazkey_Commands_GetCandidates, rhs: Hazkey_Commands_GetCandidates) -> Bool {
-    if lhs.isSuggest != rhs.isSuggest {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Hazkey_Commands_GetCurrentInputModeInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".GetCurrentInputModeInfo"
-  static let _protobuf_nameMap = SwiftProtobuf._NameMap()
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    // Load everything into unknown fields
-    while try decoder.nextFieldNumber() != nil {}
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Hazkey_Commands_GetCurrentInputModeInfo, rhs: Hazkey_Commands_GetCurrentInputModeInfo) -> Bool {
+  static func ==(lhs: Hazkey_Commands_ClientState.DecoratedTextPart, rhs: Hazkey_Commands_ClientState.DecoratedTextPart) -> Bool {
+    if lhs.text != rhs.text {return false}
+    if lhs.decoration != rhs.decoration {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
@@ -779,10 +1912,10 @@ extension Hazkey_Commands_SaveLearningData: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Hazkey_Commands_Text: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".Text"
+extension Hazkey_Commands_ResetState: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".ResetState"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "text"),
+    1: .standard(proto: "completed_preedit"),
   ]
 
   mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
@@ -791,72 +1924,28 @@ extension Hazkey_Commands_Text: SwiftProtobuf.Message, SwiftProtobuf._MessageImp
       // allocates stack space for every case branch when no optimizations are
       // enabled. https://github.com/apple/swift-protobuf/issues/1034
       switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.text) }()
+      case 1: try { try decoder.decodeSingularBoolField(value: &self.completedPreedit) }()
       default: break
       }
     }
   }
 
   func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.text.isEmpty {
-      try visitor.visitSingularStringField(value: self.text, fieldNumber: 1)
+    if self.completedPreedit != false {
+      try visitor.visitSingularBoolField(value: self.completedPreedit, fieldNumber: 1)
     }
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Hazkey_Commands_Text, rhs: Hazkey_Commands_Text) -> Bool {
-    if lhs.text != rhs.text {return false}
+  static func ==(lhs: Hazkey_Commands_ResetState, rhs: Hazkey_Commands_ResetState) -> Bool {
+    if lhs.completedPreedit != rhs.completedPreedit {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
 }
 
-extension Hazkey_Commands_TextWithCursor: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".TextWithCursor"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .same(proto: "beforeCursosr"),
-    2: .same(proto: "onCursor"),
-    3: .same(proto: "afterCursor"),
-  ]
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularStringField(value: &self.beforeCursosr) }()
-      case 2: try { try decoder.decodeSingularStringField(value: &self.onCursor) }()
-      case 3: try { try decoder.decodeSingularStringField(value: &self.afterCursor) }()
-      default: break
-      }
-    }
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if !self.beforeCursosr.isEmpty {
-      try visitor.visitSingularStringField(value: self.beforeCursosr, fieldNumber: 1)
-    }
-    if !self.onCursor.isEmpty {
-      try visitor.visitSingularStringField(value: self.onCursor, fieldNumber: 2)
-    }
-    if !self.afterCursor.isEmpty {
-      try visitor.visitSingularStringField(value: self.afterCursor, fieldNumber: 3)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Hazkey_Commands_TextWithCursor, rhs: Hazkey_Commands_TextWithCursor) -> Bool {
-    if lhs.beforeCursosr != rhs.beforeCursosr {return false}
-    if lhs.onCursor != rhs.onCursor {return false}
-    if lhs.afterCursor != rhs.afterCursor {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Hazkey_Commands_CandidatesResult: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".CandidatesResult"
+extension Hazkey_Commands_ShowCandidates: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = _protobuf_package + ".ShowCandidates"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "candidates"),
     2: .standard(proto: "live_text"),
@@ -895,7 +1984,7 @@ extension Hazkey_Commands_CandidatesResult: SwiftProtobuf.Message, SwiftProtobuf
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Hazkey_Commands_CandidatesResult, rhs: Hazkey_Commands_CandidatesResult) -> Bool {
+  static func ==(lhs: Hazkey_Commands_ShowCandidates, rhs: Hazkey_Commands_ShowCandidates) -> Bool {
     if lhs.candidates != rhs.candidates {return false}
     if lhs.liveText != rhs.liveText {return false}
     if lhs.liveTextIndex != rhs.liveTextIndex {return false}
@@ -905,8 +1994,8 @@ extension Hazkey_Commands_CandidatesResult: SwiftProtobuf.Message, SwiftProtobuf
   }
 }
 
-extension Hazkey_Commands_CandidatesResult.Candidate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = Hazkey_Commands_CandidatesResult.protoMessageName + ".Candidate"
+extension Hazkey_Commands_ShowCandidates.Candidate: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
+  static let protoMessageName: String = Hazkey_Commands_ShowCandidates.protoMessageName + ".Candidate"
   static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
     1: .same(proto: "text"),
     2: .standard(proto: "sub_hiragana"),
@@ -935,49 +2024,10 @@ extension Hazkey_Commands_CandidatesResult.Candidate: SwiftProtobuf.Message, Swi
     try unknownFields.traverse(visitor: &visitor)
   }
 
-  static func ==(lhs: Hazkey_Commands_CandidatesResult.Candidate, rhs: Hazkey_Commands_CandidatesResult.Candidate) -> Bool {
+  static func ==(lhs: Hazkey_Commands_ShowCandidates.Candidate, rhs: Hazkey_Commands_ShowCandidates.Candidate) -> Bool {
     if lhs.text != rhs.text {return false}
     if lhs.subHiragana != rhs.subHiragana {return false}
     if lhs.unknownFields != rhs.unknownFields {return false}
     return true
   }
-}
-
-extension Hazkey_Commands_CurrentInputModeInfo: SwiftProtobuf.Message, SwiftProtobuf._MessageImplementationBase, SwiftProtobuf._ProtoNameProviding {
-  static let protoMessageName: String = _protobuf_package + ".CurrentInputModeInfo"
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    1: .standard(proto: "input_mode"),
-  ]
-
-  mutating func decodeMessage<D: SwiftProtobuf.Decoder>(decoder: inout D) throws {
-    while let fieldNumber = try decoder.nextFieldNumber() {
-      // The use of inline closures is to circumvent an issue where the compiler
-      // allocates stack space for every case branch when no optimizations are
-      // enabled. https://github.com/apple/swift-protobuf/issues/1034
-      switch fieldNumber {
-      case 1: try { try decoder.decodeSingularEnumField(value: &self.inputMode) }()
-      default: break
-      }
-    }
-  }
-
-  func traverse<V: SwiftProtobuf.Visitor>(visitor: inout V) throws {
-    if self.inputMode != .normal {
-      try visitor.visitSingularEnumField(value: self.inputMode, fieldNumber: 1)
-    }
-    try unknownFields.traverse(visitor: &visitor)
-  }
-
-  static func ==(lhs: Hazkey_Commands_CurrentInputModeInfo, rhs: Hazkey_Commands_CurrentInputModeInfo) -> Bool {
-    if lhs.inputMode != rhs.inputMode {return false}
-    if lhs.unknownFields != rhs.unknownFields {return false}
-    return true
-  }
-}
-
-extension Hazkey_Commands_CurrentInputModeInfo.InputMode: SwiftProtobuf._ProtoNameProviding {
-  static let _protobuf_nameMap: SwiftProtobuf._NameMap = [
-    0: .same(proto: "NORMAL"),
-    1: .same(proto: "DIRECT"),
-  ]
 }

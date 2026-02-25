@@ -92,10 +92,10 @@ int ServerConnector::createConnection() {
     // on 1st attempt (minus 1)
     constexpr int ATTEMPT_TRY_START = 0;
     // on 4th attempt (minus 1)
-    constexpr int ATTEMPT_TRY_START_FORCE = 3;
+    constexpr int ATTEMPT_TRY_START_FORCE = 10;
 
-    constexpr int MAX_RETRIES = 8;
-    constexpr int RETRY_INTERVAL_MS = 150;
+    constexpr int MAX_RETRIES = 15;
+    constexpr int RETRY_INTERVAL_MS = 300;
 
     for (int attempt = 0; attempt < MAX_RETRIES; ++attempt) {
         int sock = socket(AF_UNIX, SOCK_STREAM, 0);

@@ -8,6 +8,10 @@ class ProtocolHandler {
         self.state = state
     }
 
+    func resetSession() {
+        state.resetSession()
+    }
+
     func processProto(data: Data) -> Data {
         let query: Hazkey_RequestEnvelope
         let response: Hazkey_ResponseEnvelope
@@ -22,43 +26,48 @@ class ProtocolHandler {
             }
             return serializeResult(unserialized: response)
         }
-
         switch query.payload {
-        case .setContext(let req):
-            response = state.setContext(
-                surroundingText: req.context, anchorIndex: Int(req.anchor))
-        case .newComposingText:
-            response = state.createComposingTextInstanse()
-        case .inputChar(let req):
-            response = state.inputChar(inputString: req.text)
-        case .modifierEvent(let req):
-            response = state.processModifierEvent(modifier: req.modType, event: req.eventType)
-        case .deleteLeft:
-            response = state.deleteLeft()
-        case .deleteRight:
-            response = state.deleteRight()
-        case .prefixComplete(let req):
-            response = state.completePrefix(candidateIndex: Int(req.index))
-        case .moveCursor(let req):
-            response = state.moveCursor(offset: Int(req.offset))
-        case .getHiraganaWithCursor:
-            response = state.getHiraganaWithCursor()
-        case .getComposingString(let req):
-            response = state.getComposingString(
-                charType: req.charType, currentPreedit: req.currentPreedit)
-        case .getCandidates(let req):
-            response = state.getCandidates(is_suggest: req.isSuggest)
-        case .getCurrentInputMode:
-            response = state.getCurrentInputMode()
+        case .keyEvent(let req):
+            let clientState = state.handle(event: req)
+            response = Hazkey_ResponseEnvelope.with {
+                $0.status = .success
+                $0.clientState = clientState
+            }
         case .saveLearningData:
-            response = state.saveLearningData()
+            state.saveLearningData()
+            response = Hazkey_ResponseEnvelope.with {
+                $0.status = .success
+            }
+        case .resetState(let req):
+            if req.completedPreedit {
+                state.commitAllPreedit()
+            }
+            state.resetSession()
+            response = Hazkey_ResponseEnvelope.with {
+                $0.status = .success
+            }
         case .getConfig:
-            response = state.serverConfig.getCurrentConfig()
+            do {
+            let config = try state.serverConfig.getCurrentConfig()
+            response = Hazkey_ResponseEnvelope.with {
+                $0.status = .success
+                $0.currentConfig = config
+            }
+            } catch {
+            NSLog("Failed to get config: \(error)")
+            response = Hazkey_ResponseEnvelope.with {
+                $0.status = .failed
+                $0.errorMessage = "Failed to get config: \(error)"
+            }
+            }
         case .setConfig(let req):
             response = state.serverConfig.setCurrentConfig(
                 req.fileHashes, req.profiles, state: state)
         case .clearAllHistory_p:
-            response = state.clearProfileLearningData()
+            state.clearProfileLearningData()
+            response = Hazkey_ResponseEnvelope.with {
+                $0.status = .success
+            }
         case .reloadZenzaiModel:
             state.serverConfig.reloadZenzaiModel()
             response = Hazkey_ResponseEnvelope.with {

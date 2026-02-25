@@ -23,7 +23,7 @@ const KeyList defaultSelectionKeys = {
 class HazkeyCandidateWord : public CandidateWord {
    public:
     HazkeyCandidateWord(const int index,
-                        const hazkey::commands::CandidatesResult_Candidate data)
+                        const hazkey::commands::ShowCandidates::Candidate data)
         : CandidateWord(Text(data.text())),
           index_(index),
           candidate_(std::move(data.text())),
@@ -51,9 +51,7 @@ class HazkeyCandidateWord : public CandidateWord {
 
 class HazkeyCandidateList : public CommonCandidateList {
    public:
-    HazkeyCandidateList(google::protobuf::RepeatedPtrField<
-                        hazkey::commands::CandidatesResult_Candidate>
-                            candidates);
+    HazkeyCandidateList(google::protobuf::RepeatedPtrField<hazkey::commands::ShowCandidates::Candidate> candidates);
 
     // return the direction of the candidate list
     // currently always vertical

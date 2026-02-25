@@ -108,6 +108,7 @@ message Profile {
     optional bool use_default_table_settings = 55;
     repeated EnabledInputTable enabled_tables = 56;
 
+    // will be removed
     optional string submode_entry_point_chars = 60;
 
     optional bool use_default_zenzai_settings = 100;
