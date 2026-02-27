@@ -12,6 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         cmake-version: ["3.21", "3.22", "3.23", "3.24", "3.25", "3.26", "3.27", "3.28", "3.29", "3.30", "3.31", "4.0", "4.1", "4.2"]
+        static_protobuf: [false]
     runs-on: ubuntu-22.04
     steps:
       - name: Checkout Repository
@@ -31,7 +32,7 @@ jobs:
         run: |
           mkdir -p ${{ github.workspace }}/swift
           wget https://download.swift.org/swift-6.2-release/ubuntu2204/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu22.04.tar.gz
-          tar xf $(basename swift-6.2-RELEASE-ubuntu22.04.tar.gz) --strip-components=1 -C ${{ github.workspace }}/swift
+          tar xf swift-6.2-RELEASE-ubuntu22.04.tar.gz --strip-components=1 -C ${{ github.workspace }}/swift
 
       - name: Add Swift to PATH
         run: |
@@ -46,8 +47,12 @@ jobs:
         run: |
           sudo apt-get update -y
           sudo apt-get install -y --no-install-recommends wget gnupg2 \
-            build-essential gettext fakeroot \
-            ninja-build libglx-dev libgl1-mesa-dev libxkbcommon-dev
+            build-essential gettext fakeroot libfcitx5core-dev libfcitx5config-dev libfcitx5utils-dev \
+            ninja-build qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6widgets6 libqt6gui6 qt6-l10n-tools libglx-dev libgl1-mesa-dev libxkbcommon-dev
+
+      - name: Install Dependencies (protobuf)
+        run: |
+          sudo apt-get install -y protobuf-compiler libprotoc-dev
 
       - name: Vulkan Dependencies (Ubuntu 22.04)
         run: |
@@ -61,10 +66,14 @@ jobs:
           mkdir -p ${{ github.workspace }}/workdir
           mkdir -p ${{ github.workspace }}/packages
 
-      - name: Build hazkey-server
+      - name: Build hazkey
         run: |
-          mkdir -p ${{ github.workspace }}/hazkey-server/build
-          cd ${{ github.workspace }}/hazkey-server/build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DHAZKEY_SERVER_SWIFT_LTO_MODE=full -G Ninja ..
+          mkdir -p ${{ github.workspace }}/build
+          cd ${{ github.workspace }}/build
+          sed -i "s/Qt::Orientation::/Qt::/g" ../hazkey-settings/mainwindow.ui
+          cmake \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_INSTALL_PREFIX=/usr \
+            -G Ninja ..
           ninja -j$(nproc)
-          env DESTDIR=${{ github.workspace }}/workdir ninja install
+          env  DESTDIR=${{ github.workspace }}/workdir ninja install
