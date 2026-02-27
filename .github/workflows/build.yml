@@ -11,33 +11,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - runner: ubuntu-22.04
-            label: ubuntu-22.04
-            arch: x86_64
-            swift_url: https://download.swift.org/swift-6.2-release/ubuntu2204/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu22.04.tar.gz
-            static_protobuf: false
-          - runner: ubuntu-24.04
-            label: ubuntu-24.04
-            arch: x86_64
-            swift_url: https://download.swift.org/swift-6.2-release/ubuntu2404/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu24.04.tar.gz
-            static_protobuf: false
-          - runner: ubuntu-24.04-arm
-            label: ubuntu-24.04
-            arch: aarch64
-            swift_url: https://download.swift.org/swift-6.2-release/ubuntu2404-aarch64/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu24.04-aarch64.tar.gz
-            static_protobuf: false
-          - runner: ubuntu-22.04
-            label: ubuntu-22.04-static_protobuf
-            arch: x86_64
-            swift_url: https://download.swift.org/swift-6.2-release/ubuntu2204/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu22.04.tar.gz
-            static_protobuf: true
-          - runner: ubuntu-24.04-arm
-            label: ubuntu-24.04-static_protobuf
-            arch: aarch64
-            swift_url: https://download.swift.org/swift-6.2-release/ubuntu2404-aarch64/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu24.04-aarch64.tar.gz
-            static_protobuf: true
-    runs-on: ${{ matrix.runner }}
+        cmake-version: ["3.21", "3.22", "3.23", "3.24", "3.25", "3.26", "3.27", "3.28", "3.29", "3.30", "3.31", "4.0", "4.1", "4.2"]
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
@@ -49,14 +24,14 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ github.workspace }}/swift
-          key: ${{ matrix.runner }}-${{ matrix.arch }}-swift-6.2-RELEASE
+          key: ubuntu-22.04-x86_64-swift-6.2-RELEASE
 
       - name: Install Swift Environment
         if: steps.cache-swift.outputs.cache-hit != 'true'
         run: |
           mkdir -p ${{ github.workspace }}/swift
-          wget ${{ matrix.swift_url }}
-          tar xf $(basename ${{ matrix.swift_url }}) --strip-components=1 -C ${{ github.workspace }}/swift
+          wget https://download.swift.org/swift-6.2-release/ubuntu2204/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu22.04.tar.gz
+          tar xf $(basename swift-6.2-RELEASE-ubuntu22.04.tar.gz) --strip-components=1 -C ${{ github.workspace }}/swift
 
       - name: Add Swift to PATH
         run: |
@@ -65,94 +40,26 @@ jobs:
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
-          cmake-version: "4.1.x"
+          cmake-version: ${{ matrix.cmake-version }}
 
       - name: Install Dependencies
         run: |
           sudo apt-get update -y
           sudo apt-get install -y --no-install-recommends wget gnupg2 \
-            build-essential gettext fakeroot libfcitx5core-dev libfcitx5config-dev libfcitx5utils-dev \
-            ninja-build qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6widgets6 libqt6gui6 qt6-l10n-tools libglx-dev libgl1-mesa-dev libxkbcommon-dev
-
-      - name: Install Dependencies (protobuf)
-        if: ${{ !matrix.static_protobuf }}
-        run: |
-          sudo apt-get install -y protobuf-compiler libprotoc-dev
+            build-essential gettext fakeroot \
+            ninja-build libglx-dev libgl1-mesa-dev libxkbcommon-dev
 
       - name: Vulkan Dependencies (Ubuntu 22.04)
-        if: matrix.runner == 'ubuntu-22.04'
         run: |
           wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
           sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list https://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
           sudo apt-get update -y
           sudo apt-get install -y mesa-vulkan-drivers vulkan-sdk
 
-      - name: Vulkan Dependencies (Ubuntu 24.04+)
-        if: matrix.runner == 'ubuntu-24.04' || matrix.runner == 'ubuntu-24.04-arm'
-        run: |
-          sudo apt-get install -y libvulkan-dev glslc
-
       - name: Create Directories
         run: |
-          mkdir -p ${{ github.workspace }}/local_deps
           mkdir -p ${{ github.workspace }}/workdir
           mkdir -p ${{ github.workspace }}/packages
-
-      - name: Cache C++ Dependencies
-        if: matrix.static_protobuf
-        id: cache-deps
-        uses: actions/cache@v5
-        with:
-          path: ${{ github.workspace }}/local_deps
-          key: ${{ matrix.runner }}-${{ matrix.arch }}-protobuf-21-12-v1
-
-      - name: Build and Install Protobuf
-        if: matrix.static_protobuf && steps.cache-deps.outputs.cache-hit != 'true'
-        run: |
-          git clone --branch v21.12 --depth 1 https://github.com/protocolbuffers/protobuf.git
-          cd protobuf
-          mkdir build && cd build
-          cmake .. \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DBUILD_SHARED_LIBS=OFF \
-            -Dprotobuf_BUILD_TESTS=OFF \
-            -DCMAKE_CXX_FLAGS="-fPIC" \
-            -DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON \
-            -DCMAKE_INSTALL_PREFIX=${{ github.workspace }}/local_deps
-          make -j$(nproc)
-          sudo make install
-
-      - name: Add local_deps to PATH
-        if: matrix.static_protobuf
-        run: |
-          echo "${{ github.workspace }}/local_deps/bin" >> $GITHUB_PATH
-
-      - name: Build hazkey-settings
-        run: |
-          mkdir -p ${{ github.workspace }}/hazkey-settings/build
-          cd ${{ github.workspace }}/hazkey-settings/build
-          sed -i "s/Qt::Orientation::/Qt::/g" ../mainwindow.ui
-          cmake \
-            -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=/usr \
-            -DCMAKE_CXX_FLAGS=-I${{ github.workspace }}/local_deps/include \
-            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/local_deps \
-            -DProtobuf_USE_STATIC_LIBS=${{ matrix.static_protobuf }} \
-            -G Ninja ..
-          ninja -j$(nproc)
-          env  DESTDIR=${{ github.workspace }}/workdir ninja install
-
-      - name: Build fcitx5-hazkey
-        run: |
-          mkdir -p ${{ github.workspace }}/fcitx5-hazkey/build
-          cd ${{ github.workspace }}/fcitx5-hazkey/build
-          cmake -DCMAKE_BUILD_TYPE=Release \
-            -DCMAKE_INSTALL_PREFIX=/usr \
-            -DCMAKE_PREFIX_PATH=${{ github.workspace }}/local_deps \
-            -DProtobuf_USE_STATIC_LIBS=${{ matrix.static_protobuf }} \
-            -G Ninja ..
-          ninja -j$(nproc)
-          env DESTDIR=${{ github.workspace }}/workdir ninja install
 
       - name: Build hazkey-server
         run: |
@@ -161,18 +68,3 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -DHAZKEY_SERVER_SWIFT_LTO_MODE=full -G Ninja ..
           ninja -j$(nproc)
           env DESTDIR=${{ github.workspace }}/workdir ninja install
-
-      - name: Strip binaries
-        run: |
-          find ${{ github.workspace }}/workdir/usr/ -type f -print0 | xargs -0 file -i | grep -E "application/(x-pie-executable|x-sharedlib)" | cut -d: -f1 | xargs -I{} strip "{}"
-
-      - name: Create tar.gz archive
-        run: |
-          cd ${{ github.workspace }}/workdir
-          tar -czvf ${{ github.workspace }}/packages/fcitx5-hazkey-${{ github.ref_name }}-${{ matrix.arch }}.tar.gz ./usr
-
-      - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v6
-        with:
-          name: fcitx5-hazkey-${{ matrix.label }}-${{ matrix.arch }}
-          path: ${{ github.workspace }}/packages/*
