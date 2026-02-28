@@ -12,8 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         cmake-version: ["3.21", "3.22", "3.23", "3.24", "3.25", "3.26", "3.27", "3.28", "3.29", "3.30", "3.31", "4.0", "4.1", "4.2"]
-        static_protobuf: [false]
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v6
@@ -25,14 +24,14 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ github.workspace }}/swift
-          key: ubuntu-22.04-x86_64-swift-6.2-RELEASE
+          key: ubuntu-24.04-x86_64-swift-6.2-RELEASE
 
       - name: Install Swift Environment
         if: steps.cache-swift.outputs.cache-hit != 'true'
         run: |
           mkdir -p ${{ github.workspace }}/swift
-          wget https://download.swift.org/swift-6.2-release/ubuntu2204/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu22.04.tar.gz
-          tar xf swift-6.2-RELEASE-ubuntu22.04.tar.gz --strip-components=1 -C ${{ github.workspace }}/swift
+          wget https://download.swift.org/swift-6.2-release/ubuntu2404/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu24.04.tar.gz
+          tar xf swift-6.2-RELEASE-ubuntu24.04.tar.gz --strip-components=1 -C ${{ github.workspace }}/swift
 
       - name: Add Swift to PATH
         run: |
@@ -48,18 +47,11 @@ jobs:
           sudo apt-get update -y
           sudo apt-get install -y --no-install-recommends wget gnupg2 \
             build-essential gettext fakeroot libfcitx5core-dev libfcitx5config-dev libfcitx5utils-dev \
-            ninja-build qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6widgets6 libqt6gui6 qt6-l10n-tools libglx-dev libgl1-mesa-dev libxkbcommon-dev
+            ninja-build qt6-base-dev qt6-tools-dev qt6-tools-dev-tools libqt6widgets6 libqt6gui6 qt6-l10n-tools libglx-dev libgl1-mesa-dev libxkbcommon-dev libvulkan-dev glslc
 
       - name: Install Dependencies (protobuf)
         run: |
           sudo apt-get install -y protobuf-compiler libprotoc-dev
-
-      - name: Vulkan Dependencies (Ubuntu 22.04)
-        run: |
-          wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-          sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list https://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
-          sudo apt-get update -y
-          sudo apt-get install -y mesa-vulkan-drivers vulkan-sdk
 
       - name: Create Directories
         run: |
