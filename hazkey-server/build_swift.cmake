@@ -38,15 +38,3 @@ execute_process(
     WORKING_DIRECTORY "${SWIFT_WORK_DIR}"
     RESULT_VARIABLE result
 )
-
-# The first build fails for an unknown reason.
-if(NOT result EQUAL 0)
-    execute_process(
-        COMMAND ${SWIFT_COMMAND}
-        WORKING_DIRECTORY "${SWIFT_WORK_DIR}"
-        RESULT_VARIABLE result2
-    )
-    if(NOT result2 EQUAL 0)
-        message(FATAL_ERROR "Swift build failed after two attempts.")
-    endif()
-endif()
