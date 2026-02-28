@@ -11,7 +11,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        cmake-version: ["3.21", "3.22", "3.23", "3.24", "3.25", "3.26", "3.27", "3.28", "3.29", "3.30", "3.31", "4.0", "4.1", "4.2"]
+        swift-version: ["6.0.3", "6.1", "6.1.1", "6.1.2", "6.1.3", "6.2", "6.2.1", "6.2.2", "6.2.3", "6.2.4"]
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Repository
@@ -24,14 +24,14 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ github.workspace }}/swift
-          key: ubuntu-24.04-x86_64-swift-6.2-RELEASE
+          key: ubuntu-24.04-x86_64-swift-${{ matrix.swift-version }}-RELEASE
 
       - name: Install Swift Environment
         if: steps.cache-swift.outputs.cache-hit != 'true'
         run: |
           mkdir -p ${{ github.workspace }}/swift
-          wget https://download.swift.org/swift-6.2-release/ubuntu2404/swift-6.2-RELEASE/swift-6.2-RELEASE-ubuntu24.04.tar.gz
-          tar xf swift-6.2-RELEASE-ubuntu24.04.tar.gz --strip-components=1 -C ${{ github.workspace }}/swift
+          wget https://download.swift.org/swift-${{ matrix.swift-version }}-release/ubuntu2404/swift-${{ matrix.swift-version }}-RELEASE/swift-${{ matrix.swift-version }}-RELEASE-ubuntu24.04.tar.gz
+          tar xf swift-${{ matrix.swift-version }}-RELEASE-ubuntu24.04.tar.gz --strip-components=1 -C ${{ github.workspace }}/swift
 
       - name: Add Swift to PATH
         run: |
@@ -40,7 +40,7 @@ jobs:
       - name: Setup cmake
         uses: jwlawson/actions-setup-cmake@v2
         with:
-          cmake-version: ${{ matrix.cmake-version }}
+          cmake-version: "4.1.x"
 
       - name: Install Dependencies
         run: |
