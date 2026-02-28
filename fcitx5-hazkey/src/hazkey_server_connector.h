@@ -29,7 +29,7 @@ class HazkeyServerConnector {
     void startHazkeyServer(bool force_restart);
 
     std::optional<hazkey::ResponseEnvelope> transact(
-        const hazkey::RequestEnvelope& send_data);
+        const hazkey::RequestEnvelope& send_data, bool tryConnect = true);
 
     std::string getComposingText(
         hazkey::commands::GetComposingString::CharType type,
@@ -61,7 +61,7 @@ class HazkeyServerConnector {
 
     void completePrefix(int index);
 
-    void saveLearningData();
+    void saveLearningData(bool tryConnect = true);
 
     struct CandidateData {
         std::string candidateText;

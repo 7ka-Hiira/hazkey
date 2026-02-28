@@ -70,8 +70,11 @@ void HazkeyEngine::reloadConfig() {
     }
 }
 
+// The `save()` function may be called after a SIGTERM signal is sent during shutdown.
+// If you start the hazkey-server at this point, the SIGTERM signal is not sent to the server, causing it to survive until the timeout.
+// Therefore, you must not start the hazkey-server here.
 void HazkeyEngine::save() {
-    server_.saveLearningData();
+    server_.saveLearningData(false);
 }
 
 FCITX_ADDON_FACTORY(HazkeyEngineFactory);

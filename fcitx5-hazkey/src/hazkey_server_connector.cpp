@@ -171,10 +171,14 @@ void HazkeyServerConnector::connectServer() {
 }
 
 std::optional<hazkey::ResponseEnvelope> HazkeyServerConnector::transact(
-    const hazkey::RequestEnvelope& send_data) {
+    const hazkey::RequestEnvelope& send_data, bool tryConnect) {
     std::lock_guard<std::mutex> lock(transact_mutex);
 
     if (sock_ == -1) {
+        if (!tryConnect) {
+            FCITX_INFO() << "Socket not connected. Aborting transact.";
+            return std::nullopt;
+        }
         FCITX_INFO() << "Socket not connected, attempting to connect...";
         connectServer();
         if (sock_ == -1) {
@@ -194,22 +198,27 @@ std::optional<hazkey::ResponseEnvelope> HazkeyServerConnector::transact(
     // write length
     uint32_t writeLen = htonl(msg.size());
     if (!writeAll(sock_, &writeLen, 4)) {
-        FCITX_INFO()
-            << "Failed to communicate with server while writing data length. "
-               "reconnecting to hazkey-server...";
         close(sock_);
         sock_ = -1;
-        connectServer();
+        if (tryConnect) {
+            FCITX_INFO()
+                << "Failed to communicate with server while writing data length. "
+                   "reconnecting to hazkey-server...";
+            
+            connectServer();
+        }
         return std::nullopt;
     }
 
     // write data
     if (!writeAll(sock_, msg.c_str(), msg.size())) {
-        FCITX_INFO() << "Failed to communicate with server while writing data. "
-                        "reconnecting to hazkey-server...";
         close(sock_);
         sock_ = -1;
-        connectServer();
+        if (tryConnect) {
+            FCITX_INFO() << "Failed to communicate with server while writing data. "
+                            "reconnecting to hazkey-server...";
+            connectServer();
+        }
         return std::nullopt;
     }
 
@@ -475,10 +484,10 @@ void HazkeyServerConnector::completePrefix(int index) {
     return;
 }
 
-void HazkeyServerConnector::saveLearningData() {
+void HazkeyServerConnector::saveLearningData(bool tryConnect) {
     hazkey::RequestEnvelope request;
     request.mutable_save_learning_data();
-    auto response = transact(request);
+    auto response = transact(request, tryConnect);
     if (response == std::nullopt) {
         FCITX_ERROR() << "Error while transacting saveLearningData().";
         return;
