@@ -18,6 +18,16 @@ class SocketManager {
     private let socketPath: String
     private var pipeFds: [Int32] = [-1, -1]
 
+    private func stopServing(reason: String) {
+        guard continueServing else { return }
+        NSLog(reason)
+        continueServing = false
+        if pipeFds[1] != -1 {
+            close(pipeFds[1])
+            pipeFds[1] = -1
+        }
+    }
+
     init(socketPath: String) {
         self.socketPath = socketPath
     }
@@ -78,15 +88,10 @@ class SocketManager {
         let signals = [SIGINT, SIGTERM, SIGHUP]
 
         for sig in signals {
+            signal(sig, SIG_IGN)
             let source = DispatchSource.makeSignalSource(signal: sig, queue: signalQueue)
             source.setEventHandler { [weak self] in
-                NSLog("Signal \(sig) received, shutting down...")
-                self?.continueServing = false
-                // stop poll
-                if let pipeFd = self?.pipeFds[1] {
-                    close(pipeFd)
-                    self?.pipeFds[1] = -1
-                }
+                self?.stopServing(reason: "Signal \(sig) received, shutting down...")
             }
             source.resume()
             self.signalSources.append(source)
@@ -114,6 +119,9 @@ class SocketManager {
             if pollRes < 0 {
                 if errno == EINTR {
                     // signal received
+                    if !continueServing {
+                        break
+                    }
                     continue
                 }
                 NSLog("Poll failed: \(errno)")
