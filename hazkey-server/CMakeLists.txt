@@ -53,17 +53,18 @@ configure_file(
 # To bypass issue swiftlang/swift#78003
 if(HAZKEY_SERVER_STATIC_SWIFT_STDLIB AND NOT SWIFT_DYNAMIC_LIB_PATH)
     if(SWIFT_EXECUTABLE)
-        get_filename_component(SWIFT_REAL_PATH "${SWIFT_EXECUTABLE}" REALPATH)
 
-        if("${SWIFT_REAL_PATH}" MATCHES "/bin/swift[^/]*$")
-            get_filename_component(SWIFT_BIN_DIR "${SWIFT_REAL_PATH}" DIRECTORY)
-            get_filename_component(SWIFT_BASE_DIR "${SWIFT_BIN_DIR}" DIRECTORY)
-
-            set(SWIFT_DYNAMIC_LIB_PATH "${SWIFT_BASE_DIR}/lib/swift/linux")
-            message(STATUS "Detected Swift dynamic library path: ${SWIFT_DYNAMIC_LIB_PATH}")
-        else()
-            message(WARNING "Unexpected swift path structure: ${SWIFT_REAL_PATH}")
+        execute_process(
+            COMMAND ${SWIFT_EXECUTABLE} -print-target-info
+            OUTPUT_VARIABLE SWIFT_TARGET_INFO_JSON
+            RESULT_VARIABLE SWIFT_INFO_RESULT
+        )
+        if(NOT SWIFT_INFO_RESULT EQUAL 0)
+            message(WARNING "Failed to get Swift target info. Build may fail due to issue swiftlang/swift#78003.")
         endif()
+
+        string(JSON SWIFT_DYNAMIC_LIB_PATH GET ${SWIFT_TARGET_INFO_JSON} "paths" "runtimeLibraryPaths" 0)
+        message(STATUS "Detected Swift dynamic library path: ${SWIFT_DYNAMIC_LIB_PATH}")
     else()
         message(WARNING "Swift executable not found in PATH.")
     endif()
