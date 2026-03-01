@@ -13,14 +13,17 @@
 
 class HazkeyServerConnector {
    public:
-    // HazkeyServerConnector();
-    // ~HazkeyServerConnector();
-
     HazkeyServerConnector() {
-        // kill_existing_hazkey_server();
         connectServer();
         FCITX_DEBUG() << "Connector initialized";
     };
+
+    ~HazkeyServerConnector();
+
+    HazkeyServerConnector(const HazkeyServerConnector&) = delete;
+    HazkeyServerConnector& operator=(const HazkeyServerConnector&) = delete;
+    HazkeyServerConnector(HazkeyServerConnector&&) = delete;
+    HazkeyServerConnector& operator=(HazkeyServerConnector&&) = delete;
 
     std::string getSocketPath();
 

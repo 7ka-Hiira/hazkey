@@ -31,7 +31,8 @@ class HazkeyEngine : public InputMethodEngineV2 {
     auto factory() const { return &factory_; }
     auto instance() const { return instance_; }
 
-    auto server() const { return server_; }
+    HazkeyServerConnector& server() { return server_; }
+    const HazkeyServerConnector& server() const { return server_; }
 
     const Configuration *getConfig() const override { return &config_; }
     void setConfig(const RawConfig &config) override;

@@ -27,6 +27,13 @@
 
 static std::mutex transact_mutex;
 
+HazkeyServerConnector::~HazkeyServerConnector() {
+    if (sock_ >= 0) {
+        close(sock_);
+        sock_ = -1;
+    }
+}
+
 std::string HazkeyServerConnector::getSocketPath() {
     const char* xdg_runtime_dir = std::getenv("XDG_RUNTIME_DIR");
     uid_t uid = getuid();

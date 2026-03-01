@@ -9,11 +9,9 @@
 namespace fcitx {
 
 HazkeyEngine::HazkeyEngine(Instance *instance)
-    : instance_(instance), factory_([this](InputContext &ic) {
-          return new HazkeyState(this, &ic);
-      }) {
-    server_ = HazkeyServerConnector();
-
+        : instance_(instance),
+            factory_([this](InputContext &ic) { return new HazkeyState(this, &ic); }),
+            server_() {
     instance->inputContextManager().registerProperty("hazkeyState", &factory_);
     reloadConfig();
 }
@@ -74,6 +72,7 @@ void HazkeyEngine::reloadConfig() {
 // If you start the hazkey-server at this point, the SIGTERM signal is not sent to the server, causing it to survive until the timeout.
 // Therefore, you must not start the hazkey-server here.
 void HazkeyEngine::save() {
+    FCITX_DEBUG() << "Saving Hazkey data...";
     server_.saveLearningData(false);
 }
 
