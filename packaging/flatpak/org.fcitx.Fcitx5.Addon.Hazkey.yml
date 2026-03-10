@@ -1,0 +1,67 @@
+# ビルドオプションやモジュールを変更する場合は org.fcitx.Fcitx5.Addon.Hazkey.local.yml も更新すること。
+app-id: org.fcitx.Fcitx5.Addon.Hazkey
+runtime: org.fcitx.Fcitx5
+runtime-version: stable
+# Swift の C++ interop が GCC 15 ヘッダーと互換性がないため (swiftlang/swift#81774)、
+# KDE SDK 6.10 (freedesktop SDK 25.08, GCC 15) ではなく 6.9 (GCC 14) を使用する。
+# 修正され次第 6.10+ に更新すること。
+sdk: org.kde.Sdk//6.9
+# Fcitx5 の拡張ポイントは version=stable を要求するため、
+# アドオンが実行時に検出されるには stable ブランチを使用する必要がある。
+default-branch: stable
+build-extension: true
+separate-locales: false
+
+build-options:
+  prefix: /app/addons/Hazkey
+  prepend-path: /app/addons/Hazkey/swift/bin:/app/addons/Hazkey/bin
+  prepend-pkg-config-path: /app/addons/Hazkey/lib/pkgconfig:/app/lib/pkgconfig
+  prepend-ld-library-path: /app/addons/Hazkey/swift/lib:/app/addons/Hazkey/lib:/app/lib
+  # no-debuginfo: debuginfo 分離ファイルを生成しない
+  # strip: バイナリからシンボルを除去する
+  # 両方指定が必要: no-debuginfo だけでは strip されず、strip だけでは debuginfo が生成される
+  no-debuginfo: true
+  strip: true
+  env:
+    CMAKE_PREFIX_PATH: /app/addons/Hazkey:/app
+  # Swift Package Manager が依存パッケージを取得するためにネットワークアクセスが必要。
+  # Flathub への公開時は事前取得したソースに置き換える必要がある。
+  build-args:
+    - --share=network
+
+cleanup:
+  - /bin/protoc*
+  - /include
+  - /lib/pkgconfig
+  - /lib/cmake
+  - /lib/libprotoc*
+  - '*.la'
+
+modules:
+  - modules/swift-toolchain.yml
+  - modules/protobuf.yml
+
+  - name: fcitx5-hazkey
+    buildsystem: cmake-ninja
+    builddir: true
+    build-options:
+      # GCC 15+ の C++ interop 問題を避けるため Swift ツールチェーンの clang を使用
+      # (swiftlang/swift#81774)。GCC 14 SDK でも問題なく使用可能。
+      env:
+        CC: /app/addons/Hazkey/swift/bin/clang
+        CXX: /app/addons/Hazkey/swift/bin/clang++
+    config-opts:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -DHAZKEY_FLATPAK=ON
+      - -DHAZKEY_SERVER_STATIC_SWIFT_STDLIB=ON
+      - -DHAZKEY_SERVER_ENABLE_ZENZAI=ON
+      - -DHAZKEY_SERVER_BUILD_LLAMA_LIBS=ON
+      - -DHAZKEY_SERVER_INSTALL_LLAMA_LIBS=ON
+      - -DHAZKEY_SERVER_INSTALL_DICTIONARY=ON
+      - -DGGML_VULKAN=ON
+    sources:
+      - type: git
+        url: https://github.com/7ka-Hiira/fcitx5-hazkey
+        tag: 0.2.1
+        commit: 596108c126449abcce2716a3e20d80106fb83890
+        disable-submodules: false

@@ -1,0 +1,30 @@
+name: swift-toolchain
+buildsystem: simple
+only-arches:
+  - x86_64
+  - aarch64
+build-commands:
+  - mkdir -p ${FLATPAK_DEST}/swift
+  - tar xf swift-${FLATPAK_ARCH}.tar.gz --strip-components=2 -C ${FLATPAK_DEST}/swift
+  # Swift ツールチェーン (Ubuntu 24.04 向けビルド) は libxml2.so.2 を要求するが、
+  # freedesktop SDK 24.08+ (KDE SDK 6.9+) は libxml2.so.16 を提供する。
+  # このワークアラウンドは Swift ツールチェーンが Ubuntu 24.04 をターゲットにしている間必要。
+  # Swift バージョン更新時は、新しいツールチェーンがまだ libxml2.so.2 をリンクしているか確認:
+  #   readelf -d swift/lib/libsourcekitdInProc.so | grep libxml2
+  # FLATPAK_ARCH で正しい multiarch ライブラリパスを解決する。
+  - ln -sf /usr/lib/${FLATPAK_ARCH}-linux-gnu/libxml2.so ${FLATPAK_DEST}/swift/lib/libxml2.so.2
+cleanup:
+  - /swift
+sources:
+  - type: file
+    only-arches:
+      - x86_64
+    url: https://download.swift.org/swift-6.2.4-release/ubuntu2404/swift-6.2.4-RELEASE/swift-6.2.4-RELEASE-ubuntu24.04.tar.gz
+    sha256: 15608c4fa0364ef906014343d81639cf58169e8a40de2b2d3503c3f35a8bb66d
+    dest-filename: swift-x86_64.tar.gz
+  - type: file
+    only-arches:
+      - aarch64
+    url: https://download.swift.org/swift-6.2.4-release/ubuntu2404-aarch64/swift-6.2.4-RELEASE/swift-6.2.4-RELEASE-ubuntu24.04-aarch64.tar.gz
+    sha256: 420bcde2ee4b2a36e49524b15373d0cb24eb4b679103f8cc8349af8a768832b7
+    dest-filename: swift-aarch64.tar.gz

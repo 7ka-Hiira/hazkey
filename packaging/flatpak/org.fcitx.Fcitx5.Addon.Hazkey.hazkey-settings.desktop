@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name[ja]=Hazkey設定ツール
+Name=Hazkey Settings
+GenericName[ja]=入力メソッドの設定
+GenericName=Input Method Settings
+Comment[ja]=Hazkeyの設定を変更します
+Comment=Configure Hazkey settings
+# flatpak 内の PATH に `/app/addons/Hazkey/bin` が含まれないため、フルパスで指定する
+Exec=flatpak run --command=/app/addons/Hazkey/bin/hazkey-settings org.fcitx.Fcitx5
+Icon=org.fcitx.Fcitx5.Addon.Hazkey
+StartupNotify=true
+Categories=Settings;

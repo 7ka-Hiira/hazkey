@@ -3,10 +3,12 @@
 #include <QLocale>
 #include <QTranslator>
 
+#include "constants.h"
 #include "mainwindow.h"
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
+    a.setDesktopFileName(HAZKEY_SETTINGS_DESKTOP_FILE_NAME);
 
     // Load Qt base translations for standard widgets (e.g., file dialogs)
     QTranslator qtTranslator;

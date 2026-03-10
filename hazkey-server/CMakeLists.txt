@@ -159,11 +159,12 @@ endif()
 
 # install icons
 if(HAZKEY_FLATPAK)
-    set(HAZKEY_ICON_NAME "org.hazkey.Fcitx5.Addon.Hazkey")
+    set(HAZKEY_ICON_NAME "org.fcitx.Fcitx5.Addon.Hazkey")
 else()
     set(HAZKEY_ICON_NAME "hazkey")
 endif()
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/hazkey.svg
+        RENAME ${HAZKEY_ICON_NAME}.svg
         DESTINATION ${CMAKE_INSTALL_FULL_DATADIR}/icons/hicolor/scalable/apps)
 install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/hazkey_256x256.png
         RENAME ${HAZKEY_ICON_NAME}.png
