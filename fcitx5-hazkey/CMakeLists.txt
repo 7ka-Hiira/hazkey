@@ -27,9 +27,13 @@ fcitx5_add_i18n_definition()
 find_package(Gettext REQUIRED)
 
 if(HAZKEY_FLATPAK)
-    set(HAZKEY_ICON_NAME "org.hazkey.Fcitx5.Addon.Hazkey")
+    set(HAZKEY_ICON_NAME "org.fcitx.Fcitx5.Addon.Hazkey")
+    # Flatpak sandbox の PATH に拡張の bin/ が含まれないためフルパスで指定。
+    # このパスはマニフェストの prefix (/app/addons/Hazkey) と一致させる必要がある。
+    set(HAZKEY_SETTINGS_COMMAND "/app/addons/Hazkey/bin/hazkey-settings")
 else()
     set(HAZKEY_ICON_NAME "hazkey")
+    set(HAZKEY_SETTINGS_COMMAND "hazkey-settings")
 endif()
 
 add_subdirectory(po)

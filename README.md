@@ -16,7 +16,7 @@ Hazkey input method for fcitx5
 
 [インストールガイド](https://hazkey.hiira.dev/docs/install)
 
-現在AURと[debianパッケージ](https://github.com/7ka-Hiira/fcitx5-hazkey/releases/latest)が利用できます。
+AURと[debianパッケージ](https://github.com/7ka-Hiira/fcitx5-hazkey/releases/latest)と[Flatpak のローカルビルド](./packaging/flatpak/README.md)が利用できます。
 
 ## ビルド
 

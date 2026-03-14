@@ -4,5 +4,6 @@
 #include <string>
 
 const std::string HAZKEY_VERSION = "@PROJECT_VERSION@";
+const std::string HAZKEY_SETTINGS_COMMAND = "@HAZKEY_SETTINGS_COMMAND@";
 
 #endif

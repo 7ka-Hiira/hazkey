@@ -11,3 +11,7 @@
 /CMakeCache.txt
 
 /compile_commands.json
+# Flatpak ビルド成果物
+.flatpak-builder/
+packaging/flatpak/build-dir/
+packaging/flatpak/hazkey-repo/

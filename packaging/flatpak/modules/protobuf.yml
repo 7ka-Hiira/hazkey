@@ -1,0 +1,11 @@
+name: protobuf
+buildsystem: cmake-ninja
+builddir: true
+config-opts:
+  - -DCMAKE_BUILD_TYPE=Release
+  - -Dprotobuf_BUILD_TESTS=OFF
+  - -Dprotobuf_BUILD_SHARED_LIBS=ON
+sources:
+  - type: archive
+    url: https://github.com/protocolbuffers/protobuf/releases/download/v21.12/protobuf-cpp-3.21.12.tar.gz
+    sha256: 4eab9b524aa5913c6fffb20b2a8abf5ef7f95a80bc0701f3a6dbb4c607f73460

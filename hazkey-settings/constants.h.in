@@ -2,5 +2,6 @@
 #define CONSTANTS_H
 
 inline constexpr char HAZKEY_VERSION_STR[] = "@PROJECT_VERSION@";
+inline constexpr char HAZKEY_SETTINGS_DESKTOP_FILE_NAME[] = "@HAZKEY_SETTINGS_DESKTOP_FILE_NAME@";
 
 #endif
